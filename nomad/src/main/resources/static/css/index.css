@@ -1,0 +1,79 @@
+body
+{
+    min-height: 200vh;
+}
+
+a:link, a:visited
+{
+    text-decoration: none;
+}
+
+.navbar
+{
+    background: #fff;
+    z-index: 200; 
+}
+
+/* NOTE(Jovan):
+ * Koristi se za sticky navbar
+ */
+.sticky
+{
+    position: fixed;
+    width: 100%;
+    left: 0px;
+    top: 0px;
+}
+
+.sticky + .content
+{
+    padding-top: 60px;
+}
+
+.navbar-list, .header-list, .footer-list
+{
+    list-style-type: none;
+}
+
+.navbar-item
+{
+    display: inline;
+    padding: 10px;
+}
+
+.navbar-item a
+{
+    font-size: 1.5rem;
+    border: none;
+}
+
+
+.header
+{
+    /* background: #f9f9f9; */
+    min-height: 50vh;
+}
+
+.header h1, h2
+{
+    text-align: center;
+}
+
+.header-item
+{
+    display: inline;
+}
+
+.footer
+{
+    background: #34495e;
+}
+
+.footer-list
+{
+    list-style-type: none;
+}
+
+.footer-item
+{
+}
