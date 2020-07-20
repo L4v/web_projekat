@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+        <meta charset="UTF-8">
+
+		<script src="js/vue.js"></script>
+        <!-- TODO(Jovan): Datepicker -->
+		<script src="js/vuejs-datepicker.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="css/normalize.css">
+        <link rel="stylesheet" type="text/css" href="css/skeleton.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+
+		<title>Nomad</title>
+	</head>
+	<body>
+        <div class="navbar-spacer"></div>
+        <nav class="navbar">
+            <div class="container">
+                <ul class="navbar-list">
+                    <!-- TODO(Jovan): Dodatne funk u zavisnosti od ulogovanog korisnika? -->
+                    <li class="navbar-item u-pull-left"><a class="button" href="index.html">nomad</a></li>
+                    <li class="navbar-item u-pull-right"><a class="button" href="">Sign Up</a></li>
+                    <li class="navbar-item u-pull-right"><a class="button" href="">Log In</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container">
+            <!-- NOTE(Jovan): Header -->
+            <section class="header">
+                <!-- TODO(Jovan): Bolji slogan? Mozda generator? -->
+                <h2 class="title">Never settle.</h2>
+                <ul class="guest-host">
+                    <button class="button-primary">Find a home</button>
+                    <button class="">Host your home</button>
+                </ul>
+            </section>
+
+            <!-- NOTE(Jovan): Search -->
+            <div class="search">
+                <input type="text" placeholder="Country" name="country">
+                <input type="text" placeholder="City" name="city">
+                <input type="submit" value="Search" name="search-btn">
+            </div>
+
+            <!-- NOTE(Jovan): Footer -->
+            <div class="footer">
+                <ul>
+                    <a href="">About</a>
+                    <a href="">Contact</a>
+                </ul>
+            </div>
+        </div>
+	</body>
+</html>

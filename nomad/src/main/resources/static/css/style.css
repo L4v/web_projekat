@@ -1,0 +1,31 @@
+a:link, a:visited
+{
+    text-decoration: none;
+}
+
+.navbar
+{
+    background: #fff;
+}
+
+.navbar-list
+{
+    list-style-type: none;
+}
+
+.navbar-item
+{
+    display: inline;
+    padding: 10px;
+    font-size: 2rem;
+}
+
+.header h1, h2
+{
+    text-align: center;
+}
+
+.header
+{
+    /* background: #f9f9f9; */
+}
