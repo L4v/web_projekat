@@ -2,7 +2,18 @@
 Kristian Farkaš  
 Jovan Ivošević
 
-
+## Uloge:
+| Jovan                                     | Kristian                                                      |
+|----------------------------------------   |------------------------------------------------------------   |
+| Registracija                              | Login                                                         |
+| Logout                                    | Izmena licnih podataka                                        |
+| Pregled svih korisnika (administrator)    | Pregled svih korisnika (domacin)                              |
+| Pregled apartmana (domacin)               | Pregled apartmana (administrator, neregistrovani korisnik)    |
+| Dodavanje apartmana                       | Odrzavanje sadrzaja                                           |
+| Pregled rezervacija (domacin)             | Pregled rezervacija (gost, administrator)                     |
+| Kreiranje rezervacije                     | Ostavljanje komentara                                         |
+| Pregled komentara (domacin)               | Pregled komentara (admin)                                     |
+| Pretraga (svi, gost)                      | Pretraga (domacin, admin)                                     |
 ## NAPOMENA:
 Kada se projekat importuje u Eclipse, ukoliko  
 postoji greška, potrebno je uraditi sledeće:  
