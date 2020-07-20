@@ -1,21 +1,17 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 	<head>
         <meta charset="UTF-8">
 
-		<script src="js/vue.js"></script>
-        <!-- TODO(Jovan): Datepicker -->
-		<script src="js/vuejs-datepicker.min.js"></script>
-
         <link rel="stylesheet" type="text/css" href="css/normalize.css">
         <link rel="stylesheet" type="text/css" href="css/skeleton.css">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
 
 		<title>Nomad</title>
 	</head>
 	<body>
-        <div class="navbar-spacer"></div>
-        <nav class="navbar">
+        <!-- NOTE(Jovan): Navigation bar -->
+        <nav id="nav" :class="toggleNavClass()">
             <div class="container">
                 <ul class="navbar-list">
                     <!-- TODO(Jovan): Dodatne funk u zavisnosti od ulogovanog korisnika? -->
@@ -25,14 +21,16 @@
                 </ul>
             </div>
         </nav>
-        <div class="container">
+
+        <!-- NOTE(Jovan): Main content -->
+        <div class="container content">
             <!-- NOTE(Jovan): Header -->
             <section class="header">
                 <!-- TODO(Jovan): Bolji slogan? Mozda generator? -->
                 <h2 class="title">Never settle.</h2>
-                <ul class="guest-host">
-                    <button class="button-primary">Find a home</button>
-                    <button class="">Host your home</button>
+                <ul class="header-list">
+                    <li class="header-item"><button class="button-primary">Find a home</button></li>
+                    <li class="header-item"><button class="">Host your home</button></li>
                 </ul>
             </section>
 
@@ -44,12 +42,17 @@
             </div>
 
             <!-- NOTE(Jovan): Footer -->
-            <div class="footer">
-                <ul>
-                    <a href="">About</a>
-                    <a href="">Contact</a>
+            <section class="footer">
+                <ul class="footer-list">
+                    <li class="footer-item"><a href="">About</a></li>
+                    <li class="footer-item"><a href="footer-item">Contact</a></li>
                 </ul>
             </div>
-        </div>
+        </section>
+
+		<script src="js/vue.js"></script>
+        <!-- TODO(Jovan): Datepicker -->
+		<script src="js/vuejs-datepicker.min.js"></script>
+        <script src="js/index.js"></script>
 	</body>
 </html>
