@@ -1,32 +1,20 @@
 package nomad.services;
 
-import nomad.dao.UserAdminDAO;
+import nomad.beans.UserGuest;
 import nomad.dao.UserGuestDAO;
-import nomad.dao.UserHostDAO;
 
 public class UserRegistrationService {
 	
-	private UserAdminDAO adminDAO;
 	private UserGuestDAO guestDAO;
-	private UserHostDAO hostDAO;
 	
 	public UserRegistrationService()
 	{
-		this.adminDAO = new UserAdminDAO();
 		this.guestDAO = new UserGuestDAO();
-		this.hostDAO = new UserHostDAO();
 	}
 	
-	public boolean RegisterGuest()
+	public boolean RegisterGuest(UserGuest guest)
 	{
-		
-		return false;
-	}
-	
-	public boolean RegisterHost()
-	{
-		
-		return false;
+		return guestDAO.add(guest);
 	}
 	
 }

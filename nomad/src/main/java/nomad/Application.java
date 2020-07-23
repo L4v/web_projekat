@@ -10,6 +10,7 @@ public class Application implements SparkApplication{
 	public void init()
 	{
 		staticFileLocation("/static");
+		
 	}
 	
 }

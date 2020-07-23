@@ -23,6 +23,17 @@ public class UserGuestDAO {
 		//TODO
 	}
 	
+	public boolean add(UserGuest guest)
+	{
+		// TODO(Jovan): koristiti find?
+		if(!userGuests.containsKey(guest.getName()))
+		{
+			userGuests.put(guest.getName(), guest);
+			return true;
+		}
+		return false;
+	}
+	
 	public UserGuest find(String username, String password) {
 		if (!userGuests.containsKey(username)) {
 			return null;
