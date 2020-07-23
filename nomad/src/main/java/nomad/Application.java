@@ -30,6 +30,14 @@ public class Application{
 			guest.setName(guest.getName() + "2");
 			return gson.toJson(guest);
 		});
+		
+		post(Path.Rest.LOGIN, (request, response)->
+		{
+			response.type("application/json");
+			String payload = request.body();
+			//TODO;
+			return null;
+		});
 	}
 	
 }
