@@ -12,6 +12,7 @@ public class Path {
 	public static class Rest
 	{
 		public static final String REG_GUEST = "/rest/reg_guest";
+		public static final String LOGIN = "/rest/login";
 	}
 	
 }
