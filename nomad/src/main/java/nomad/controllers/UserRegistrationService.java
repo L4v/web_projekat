@@ -1,4 +1,4 @@
-package nomad.services;
+package nomad.controllers;
 
 import nomad.dao.UserAdminDAO;
 import nomad.dao.UserGuestDAO;
