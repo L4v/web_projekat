@@ -1,4 +1,8 @@
-Servers
+
+# Created by https://www.toptal.com/developers/gitignore/api/eclipse,maven
+# Edit at https://www.toptal.com/developers/gitignore?templates=eclipse,maven
+
+### Eclipse ###
 .metadata
 bin/
 tmp/
@@ -59,3 +63,23 @@ local.properties
 # Uncomment this line if you wish to ignore the project description file.
 # Typically, this file would be tracked if it contains build/dependency configurations:
 #.project
+
+### Eclipse Patch ###
+# Spring Boot Tooling
+.sts4-cache/
+
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+# https://github.com/takari/maven-wrapper#usage-without-binary-jar
+.mvn/wrapper/maven-wrapper.jar
+
+# End of https://www.toptal.com/developers/gitignore/api/eclipse,maven
+
