@@ -38,11 +38,7 @@ public class UserGuestDAO {
 		if (!userGuests.containsKey(username)) {
 			return null;
 		}
-		UserGuest userGuest = userGuests.get(username);
-		if (!userGuest.getPassword().equals(password)) {
-			return null;
-		}
-		return userGuest;
+		return userGuests.get(username);
 	}
 	
 	public Collection<UserGuest> findAll(){

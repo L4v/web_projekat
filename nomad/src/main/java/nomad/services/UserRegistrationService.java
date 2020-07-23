@@ -12,7 +12,7 @@ public class UserRegistrationService {
 		this.guestDAO = new UserGuestDAO();
 	}
 	
-	public boolean RegisterGuest(UserGuest guest)
+	public boolean registerGuest(UserGuest guest)
 	{
 		return guestDAO.add(guest);
 	}

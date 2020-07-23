@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta charset="UTF-8">
         <title>Guest Registration</title>
         <link rel="stylesheet" type="text/css" href="css/registration.css">
     </head>
     <body>
-        <form id="registrationForm">
+        <div id="registrationForm">
             <h1>Registration</h1>
             
             <div class="tab">
-                <input type="text" placeholder="Name" name="name">
-                <input type="text" placeholder="Surname" name="surname">
-                <select name="sex">
+                <input type="text" placeholder="Name" name="name" v-model="guest.name">
+                <input type="text" placeholder="Surname" name="surname" v-model="guest.surname">
+                <select name="sex" v-model="guest.sex">
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
@@ -20,13 +21,13 @@
             </div>
             
             <div class="tab">
-                <input type="text" placeholder="Username" name="username">
-                <input type="text" placeholder="Password" name="password">
+                <input type="text" placeholder="Username" name="username" v-model="guest.username">
+                <input type="text" placeholder="Password" name="password" v-model="guest.password">
                 <input type="text" placeholder="Confirm Password" name="confirmPassword">
-                <input type="submit" name="register" value="Register">
+                <button v-on:click="registerGuest(guest)">Register</button>
             </div>
 
-        </form>
+        </div>
 
         <div>
             <button id="prevBtn">Previous</button>
@@ -39,6 +40,7 @@
         </div>
 
 		<script src="js/vue.js"></script>
+        <script src="js/axios.min.js"></script>
         <script src="js/registration.js"></script>
     </body>
 </html>
