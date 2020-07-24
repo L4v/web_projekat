@@ -47,11 +47,16 @@ a:link, a:visited
     border: none;
 }
 
-
 .header
 {
-    /* background: #f9f9f9; */
+    /* TODO(Jovan): Postaviti adekvatnu pozadinu
+    background-color: #fff;
+    background-image: url("../img/mountains.gif");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     min-height: 50vh;
+    */
 }
 
 .header h1, h2
@@ -62,6 +67,11 @@ a:link, a:visited
 .header-item
 {
     display: inline;
+}
+
+.host-btn
+{
+    color: #fff;
 }
 
 .footer

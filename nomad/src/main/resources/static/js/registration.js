@@ -4,6 +4,8 @@ var regVue = new Vue
     data:
     {
         guest: {},
+        successMsg: "",
+        exists: false,
     },
     methods:
     {
@@ -16,10 +18,19 @@ var regVue = new Vue
                     name:     guest.name,
                     surname:  guest.surname,
                     sex:      guest.sex,
-                    userType: "GUEST"
+                    userType: "GUEST",
                 };
-            axios
-            .post("rest/reg_guest", g);
+            const vm = this;
+            axios.post("rest/reg_guest", g)
+            .then(response =>
+                {
+                    this.successMsg = "Registered";
+                })
+            .catch(error =>
+                {
+                    this.successMsg = "Already exists!";
+                    this.exists = true;
+                });
         }
     }
 })

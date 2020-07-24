@@ -26,9 +26,8 @@ public class Application{
 			response.type("application/json");
 			String payload = request.body();
 			UserGuest guest = gson.fromJson(payload, UserGuest.class);
-			userRegistrationService.registerGuest(guest);
-			guest.setName(guest.getName() + "2");
-			return gson.toJson(guest);
+			response.status(userRegistrationService.registerGuest(guest) ? 200 : 404);
+			return response;
 		});
 		
 		post(Path.Rest.LOGIN, (request, response)->
