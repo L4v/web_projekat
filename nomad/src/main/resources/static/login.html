@@ -8,28 +8,27 @@
         <title>Login</title>
 	</head>
 	<body>
-		<div class="container">
-		<div id="login">
-		<h1>Login</h1>
-			<table id="tabela">
-				<tr>
-					<td>Username:</td>
-					<td><input type="text" id="username" placeholder="Username"></td>
-					<td id="emptyUsername">Enter your username</td>
-				</tr>
-				<tr>
-					<td>Password:</td>
-					<td><input type="password" id="password" placeholder="Password"></td>
-					<td id="emptyPassword">Enter your password</td>
-				</tr>
-				<tr>
-					<td colspan="2"><button v-on:click="login(username, password)">Log in</button></td>
-				</tr>
-			</table>
-		</div>
-		</div>
+        <div id="login">
+            <h1>Login</h1>
+            <h2>{{successMsg}}</h2>
+            <table id="tabela">
+                <tr>
+                    <td>Username:</td>
+                    <td><input type="text" id="username" v-model="user.username" placeholder="Username"></td>
+                    <td id="emptyUsername">Enter your username</td>
+                </tr>
+                <tr>
+                    <td>Password:</td>
+                    <td><input type="password" id="password" v-model="user.password" placeholder="Password"></td>
+                    <td id="emptyPassword">Enter your password</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><button v-on:click="login()">Log in</button></td>
+                </tr>
+            </table>
+        </div>
 		<script src="js/vue.js"></script>
-		<script src="js/login.js"></script>
 		<script src="js/axios.min.js"></script>
+		<script src="js/login.js"></script>
 	</body>
 </html>

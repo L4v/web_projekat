@@ -8,7 +8,7 @@ import nomad.beans.UserAdmin;
 
 public class UserAdminDAO {
 
-	private Map<String, UserAdmin> userAdmins = new HashMap<>();
+	private static Map<String, UserAdmin> userAdmins = new HashMap<>();
 	
 	public UserAdminDAO() {
 		

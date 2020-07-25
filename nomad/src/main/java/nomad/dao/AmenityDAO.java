@@ -9,7 +9,7 @@ import nomad.beans.Amenity;
 
 public class AmenityDAO {
 
-	private Map<String, Amenity> amenities = new HashMap<>();
+	private static Map<String, Amenity> amenities = new HashMap<>();
 	
 	public AmenityDAO() {
 		

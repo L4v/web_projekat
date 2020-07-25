@@ -8,7 +8,7 @@ import nomad.beans.Reservation;
 
 public class ReservationDAO {
 
-	private Map<String, Reservation> reservations = new HashMap<>();
+	private static Map<String, Reservation> reservations = new HashMap<>();
 	
 	public ReservationDAO() {
 		

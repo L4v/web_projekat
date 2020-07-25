@@ -8,7 +8,7 @@ import nomad.beans.Comment;
 
 public class CommentDAO {
 
-	private Map<String, Comment> comments = new HashMap<>();
+	private static Map<String, Comment> comments = new HashMap<>();
 	
 	public CommentDAO() {
 		

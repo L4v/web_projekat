@@ -9,7 +9,7 @@ import nomad.beans.UserHost;
 
 public class UserHostDAO {
 
-	private Map<String, UserHost> userHosts = new HashMap<>();
+	private static Map<String, UserHost> userHosts = new HashMap<>();
 	
 	public UserHostDAO() {
 		

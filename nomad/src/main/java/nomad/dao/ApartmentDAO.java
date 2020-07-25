@@ -8,7 +8,7 @@ import nomad.beans.Apartment;
 
 public class ApartmentDAO {
 
-	private Map<String, Apartment> apartments = new HashMap<>();
+	private static Map<String, Apartment> apartments = new HashMap<>();
 	
 	public ApartmentDAO() {
 		

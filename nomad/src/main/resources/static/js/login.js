@@ -3,15 +3,27 @@ var loginVue = new Vue
     el: "#login",
     data:
     {
-        guest: {},
+        user: {},
+        errors: [],
+        successMsg: "",
     },
     methods:
     {
-        login: function(username, password)
+        login: function()
         {
-            //
-            axios
-            .post("rest/login", g);
+            // TODO(Jovan): Validation
+
+            B
+            axios.post("rest/login", this.user)
+            .then(response =>
+                {
+                    this.successMsg = "Logged in!";
+                    localStorage.jwt = response.data;
+                })
+            .catch(response =>
+                {
+                    this.successMsg = "Failed to log in!";
+                });
         }
     }
 })
