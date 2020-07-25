@@ -5,8 +5,8 @@ Jovan Ivošević
 ## Uloge:
 | Jovan                                     | Kristian                                                      |
 |----------------------------------------   |------------------------------------------------------------   |
-| Registracija                              | Login                                                         |
-| Logout                                    | Izmena licnih podataka                                        |
+| Registracija                              | Logout                                                        |
+| Login                                     | Izmena licnih podataka                                        |
 | Pregled svih korisnika (administrator)    | Pregled svih korisnika (domacin)                              |
 | Pregled apartmana (domacin)               | Pregled apartmana (administrator, neregistrovani korisnik)    |
 | Dodavanje apartmana                       | Odrzavanje sadrzaja                                           |

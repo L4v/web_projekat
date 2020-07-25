@@ -12,6 +12,7 @@ var loginVue = new Vue
         login: function()
         {
             // TODO(Jovan): Validation
+            // TODO(Jovan): Cuvanje u memoriji preko refresh tokena, umesto u local
 
             axios.post("rest/login", this.user)
             .then(response =>
