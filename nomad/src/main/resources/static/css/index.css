@@ -49,14 +49,13 @@ a:link, a:visited
 
 .header
 {
-    /* TODO(Jovan): Postaviti adekvatnu pozadinu
+    /* TODO(Jovan): Postaviti adekvatnu pozadinu*/
     background-color: #fff;
     background-image: url("../img/mountains.gif");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     min-height: 50vh;
-    */
 }
 
 .header h1, h2
