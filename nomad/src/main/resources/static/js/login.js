@@ -13,7 +13,6 @@ var loginVue = new Vue
         {
             // TODO(Jovan): Validation
 
-            B
             axios.post("rest/login", this.user)
             .then(response =>
                 {
