@@ -22,6 +22,10 @@ public class UserAdminDAO {
 		//TODO
 	}
 	
+	public void update(UserAdmin userAdmin) {
+		//TODO
+	}
+	
 	public UserAdmin find(String username, String password) {
 		if (!userAdmins.containsKey(username)) {
 			return null;

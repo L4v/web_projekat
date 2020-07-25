@@ -23,6 +23,10 @@ public class UserHostDAO {
 		//TODO
 	}
 	
+	public void update(UserHost userHost) {
+		//TODO
+	}
+	
 	public UserHost find(String username, String password) {
 		if (!userHosts.containsKey(username)) {
 			return null;

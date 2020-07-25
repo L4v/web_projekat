@@ -23,6 +23,10 @@ public class UserGuestDAO {
 		//TODO
 	}
 	
+	public void update(UserGuest userGuest) {
+		//TODO
+	}
+	
 	public boolean add(UserGuest guest)
 	{
 		// TODO(Jovan): koristiti find?

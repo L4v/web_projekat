@@ -1,0 +1,7 @@
+table, tr, td{
+	border: none;
+}
+
+#emptyName, #emptySurname, #emptyPassword {
+	color: red;
+}

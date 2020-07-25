@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="css/normalize.css">
+        <link rel="stylesheet" type="text/css" href="css/skeleton.css">
+        <link rel="stylesheet" type="text/css" href="css/personalData.css">
+        <title>Personal data</title>
+	</head>
+	<body>
+		<div class="container">
+		<div id="personalData">
+		<h1>Personal data</h1>
+			<table id="tabela">
+				<tr>
+					<td>Name:</td>
+					<td><input type="text" id="name" v-model="guest.name"></td>
+					<td id="emptyName">Enter your name</td>
+				</tr>
+				<tr>
+					<td>Surname:</td>
+					<td><input type="text" id="surname" v-model="guest.surname"></td>
+					<td id="emptySurname">Enter your surname</td>
+				</tr>
+				<tr>
+					<td>Sex:</td>
+					<td><select name="sex" v-model="guest.sex">
+		                    <option value="male">Male</option>
+		                    <option value="female">Female</option>
+		                    <option value="other">Other</option>
+		                    <option value="private">Prefer not to say</option>
+                		</select>
+                	</td>
+				</tr>
+				<tr>
+					<td>Password:</td>
+					<td><input type="password" id="password" v-model="guest.password"></td>
+					<td id="emptyPassword">Enter your password</td>
+				</tr>
+				<tr>
+					<td><button v-on:click="updatePersonalData(guest)">Save changes</button></td>
+					<td><button >Back</button></td>
+				</tr>
+			</table>
+		</div>
+		</div>
+		<script src="js/vue.js"></script>
+		<script src="js/personalData.js"></script>
+		<script src="js/axios.min.js"></script>
+	</body>
+</html>
