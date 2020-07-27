@@ -34,7 +34,7 @@ public class Application{
 		
 		// TODO(Jovan): Refaktorisati dao-e
 		UserAdminDAO adminDAO = new UserAdminDAO();
-		UserGuestDAO guestDAO = new UserGuestDAO("users.json");
+		UserGuestDAO guestDAO = new UserGuestDAO("guests.json");
 		UserHostDAO hostDAO = new UserHostDAO();
 		
 		UserRegistrationService userRegistrationService = new UserRegistrationService(guestDAO);
