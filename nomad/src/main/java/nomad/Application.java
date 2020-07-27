@@ -97,6 +97,34 @@ public class Application{
 			return response;
 		});
 		
+		get("rest/getUser", (request, response)->
+		{
+			response.type("application/json");
+			String auth = request.headers("Authorization");
+			if(auth.isEmpty()|| !auth.contains("Bearer"))
+			{
+				response.status(404);
+			}
+			else
+			{
+				String jws = auth.substring(auth.indexOf("Bearer") + 7);
+				try
+				{
+					Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+					UserGuest guest = guestDAO.get(claims.getBody().getSubject());
+					response.status(200);
+					return guest;
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+					response.status(404);
+					return response;
+				}
+			}
+			return response;
+		});
+		
 		
 	}
 	

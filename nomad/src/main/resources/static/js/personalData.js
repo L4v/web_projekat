@@ -6,6 +6,12 @@ var personalDataVue = new Vue
         guest: {},
         successMsg: "",
     },
+    mounted(){
+    	axios
+	        .get("rest/getUser",{headers:{"Authorization": "Bearer " + localStorage.jwt}})
+	        .then(response => (this.guest = response.data))
+    },
+    	
     methods:
     {
         updatePersonalData: function(guest)
@@ -27,4 +33,4 @@ var personalDataVue = new Vue
                 })
         }
     }
-})
+});

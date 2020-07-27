@@ -21,6 +21,7 @@ new Vue
         logout: function()
         {
         	localStorage.removeItem('jwt');
+        	
         }
     },
     mounted()
