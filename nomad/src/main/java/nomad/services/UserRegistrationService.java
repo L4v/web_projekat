@@ -7,9 +7,9 @@ public class UserRegistrationService {
 	
 	private UserGuestDAO guestDAO;
 	
-	public UserRegistrationService()
+	public UserRegistrationService(UserGuestDAO guestDAO)
 	{
-		this.guestDAO = new UserGuestDAO();
+		this.guestDAO = guestDAO;
 	}
 	
 	public boolean registerGuest(UserGuest guest)

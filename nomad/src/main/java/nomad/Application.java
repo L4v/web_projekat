@@ -6,7 +6,6 @@ import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
 import java.security.Key;
-import java.util.Set;
 
 import com.google.gson.Gson;
 
@@ -17,8 +16,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import nomad.beans.UserBase;
 import nomad.beans.UserGuest;
+import nomad.dao.UserAdminDAO;
+import nomad.dao.UserGuestDAO;
+import nomad.dao.UserHostDAO;
 import nomad.dto.LoginDTO;
-import nomad.dto.SessionDTO;
 import nomad.services.UserLoginService;
 import nomad.services.UserRegistrationService;
 import nomad.utils.Path;
@@ -30,8 +31,14 @@ public class Application{
 	public static void main(String args[])
 	{
 		Gson gson = new Gson();
-		UserRegistrationService userRegistrationService = new UserRegistrationService();
-		UserLoginService userLoginService = new UserLoginService();
+		
+		// TODO(Jovan): Refaktorisati dao-e
+		UserAdminDAO adminDAO = new UserAdminDAO();
+		UserGuestDAO guestDAO = new UserGuestDAO("users.json");
+		UserHostDAO hostDAO = new UserHostDAO();
+		
+		UserRegistrationService userRegistrationService = new UserRegistrationService(guestDAO);
+		UserLoginService userLoginService = new UserLoginService(adminDAO, guestDAO, hostDAO);
 		
 		port(8080);
 		staticFiles.location("/static");
