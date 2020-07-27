@@ -6,9 +6,12 @@ import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
 import java.security.Key;
+import java.util.Set;
 
 import com.google.gson.Gson;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -54,10 +57,37 @@ public class Application{
 				return null;
 			}
 			response.status(200);
-			SessionDTO session = new SessionDTO(loggedInUser.getUsername(), loggedInUser.getUserType());
-			String jws = Jwts.builder().setPayload(gson.toJson(session)).signWith(key).compact();
+			String jws = Jwts.builder().setSubject(loggedInUser.getUsername()).signWith(key).compact();
 			
 			return jws;
+		});
+		
+		get("rest/test", (request, response) ->
+		{
+			String auth = request.headers("Authorization");
+			if(auth.isEmpty()|| !auth.contains("Bearer"))
+			{
+				response.status(404);
+			}
+			else
+			{
+				// TODO(Jovan): Signature exception ????
+				String jws = auth.substring(auth.indexOf("Bearer") + 7);
+				try
+				{
+					Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+					response.body(claims.getBody().getSubject());
+					response.status(200);
+					return response;
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+					response.status(404);
+					return response;
+				}
+			}
+			return response;
 		});
 	}
 	
