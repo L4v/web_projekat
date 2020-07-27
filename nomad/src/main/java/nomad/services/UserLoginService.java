@@ -15,11 +15,11 @@ public class UserLoginService {
 	private UserGuestDAO guestDAO;
 	private UserHostDAO hostDAO;
 	
-	public UserLoginService()
+	public UserLoginService(UserAdminDAO adminDAO, UserGuestDAO guestDAO, UserHostDAO hostDAO)
 	{
-		this.adminDAO = new UserAdminDAO();
-		this.guestDAO = new UserGuestDAO();
-		this.hostDAO = new UserHostDAO();
+		this.adminDAO = adminDAO;
+		this.guestDAO = guestDAO;
+		this.hostDAO = hostDAO;
 	}
 	
 	public UserBase validate(LoginDTO loginDTO)
@@ -33,7 +33,7 @@ public class UserLoginService {
 			}
 		}
 	
-		for(UserGuest u : guestDAO.findAll())
+		for(UserGuest u : guestDAO.getAll())
 		{
 			if(u.getUsername().equals(loginDTO.getUsername())
 					&& u.getPassword().equals(loginDTO.getPassword()))
