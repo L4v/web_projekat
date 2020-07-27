@@ -125,6 +125,16 @@ public class Application{
 			return response;
 		});
 		
+		post(Path.Rest.PERSONAL_DATA, (request, response)->
+		{
+			response.type("application/json");
+			String payload = request.body();
+			UserBase user = gson.fromJson(payload, UserBase.class);
+			guestDAO.update((UserGuest)user);
+			response.status(200);
+			return response;
+		});
+		
 		
 	}
 	
