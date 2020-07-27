@@ -17,6 +17,10 @@ new Vue
             {
                 return 'navbar sticky';
             }
+        },
+        logout: function()
+        {
+        	localStorage.removeItem('jwt');
         }
     },
     mounted()
