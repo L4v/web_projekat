@@ -20,8 +20,13 @@ new Vue
         },
         logout: function()
         {
-        	localStorage.removeItem('jwt');
-        	
+        	let jwt = localStorage.jwt;
+        	if(jwt){
+        		localStorage.removeItem('jwt');
+        		alert("You have successfully logged out");
+        	} else {
+        		alert("You are not logged in");
+        	}
         }
     },
     mounted()

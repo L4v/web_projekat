@@ -7,9 +7,17 @@ var personalDataVue = new Vue
         successMsg: "",
     },
     mounted(){
-    	axios
-	        .get("rest/getUser",{headers:{"Authorization": "Bearer " + localStorage.jwt}})
-	        .then(response => (this.guest = response.data))
+    	var jwt = localStorage.jwt;
+    	
+    	if(jwt)
+		{
+	    	axios.get("rest/getUser",{headers:{"Authorization": "Bearer " + localStorage.jwt}})
+		        .then(response => (this.guest = response.data))
+	    		.catch(response => 
+    			{
+    				//TODO(Kristian): handle 404
+    			});
+		}
     },
     	
     methods:
@@ -31,6 +39,9 @@ var personalDataVue = new Vue
                 {
                     this.successMsg = "Changes successfully saved.";
                 })
+            .catch(response => {
+            		this.successMsg = "Something's wrong :(";
+            });
         }
     }
 });

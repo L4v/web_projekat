@@ -117,7 +117,8 @@ public class Application{
 					Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
 					UserGuest guest = guestDAO.get(claims.getBody().getSubject());
 					response.status(200);
-					return guest;
+					String gs = gson.toJson(guest);
+					return gson.toJson(guest);
 				}
 				catch(Exception e)
 				{
@@ -133,8 +134,9 @@ public class Application{
 		{
 			response.type("application/json");
 			String payload = request.body();
-			UserBase user = gson.fromJson(payload, UserBase.class);
-			guestDAO.update((UserGuest)user);
+			UserGuest user = gson.fromJson(payload, UserGuest.class);
+			guestDAO.update(user);
+			System.out.println(user.getName());
 			response.status(200);
 			return response;
 		});

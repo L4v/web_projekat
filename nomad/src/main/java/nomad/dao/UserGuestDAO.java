@@ -71,7 +71,17 @@ public class UserGuestDAO{
 		{
 			return false;
 		}
+		
+		/* ovo je bilo samo ovaj jedan red
 		guest = userGuest;
+		*/
+		
+		//dodato (Kristian)
+		remove(guest.getUsername());
+		guest = userGuest;
+		add(guest);
+		//
+		
 		return true;
 	}
 	
