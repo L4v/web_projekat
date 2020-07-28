@@ -24,7 +24,7 @@ public class UserLoginService {
 	
 	public UserBase validate(LoginDTO loginDTO)
 	{
-		for(UserAdmin u : adminDAO.findAll())
+		for(UserAdmin u : adminDAO.getAll())
 		{
 			if(u.getUsername().equals(loginDTO.getUsername())
 					&& u.getPassword().equals(loginDTO.getPassword()))
@@ -42,7 +42,7 @@ public class UserLoginService {
 			}
 		}
 		
-		for(UserHost u : hostDAO.findAll())
+		for(UserHost u : hostDAO.getAll())
 		{
 			if(u.getUsername().equals(loginDTO.getUsername())
 					&& u.getPassword().equals(loginDTO.getPassword()))

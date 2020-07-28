@@ -42,6 +42,8 @@ public class Application{
 		
 		port(8080);
 		staticFiles.location("/static");
+		
+		// TODO(Jovan): Ukloniti
 		get(Path.Web.HELLO, (request, response) -> "Hello");
 		post(Path.Rest.REG_GUEST, (request, response)->
 		{

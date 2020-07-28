@@ -16,7 +16,7 @@ import com.google.gson.stream.JsonReader;
 import nomad.beans.UserGuest;
 
 
-public class UserGuestDAO {
+public class UserGuestDAO{
 	
 	private String filename;
 	
@@ -29,7 +29,9 @@ public class UserGuestDAO {
 		this.filename = contextPath;
 		this.initFile();
 	}
-	
+
+	// NOTE(Jovan): Kreiramo prazan JSON u slucaju
+	// da ne postoji
 	private void initFile()
 	{
 		File f = new File(this.filename);
@@ -49,6 +51,17 @@ public class UserGuestDAO {
 		catch (JsonIOException | IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean remove(String username)
+	{
+		ArrayList<UserGuest> guests = (ArrayList<UserGuest>)this.getAll();
+		boolean success = guests.removeIf(g -> g.getUsername().equals(username));
+		if(success == true)
+		{
+			this.saveAll(guests);
+		}
+		return success;
 	}
 	
 	public boolean update(UserGuest userGuest) {
@@ -81,7 +94,7 @@ public class UserGuestDAO {
 	}
 	
 	public Collection<UserGuest> getAll(){
-		Collection<UserGuest> guests = new ArrayList<UserGuest>();
+		Collection<UserGuest> guests = null;
 		Type collectionType = new TypeToken<Collection<UserGuest>>() {}.getType();
 		try(FileReader freader = new FileReader(this.filename);
 			JsonReader jreader = new JsonReader(freader))
