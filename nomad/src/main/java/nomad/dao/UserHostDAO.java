@@ -76,17 +76,18 @@ public class UserHostDAO {
 	
 	public boolean update(UserHost userHost) {
 		ArrayList<UserHost> hosts = (ArrayList<UserHost>) this.getAll();
-		UserHost host = hosts.stream().filter(h -> h.getUsername().equals(userHost.getUsername())).findAny().orElse(null);
-		if(host == null)
+		for(int i = 0;
+				i < hosts.size();
+				++i)
 		{
-			return false;
+			if(hosts.get(i).getUsername().equals(userHost.getUsername()))
+			{
+				hosts.set(i, userHost);
+				this.saveAll(hosts);
+				return true;
+			}
 		}
-		else
-		{
-			host = userHost;
-			this.saveAll(hosts);
-			return true;
-		}
+		return false;
 	}
 	
 	public UserHost get(String username) {

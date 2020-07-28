@@ -67,14 +67,18 @@ public class UserAdminDAO {
 	
 	public boolean update(UserAdmin newAdmin) {
 		ArrayList<UserAdmin> admins = (ArrayList<UserAdmin>)this.getAll();
-		UserAdmin admin = admins.stream().filter(a -> a.getUsername().equals(newAdmin.getUsername())).findAny().orElse(null);
-		if(admin == null)
+		for(int i = 0;
+				i < admins.size();
+				++i)
 		{
-			return false;
+			if(admins.get(i).getUsername().equals(newAdmin.getUsername()))
+			{
+				admins.set(i, newAdmin);
+				this.saveAll(admins);
+				return true;
+			}
 		}
-		admin = newAdmin;
-		this.saveAll(admins);
-		return true;
+		return false;
 	}
 	
 	public boolean remove(String username)
