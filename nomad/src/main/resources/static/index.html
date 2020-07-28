@@ -7,6 +7,9 @@
         <link rel="stylesheet" type="text/css" href="css/skeleton.css">
         <link rel="stylesheet" type="text/css" href="css/index.css">
 
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet"> 
+
 		<title>Nomad</title>
 	</head>
 	<body>
@@ -15,33 +18,41 @@
             <div class="container">
                 <ul class="navbar-list">
                     <!-- TODO(Jovan): Dodatne funk u zavisnosti od ulogovanog korisnika? -->
-                    <li class="navbar-item u-pull-left"><a class="button" href="index.html">nomad</a></li>
+                    <li class="navbar-item u-pull-left logo"><a class="button" href="index.html">nomad</a></li>
                     <li class="navbar-item u-pull-right"><a class="button" href="registration.html">Sign Up</a></li>
                     <li class="navbar-item u-pull-right"><a class="button" href="login.html">Log In</a></li>
                     <li class="navbar-item u-pull-right"><a class="button" v-on:click="logout()">Log Out</a></li>
                     <!-- <li class="navbar-item u-pull-right"><a class="button" href="personalData.html">personal</a></li> -->
                 </ul>
             </div>
-        </nav><li class="navbar-item u-pull-right">
+        </nav>
 
         <!-- NOTE(Jovan): Main content -->
-        <div class="container content">
+        <div class="content">
             <!-- NOTE(Jovan): Header -->
             <section class="header">
-                <!-- TODO(Jovan): Bolji slogan? Mozda generator? -->
-                <h2 class="title">Never settle.</h2>
-                <ul class="header-list">
-                    <li class="header-item"><button class="button-primary">Find a home</button></li>
-                    <li class="header-item"><button class="">Host your home</button></li>
-                </ul>
-            </section>
+                    <!-- TODO(Jovan): Bolji slogan? Mozda generator? -->
+                    <h2 class="slogan">Be at home, anywhere!</h2>
 
-            <!-- NOTE(Jovan): Search -->
-            <div class="search">
-                <input type="text" placeholder="Country" name="country">
-                <input type="text" placeholder="City" name="city">
-                <input type="submit" value="Search" name="search-btn">
-            </div>
+                    <!-- NOTE(Jovan): Search -->
+                    <div class="search">
+                        <div class="search-field">
+                            <label>Country</label>
+                            <input type="text" placeholder="Which country?" name="country">
+                        </div>
+                        <div class="search-field">
+                            <label>City</label>
+                            <input type="text" placeholder="Which city?" name="city">
+                        </div>
+                        <div class="search-field">
+                            <label>Arrival date</label>
+                            <input type="date">
+                        </div>
+                        <div class="search-field">
+                            <button class="button-primary">Find a home</button>
+                        </div>
+                    </div>
+            </section>
 
             <!-- NOTE(Jovan): Footer -->
             <section class="footer">

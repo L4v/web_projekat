@@ -10,6 +10,7 @@ a:link, a:visited
 
 .navbar
 {
+    position: relative;
     background: #fff;
     z-index: 200; 
 }
@@ -23,11 +24,12 @@ a:link, a:visited
     width: 100%;
     left: 0px;
     top: 0px;
+    box-shadow: 0px 1px 10px #999;
 }
 
 .sticky + .content
 {
-    padding-top: 60px;
+    padding-top: 50px;
 }
 
 .navbar-list, .header-list, .footer-list
@@ -45,17 +47,32 @@ a:link, a:visited
 {
     font-size: 1.5rem;
     border: none;
+    text-transform: capitalize;
+    font-weight: normal;
+}
+
+.logo a
+{
+    color: #ff5722;
+    text-transform: uppercase;
+    font-weight: bold;
 }
 
 .header
 {
     /* TODO(Jovan): Postaviti adekvatnu pozadinu*/
     background-color: #fff;
-    background-image: url("../img/mountains.gif");
+    background-image: url("../img/novisad.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    min-height: 50vh;
+    min-height: 80vh;
+}
+
+.slogan
+{
+    color: #fff;
+    font-weight: bold;
 }
 
 .header h1, h2
@@ -70,7 +87,40 @@ a:link, a:visited
 
 .host-btn
 {
-    color: #fff;
+    background-color: #fff;
+}
+
+.search
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80vw;
+    margin: auto;
+    background-color: #fff;
+    border-radius: 25px;
+}
+
+.search-field
+{
+    padding: 10px 0px 10px 0px;
+}
+
+.search button
+{
+    margin: 0px;
+}
+
+.search input
+{
+    border: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.search input:focus
+{
+    border: none;
 }
 
 .footer
