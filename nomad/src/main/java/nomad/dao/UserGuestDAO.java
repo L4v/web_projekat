@@ -66,23 +66,21 @@ public class UserGuestDAO{
 	
 	public boolean update(UserGuest userGuest) {
 		ArrayList<UserGuest> guests = (ArrayList<UserGuest>)this.getAll();
-		UserGuest guest = guests.stream().filter(g -> g.getUsername().equals(userGuest.getUsername())).findAny().orElse(null);
-		if(guest == null)
+		
+		for(int i = 0;
+			i < guests.size();
+			++i)
 		{
-			return false;
+			if(guests.get(i).getUsername().equals(userGuest.getUsername()))
+			{
+				guests.set(i, userGuest);
+				this.saveAll(guests);
+				return true;
+			}
 		}
 		
-		/* ovo je bilo samo ovaj jedan red
-		guest = userGuest;
-		*/
+		return false;
 
-		//dodato (Kristian)
-		remove(guest.getUsername());
-		guest = userGuest;
-		add(guest);
-		//
-		
-		return true;
 	}
 	
 	public boolean add(UserGuest guest)
