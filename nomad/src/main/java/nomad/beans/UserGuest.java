@@ -12,7 +12,7 @@ public class UserGuest extends UserBase implements Serializable {
 	private HashMap<String, Apartment> rented;
 	private ArrayList<Reservation> reservations;
 
-	public UserGuest(String username, String password, String name, String surname, Sex sex, UserType userType) {
+	public UserGuest(String username, String password, String name, String surname, Sex sex) {
 		super(username, password, name, surname, sex, UserType.GUEST);
 	}
 

@@ -14,8 +14,10 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import nomad.beans.UserAdmin;
 import nomad.beans.UserBase;
 import nomad.beans.UserGuest;
+import nomad.beans.enums.Sex;
 import nomad.dao.UserAdminDAO;
 import nomad.dao.UserGuestDAO;
 import nomad.dao.UserHostDAO;
@@ -32,10 +34,10 @@ public class Application{
 	{
 		Gson gson = new Gson();
 		
-		// TODO(Jovan): Refaktorisati dao-e
-		UserAdminDAO adminDAO = new UserAdminDAO();
+		// TODO(Jovan): Prepraviti na logicko brisanje??
+		UserAdminDAO adminDAO = new UserAdminDAO("admins.json");
 		UserGuestDAO guestDAO = new UserGuestDAO("guests.json");
-		UserHostDAO hostDAO = new UserHostDAO();
+		UserHostDAO hostDAO = new UserHostDAO("hosts.json");
 		
 		UserRegistrationService userRegistrationService = new UserRegistrationService(guestDAO);
 		UserLoginService userLoginService = new UserLoginService(adminDAO, guestDAO, hostDAO);
