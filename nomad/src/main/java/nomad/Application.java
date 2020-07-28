@@ -17,6 +17,7 @@ import io.jsonwebtoken.security.Keys;
 import nomad.beans.UserAdmin;
 import nomad.beans.UserBase;
 import nomad.beans.UserGuest;
+import nomad.beans.UserHost;
 import nomad.beans.enums.Sex;
 import nomad.dao.UserAdminDAO;
 import nomad.dao.UserGuestDAO;
@@ -139,6 +140,25 @@ public class Application{
 			System.out.println(user.getName());
 			response.status(200);
 			return response;
+			
+			/*response.type("application/json");
+			String payload = request.body();
+			UserBase user = gson.fromJson(payload, UserBase.class);
+			if(user instanceof UserGuest)
+			{
+				guestDAO.update((UserGuest)user);
+			}
+			else if(user instanceof UserAdmin) 
+			{
+				adminDAO.update((UserAdmin)user);
+			}
+			else if(user instanceof UserHost)
+			{
+				hostDAO.update((UserHost)user);
+			}
+			System.out.println(user.getName());
+			response.status(200);
+			return response;*/
 		});
 		
 		
