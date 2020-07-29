@@ -14,24 +14,25 @@
 		<title>Nomad</title>
 	</head>
 	<body>
+        <!-- TODO(Jovan): Merge search and navigation -->
         <!-- NOTE(Jovan): Navigation bar -->
-        <nav id="navbar">
-            <div id="nav" :class="{sticky:active}">
-                <div class="nav-container" :class="toggleNavClass()">
-                    <ul class="navbar-list">
-                        <!-- TODO(Jovan): Dodatne funk u zavisnosti od ulogovanog korisnika? -->
-                        <li class="navbar-item u-pull-left logo"><a class="button" href="index.html">nomad</a></li>
-                        <li class="navbar-item u-pull-right"><a class="button" href="registration.html">Sign Up</a></li>
-                        <li class="navbar-item u-pull-right"><a class="button" href="login.html">Log In</a></li>
-                        <li class="navbar-item u-pull-right"><a class="button" v-on:click="logout()">Log Out</a></li>
-                        <!-- <li class="navbar-item u-pull-right"><a class="button" href="personalData.html">personal</a></li> -->
-                    </ul>
+        <div id="app" class="content">
+            <nav id="navbar">
+                <div id="nav" :class="{sticky:active}">
+                    <div class="nav-container" :class="toggleNavClass()">
+                        <ul class="navbar-list">
+                            <!-- TODO(Jovan): Dodatne funk u zavisnosti od ulogovanog korisnika? -->
+                            <li class="navbar-item u-pull-left logo"><a class="button" href="index.html">nomad</a></li>
+                            <li class="navbar-item u-pull-right"><a class="button" href="registration.html">Sign Up</a></li>
+                            <li class="navbar-item u-pull-right"><a class="button" href="login.html">Log In</a></li>
+                            <li class="navbar-item u-pull-right"><a class="button" v-on:click="logout()">Log Out</a></li>
+                            <!-- <li class="navbar-item u-pull-right"><a class="button" href="personalData.html">personal</a></li> -->
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
 
         <!-- NOTE(Jovan): Main content -->
-        <div class="content">
             <!-- NOTE(Jovan): Header -->
             <section class="header">
                 <div class="header-content">
@@ -39,7 +40,7 @@
                     <h2 class="slogan">Be at home, anywhere!</h2>
 
                     <!-- NOTE(Jovan): Search -->
-                    <div id="searchbar" class="search">
+                    <div id="searchbar">
                         <div class="search-field">
                             <label>Country</label>
                             <input type="text" placeholder="Which country?" name="country">

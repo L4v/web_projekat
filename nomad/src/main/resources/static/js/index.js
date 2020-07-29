@@ -1,6 +1,6 @@
 new Vue
 ({
-    el: "#navbar",
+    el: "#app",
     data:
     {
         active: false
