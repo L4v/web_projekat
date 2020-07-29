@@ -49,31 +49,31 @@ a:link, a:visited
 .navbar-item
 {
     display: inline;
-    padding: 10px;
+    padding: 0rem;
 }
 
 #nav > .nav-container > .navbar-list > .navbar-item a
 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     border: none;
     color: #fff;
-    text-transform: uppercase;
-    font-weight: bold;
+    text-transform: capitalize;
+    font-weight: 600;
 }
 
 #nav > .nav-container > .navbar-list > .logo a
 {
     color: #fff;
     text-transform: uppercase;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 #nav.sticky > .nav-container > .navbar-list > .navbar-item a
 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     border: none;
     text-transform: capitalize;
-    font-weight: normal;
+    font-weight: 400;
     color: #000;
 }
 
@@ -81,7 +81,7 @@ a:link, a:visited
 {
     color: #ff5722;
     text-transform: uppercase;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .content
@@ -97,7 +97,7 @@ a:link, a:visited
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    min-height: 80vh;
+    min-height: 100vh;
 }
 
 .header-content
@@ -108,7 +108,7 @@ a:link, a:visited
 .slogan
 {
     color: #fff;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .header h1, h2
