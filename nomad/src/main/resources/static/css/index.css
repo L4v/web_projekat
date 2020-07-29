@@ -10,27 +10,36 @@ a:link, a:visited
 
 .navbar
 {
-    position: relative;
-    background: #fff;
-    z-index: 200; 
+    transition: 100ms;
+    padding: 0px 25px 0px 25px;
+}
+
+.navbar-sticky
+{
+    transition: 100ms;
+    padding: 0px 25px 0px 25px;
+}
+
+#nav
+{
+    transition: 150ms;
+    height: 10vh;
+    width: 100%;
+    /*background-color: #fff;*/
+    position: fixed;
+    top: 0;
+}
+
+#nav.sticky
+{
+    transition: 150ms;
+    background-color: #fff;
+    box-shadow: 0px 1px 10px #999;
 }
 
 /* NOTE(Jovan):
  * Koristi se za sticky navbar
  */
-.sticky
-{
-    position: fixed;
-    width: 100%;
-    left: 0px;
-    top: 0px;
-    box-shadow: 0px 1px 10px #999;
-}
-
-.sticky + .content
-{
-    padding-top: 50px;
-}
 
 .navbar-list, .header-list, .footer-list
 {
@@ -43,19 +52,41 @@ a:link, a:visited
     padding: 10px;
 }
 
-.navbar-item a
+#nav > .nav-container > .navbar-list > .navbar-item a
+{
+    font-size: 1.5rem;
+    border: none;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+#nav > .nav-container > .navbar-list > .logo a
+{
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+#nav.sticky > .nav-container > .navbar-list > .navbar-item a
 {
     font-size: 1.5rem;
     border: none;
     text-transform: capitalize;
     font-weight: normal;
+    color: #000;
 }
 
-.logo a
+#nav.sticky > .nav-container > .navbar-list > .logo a
 {
     color: #ff5722;
     text-transform: uppercase;
     font-weight: bold;
+}
+
+.content
+{
+    margin-top: 0vh;
 }
 
 .header
@@ -67,6 +98,11 @@ a:link, a:visited
     background-repeat: no-repeat;
     background-size: cover;
     min-height: 80vh;
+}
+
+.header-content
+{
+    padding-top: 10vh;
 }
 
 .slogan

@@ -1,6 +1,6 @@
 new Vue
 ({
-    el: "#nav",
+    el: "#navbar",
     data:
     {
         active: false
@@ -11,29 +11,30 @@ new Vue
         {
             if(this.active == false)
             {
-                return 'navbar';
+                return "navbar";
             }
             else
             {
-                return 'navbar sticky';
+                return "navbar-sticky";
             }
         },
         logout: function()
         {
-        	let jwt = localStorage.jwt;
-        	if(jwt){
-        		localStorage.removeItem('jwt');
-        		alert("You have successfully logged out");
-        	} else {
-        		alert("You are not logged in");
-        	}
+            let jwt = localStorage.jwt;
+            if(jwt){
+                localStorage.removeItem("jwt");
+                alert("You have successfully logged out");
+            } else {
+                alert("You are not logged in");
+            }
         }
     },
     mounted()
     {
         window.document.onscroll = () =>
         {
-            let navbar = document.getElementById('nav');
+            /*
+            let navbar = document.getElementById("nav");
             if(window.scrollY > navbar.offsetTop)
             {
                 this.active = true;
@@ -42,6 +43,16 @@ new Vue
             {
                 this.active = false;
             }
-        }
+            */
+            let searchbar = document.getElementById("searchbar");
+            if(window.scrollY > searchbar.offsetTop)
+            {
+                this.active = true;
+            }
+            else
+            {
+                this.active = false;
+            }
+        };
     }
-})
+});
