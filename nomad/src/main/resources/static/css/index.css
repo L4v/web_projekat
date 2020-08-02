@@ -156,6 +156,19 @@ a:link, a:visited
     margin: auto;
     background-color: #fff;
     border-radius: 25px;
+    transition: 200ms;
+}
+
+#searchbar.search-collapse
+{
+    position: fixed;
+    top: 0;
+    transition: 400ms;
+    transition-timing-function: ease-in-out;
+    width: 20vw;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
 }
 
 .search-field

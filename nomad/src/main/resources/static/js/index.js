@@ -18,6 +18,17 @@ new Vue
                 return "navbar-sticky";
             }
         },
+        toggleSearchClass()
+        {
+            if(this.active == false)
+            {
+                return "";
+            }
+            else
+            {
+                return "search-collapse";
+            }
+        },
         logout: function()
         {
             let jwt = localStorage.jwt;

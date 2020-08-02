@@ -37,8 +37,9 @@
             <!-- NOTE(Jovan): Header -->
             <section class="header">
 
+                <!-- TODO(Jovan): Search to navigation? -->
                 <!-- NOTE(Jovan): Search -->
-                <div id="searchbar">
+                <div id="searchbar" :class="toggleSearchClass()">
                     <div class="search-field">
                         <label>Country</label>
                         <input type="text" placeholder="Which country?" name="country">
