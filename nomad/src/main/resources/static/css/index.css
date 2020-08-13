@@ -32,6 +32,10 @@ a:link, a:visited
     z-index:999;
 }
 
+
+/* NOTE(Jovan):
+ * Koristi se za sticky navbar
+ */
 #nav.sticky
 {
     transition: 150ms;
@@ -39,19 +43,62 @@ a:link, a:visited
     box-shadow: 0px 1px 10px #999;
 }
 
-/* NOTE(Jovan):
- * Koristi se za sticky navbar
- */
-
 .navbar-list, .header-list, .footer-list
 {
     list-style-type: none;
 }
 
+.nav-container
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sticky > .nav-container
+{
+    flex-wrap: nowrap;
+}
+
+
+.nav-container > *
+{
+    min-height: 10vh;
+    flex-basis: 50%;
+}
+
+.navbar-list
+{
+    flex-grow: 1;
+    align-self: flex-end;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin: 0;
+    max-width: 13rem;
+}
+
 .navbar-item
 {
-    display: inline;
-    padding: 0rem;
+    margin: 0;
+    padding: 0;
+}
+
+.logo
+{
+    flex-grow: 1;
+
+    display: flex;
+    align-items: center;
+}
+
+.navbar-sticky > .logo
+{
+    max-width: 13rem;
 }
 
 #nav > .nav-container > .navbar-list > .navbar-item a
@@ -63,8 +110,10 @@ a:link, a:visited
     font-weight: 600;
 }
 
-#nav > .nav-container > .navbar-list > .logo a
+#nav > .nav-container > .logo a
 {
+    font-size: 1.8rem;
+    border: none;
     color: #fff;
     text-transform: uppercase;
     font-weight: 600;
@@ -79,8 +128,10 @@ a:link, a:visited
     color: #000;
 }
 
-#nav.sticky > .nav-container > .navbar-list > .logo a
+#nav.sticky > .nav-container > .logo a
 {
+    font-size: 1.8rem;
+    border: none;
     color: #ff5722;
     text-transform: uppercase;
     font-weight: 600;
@@ -147,28 +198,34 @@ a:link, a:visited
     background-color: #fff;
 }
 
+.fade-enter-active, .fade-leave-active
+{
+    transition: opacity 500ms;
+}
+
+.fade-enter, .fade-leave-to
+{
+    opacity: 0;
+}
+
 #searchbar
 {
+    order: 1;
+
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     width: 80vw;
     margin: auto;
     background-color: #fff;
     border-radius: 25px;
-    transition: 200ms;
 }
 
 #searchbar.search-collapse
 {
-    position: fixed;
-    top: 0;
-    transition: 400ms;
-    transition-timing-function: ease-in-out;
-    width: 20vw;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
+    order: 0;
+    flex-grow: 2;
 }
 
 .search-field

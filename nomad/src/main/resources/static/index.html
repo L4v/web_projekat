@@ -20,14 +20,38 @@
             <nav id="navbar">
                 <div id="nav" :class="{sticky:active}">
                     <div class="nav-container" :class="toggleNavClass()">
+                        <div class="navbar-item navbar-item-left logo"><a class="button" href="index.html">nomad</a></div>
+                <!-- TODO(Jovan): Search to navigation? -->
+                <!-- NOTE(Jovan): Search -->
+                <transition name="fade">
+                    <div v-if="!active" id="searchbar" :class="toggleSearchClass()">
+                            <div class="search-field">
+                                <label>Country</label>
+                                <input type="text" placeholder="Which country?" name="country">
+                            </div>
+                            <div class="search-field">
+                                <label>City</label>
+                                <input type="text" placeholder="Which city?" name="city">
+                            </div>
+                            <div class="search-field">
+                                <label>Arrival date</label>
+                                <input type="date">
+                            </div>
+                        <div class="search-field search-btn" :class="toggleSearchClass()">
+                            <button class="button-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <div v-else id="searchbar" :class="toggleSearchClass()">
+                        <div class="search-field search-btn" :class="toggleSearchClass()">
+                            <input type="text" placeholder="Search for a home">
+                            <button class="button-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </transition>
+
                         <ul class="navbar-list">
                             <!-- TODO(Jovan): Dodatne funk u zavisnosti od ulogovanog korisnika? -->
-                            <li class="navbar-item u-pull-left logo"><a class="button" href="index.html">nomad</a></li>
-                            <li class="navbar-item u-pull-right"><a class="button" href="registration.html">Sign Up</a></li>
-                            <li class="navbar-item u-pull-right"><a class="button" href="login.html">Log In</a></li>
-                            <li class="navbar-item u-pull-right"><a class="button" v-on:click="logout()">Log Out</a></li>
-                            <!-- <li class="navbar-item u-pull-right"><a class="button" href="personalData.html">personal</a></li> -->
-                            <li class="navbar-item u-pull-right"><a class="button" href="showGuests.html">Guests</a></li>
+                            <li class="navbar-item navbar-item-right"><a class="button" href="registration.html">Sign Up</a></li>
                         </ul>
                     </div>
                 </div>
@@ -37,25 +61,6 @@
             <!-- NOTE(Jovan): Header -->
             <section class="header">
 
-                <!-- TODO(Jovan): Search to navigation? -->
-                <!-- NOTE(Jovan): Search -->
-                <div id="searchbar" :class="toggleSearchClass()">
-                    <div class="search-field">
-                        <label>Country</label>
-                        <input type="text" placeholder="Which country?" name="country">
-                    </div>
-                    <div class="search-field">
-                        <label>City</label>
-                        <input type="text" placeholder="Which city?" name="city">
-                    </div>
-                    <div class="search-field">
-                        <label>Arrival date</label>
-                        <input type="date">
-                    </div>
-                    <div class="search-field search-btn">
-                        <button class="button-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
-                    </div>
-                </div>
 
                 <div class="header-content row">
                     <!-- TODO(Jovan): Bolji slogan? Mozda generator? -->
