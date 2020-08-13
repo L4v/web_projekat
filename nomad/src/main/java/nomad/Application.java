@@ -138,6 +138,7 @@ public class Application{
 			response.type("application/json");
 			String payload = request.body();
 			UserGuest user = gson.fromJson(payload, UserGuest.class);
+			
 			guestDAO.update(user);
 			System.out.println(user.getName());
 			response.status(200);
