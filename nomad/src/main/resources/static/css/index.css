@@ -101,6 +101,12 @@ a:link, a:visited
     max-width: 13rem;
 }
 
+.nav-container
+{
+    max-width: 80vw;
+    margin: auto;
+}
+
 #nav > .nav-container > .navbar-list > .navbar-item a
 {
     font-size: 1.8rem;
@@ -216,7 +222,7 @@ a:link, a:visited
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 80vw;
+    min-width: 70vw;
     margin: auto;
     background-color: #fff;
     border-radius: 25px;
