@@ -79,7 +79,7 @@ a:link, a:visited
     align-items: center;
 
     margin: 0;
-    max-width: 13rem;
+    max-width: 8rem;
 }
 
 .navbar-item
@@ -107,7 +107,7 @@ a:link, a:visited
     margin: auto;
 }
 
-#nav > .nav-container > .navbar-list > .navbar-item a
+#nav > .nav-container > .navbar-list > .navbar-item button
 {
     font-size: 1.8rem;
     border: none;
@@ -125,7 +125,7 @@ a:link, a:visited
     font-weight: 600;
 }
 
-#nav.sticky > .nav-container > .navbar-list > .navbar-item a
+#nav.sticky > .nav-container > .navbar-list > .navbar-item button
 {
     font-size: 1.8rem;
     border: none;
