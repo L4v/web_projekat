@@ -6,6 +6,7 @@ import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
 import java.security.Key;
+import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
@@ -17,12 +18,11 @@ import io.jsonwebtoken.security.Keys;
 import nomad.beans.UserAdmin;
 import nomad.beans.UserBase;
 import nomad.beans.UserGuest;
-import nomad.beans.UserHost;
-import nomad.beans.enums.Sex;
 import nomad.dao.UserAdminDAO;
 import nomad.dao.UserGuestDAO;
 import nomad.dao.UserHostDAO;
 import nomad.dto.LoginDTO;
+import nomad.services.AdminServices;
 import nomad.services.UserLoginService;
 import nomad.services.UserRegistrationService;
 import nomad.utils.Path;
@@ -42,6 +42,8 @@ public class Application{
 		
 		UserRegistrationService userRegistrationService = new UserRegistrationService(guestDAO);
 		UserLoginService userLoginService = new UserLoginService(adminDAO, guestDAO, hostDAO);
+		
+		AdminServices adminServices = new AdminServices(guestDAO, adminDAO, hostDAO);
 		
 		port(8080);
 		staticFiles.location("/static");
@@ -159,6 +161,42 @@ public class Application{
 			System.out.println(user.getName());
 			response.status(200);
 			return response;*/
+		});
+		
+		get(Path.Rest.ADMIN_ALL_USERS, (request, response) ->
+		{
+			// TODO(Jovan): Pull out auth check into function?
+			response.type("application/json");
+			String auth = request.headers("Authorization");
+			if(auth.isEmpty()|| !auth.contains("Bearer"))
+			{
+				response.status(404);
+			}
+			else
+			{
+				String jws = auth.substring(auth.indexOf("Bearer") + 7);
+				try
+				{
+					Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+					UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
+					if(admin == null)
+					{
+						response.status(404);
+						return response;
+					}
+					response.status(200);
+					ArrayList<UserBase> users = (ArrayList<UserBase>) adminServices.getAll();
+					String usersJson = gson.toJson(users);
+					return usersJson;
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+					response.status(404);
+					return response;
+				}
+			}
+			return response;
 		});
 		
 		
