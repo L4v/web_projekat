@@ -20,39 +20,49 @@
             <nav id="navbar">
                 <div id="nav" :class="{sticky:active}">
                     <div class="nav-container" :class="toggleNavClass()">
-                        <div class="navbar-item navbar-item-left logo"><a class="button" href="index.html">nomad</a></div>
-                <!-- TODO(Jovan): Search to navigation? -->
-                <!-- NOTE(Jovan): Search -->
-                <transition name="fade">
-                    <div v-if="!active" id="searchbar" :class="toggleSearchClass()">
-                            <div class="search-field">
-                                <label>Country</label>
-                                <input type="text" placeholder="Which country?" name="country">
-                            </div>
-                            <div class="search-field">
-                                <label>City</label>
-                                <input type="text" placeholder="Which city?" name="city">
-                            </div>
-                            <div class="search-field">
-                                <label>Arrival date</label>
-                                <input type="date">
-                            </div>
-                        <div class="search-field search-btn" :class="toggleSearchClass()">
-                            <button class="button-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
-                        </div>
-                    </div>
-                    <div v-else id="searchbar" :class="toggleSearchClass()">
-                        <div class="search-field search-btn" :class="toggleSearchClass()">
-                            <input type="text" placeholder="Search for a home">
-                            <button class="button-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
-                        </div>
-                    </div>
-                </transition>
+                        <!-- NOTE(Jovan): Logo -->
+                        <div class="navbar-item logo"><a class="button" href="index.html">nomad</a></div>
 
-                        <ul class="navbar-list">
-                            <!-- TODO(Jovan): Dodatne funk u zavisnosti od ulogovanog korisnika? -->
-                            <li class="navbar-item"><button><i class="fa fa-bars" aria-hidden="true"></i> <i class="fa fa-user-o" aria-hidden="true"></i></button></li>
-                        </ul>
+                        <!-- NOTE(Jovan): Searchbar -->
+                        <transition name="fade">
+
+                            <!-- NOTE(Jovan): Expanded searchbar -->
+                            <div v-if="!active" id="searchbar" :class="toggleSearchClass()">
+                                    <div class="search-field">
+                                        <label>Country</label>
+                                        <input type="text" placeholder="Which country?" name="country">
+                                    </div>
+                                    <div class="search-field">
+                                        <label>City</label>
+                                        <input type="text" placeholder="Which city?" name="city">
+                                    </div>
+                                    <div class="search-field">
+                                        <label>Arrival date</label>
+                                        <input type="date">
+                                    </div>
+                                <div class="search-field search-btn" :class="toggleSearchClass()">
+                                    <button class="button-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- NOTE(Jovan): Collapsed, in navbar, searchbar -->
+                            <div v-else id="searchbar" :class="toggleSearchClass()">
+                                <div class="search-field search-btn" :class="toggleSearchClass()">
+                                    <input type="text" placeholder="Search for a home">
+                                    <button class="button-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                        </transition>
+
+                        <div class="navbar-dropdown">
+                            <button class="navdropbtn"><i class="fa fa-bars" aria-hidden="true"></i> <i class="fa fa-user-o" aria-hidden="true"></i></button>
+                            <!-- TODO(Jovan): Make Log and Sign into dropdown like menus -->
+                            <ul class="navbar-list">
+                                <li><a href="#">Log in</a></li>
+                                <li><a href="#">Sign up</a></li>
+                                <li><a href="#">Host your home</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </nav>
