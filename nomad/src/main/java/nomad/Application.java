@@ -1,9 +1,6 @@
 package nomad;
 
-import static spark.Spark.get;
-import static spark.Spark.port;
-import static spark.Spark.post;
-import static spark.Spark.staticFiles;
+import static spark.Spark.*;
 
 import java.security.Key;
 import java.util.ArrayList;
@@ -15,22 +12,37 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import nomad.beans.Apartment;
 import nomad.beans.UserAdmin;
 import nomad.beans.UserBase;
 import nomad.beans.UserGuest;
+import nomad.beans.UserHost;
 import nomad.dao.UserAdminDAO;
 import nomad.dao.UserGuestDAO;
 import nomad.dao.UserHostDAO;
 import nomad.dto.LoginDTO;
 import nomad.services.AdminServices;
+import nomad.services.HostsServices;
 import nomad.services.UserLoginService;
 import nomad.services.UserRegistrationService;
 import nomad.utils.Path;
+import spark.Request;
 
 public class Application{
 	
 	static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
+	public static String parseJws(Request request)
+	{
+		String auth = request.headers("Authorization");
+		if(auth == null || auth.isEmpty() || !auth.contains("Bearer"))
+		{
+			return null;
+		}
+		
+		return auth.length() <= 7 ? null : auth.substring(auth.indexOf("Bearer") + 7);
+	}
+	
 	public static void main(String args[])
 	{
 		Gson gson = new Gson();
@@ -42,6 +54,7 @@ public class Application{
 		
 		UserRegistrationService userRegistrationService = new UserRegistrationService(guestDAO);
 		UserLoginService userLoginService = new UserLoginService(adminDAO, guestDAO, hostDAO);
+		HostsServices hostsServices = new HostsServices(hostDAO);
 		
 		AdminServices adminServices = new AdminServices(guestDAO, adminDAO, hostDAO);
 		
@@ -78,15 +91,15 @@ public class Application{
 		
 		get("rest/test", (request, response) ->
 		{
-			String auth = request.headers("Authorization");
-			if(auth.isEmpty()|| !auth.contains("Bearer"))
+			response.type("application/json");
+			String jws = parseJws(request);
+			if(jws == null)
 			{
 				response.status(404);
+				return response;
 			}
 			else
 			{
-				// TODO(Jovan): Signature exception ????
-				String jws = auth.substring(auth.indexOf("Bearer") + 7);
 				try
 				{
 					Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
@@ -101,26 +114,23 @@ public class Application{
 					return response;
 				}
 			}
-			return response;
 		});
 		
 		get("rest/getUser", (request, response)->
 		{
-			response.type("application/json");
-			String auth = request.headers("Authorization");
-			if(auth.isEmpty()|| !auth.contains("Bearer"))
+			String jws = parseJws(request);
+			if(jws == null)
 			{
 				response.status(404);
+				return response;
 			}
 			else
 			{
-				String jws = auth.substring(auth.indexOf("Bearer") + 7);
 				try
 				{
 					Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
 					UserGuest guest = guestDAO.get(claims.getBody().getSubject());
 					response.status(200);
-					String gs = gson.toJson(guest);
 					return gson.toJson(guest);
 				}
 				catch(Exception e)
@@ -130,7 +140,6 @@ public class Application{
 					return response;
 				}
 			}
-			return response;
 		});
 		
 		post(Path.Rest.PERSONAL_DATA, (request, response)->
@@ -166,16 +175,14 @@ public class Application{
 		
 		get(Path.Rest.ADMIN_ALL_USERS, (request, response) ->
 		{
-			// TODO(Jovan): Pull out auth check into function?
-			response.type("application/json");
-			String auth = request.headers("Authorization");
-			if(auth.isEmpty()|| !auth.contains("Bearer"))
+			String jws = parseJws(request);
+			if(jws == null)
 			{
 				response.status(404);
+				return response;
 			}
 			else
 			{
-				String jws = auth.substring(auth.indexOf("Bearer") + 7);
 				try
 				{
 					Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
@@ -197,9 +204,29 @@ public class Application{
 					return response;
 				}
 			}
-			return response;
 		});
 		
+		
+		get(Path.Rest.HOST_ALL_APARTMENTS, (request, response) ->
+		{
+			response.type("application/json");
+			String jws = parseJws(request);
+			
+			if(jws == null)
+			{
+				response.status(404);
+				return response;
+			}
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserHost host = hostDAO.get(claims.getBody().getSubject());
+			if(host == null)
+			{
+				response.status(404);
+				return response;
+			}
+			ArrayList<Apartment> apartments = (ArrayList<Apartment>) hostsServices.getApartments(host.getUsername());
+			return gson.toJson(apartments);
+		});
 		
 	}
 	
