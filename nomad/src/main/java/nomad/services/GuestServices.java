@@ -14,6 +14,7 @@ import spark.Route;
 
 public class GuestServices {
 
+	// TODO(Jovan -> Kris): UserServices?
 	public static Route getGuest = (Request request, Response response) ->
 	{
 		String jws = parseJws(request);

@@ -7,7 +7,6 @@ public class Path {
 	// NOTE(Jovan): Web page redirections
 	public static class Web
 	{
-		public static final String HELLO = "/hello";
 	}
 	
 	// NOTE(Jovan): REST paths

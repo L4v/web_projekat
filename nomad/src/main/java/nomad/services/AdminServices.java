@@ -1,27 +1,26 @@
 package nomad.services;
 
+import static nomad.Application.parseJws;
+import static nomad.Application.gson;
+import static nomad.Application.key;
+import static nomad.Application.guestDAO;
+import static nomad.Application.hostDAO;
+import static nomad.Application.adminDAO;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import nomad.beans.UserAdmin;
 import nomad.beans.UserBase;
-import nomad.dao.UserAdminDAO;
-import nomad.dao.UserGuestDAO;
-import nomad.dao.UserHostDAO;
+import spark.Request;
+import spark.Response;
+import spark.Route;
 
 public class AdminServices {
 
-	private UserGuestDAO guestDAO;
-	private UserAdminDAO adminDAO;
-	private UserHostDAO hostDAO;
-	
-	public AdminServices(UserGuestDAO guestDAO, UserAdminDAO adminDAO, UserHostDAO hostDAO)
-	{
-		this.guestDAO = guestDAO;
-		this.adminDAO = adminDAO;
-		this.hostDAO = hostDAO;
-	}
-	
-	public Collection<UserBase> getAll()
+	private static Collection<UserBase> getAll()
 	{
 		Collection<UserBase> users = new ArrayList<UserBase>();
 		
@@ -31,5 +30,38 @@ public class AdminServices {
 		
 		return users;
 	}
+	
+	public static Route getAllUsers = (Request request, Response response) ->
+	{
+		String jws = parseJws(request);
+		if(jws == null)
+		{
+			response.status(404);
+			return response;
+		}
+		else
+		{
+			try
+			{
+				Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+				UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
+				if(admin == null)
+				{
+					response.status(404);
+					return response;
+				}
+				response.status(200);
+				ArrayList<UserBase> users = (ArrayList<UserBase>) getAll();
+				String usersJson = gson.toJson(users);
+				return usersJson;
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				response.status(404);
+				return response;
+			}
+		}
+	};
 	
 }
