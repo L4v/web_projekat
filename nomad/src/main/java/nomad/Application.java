@@ -19,9 +19,7 @@ import nomad.services.RegistrationServices;
 import nomad.services.UserServices;
 import nomad.utils.Filters;
 import nomad.utils.Path;
-import spark.Filter;
 import spark.Request;
-import spark.Response;
 
 public class Application{
 	
@@ -61,21 +59,15 @@ public class Application{
 		staticFiles.location("/static");
 		
 		post(Path.Rest.REG_GUEST, RegistrationServices.registerGuest);
-		
 		post(Path.Rest.LOGIN, LoginServices.login);
-		
-		get("rest/test", LoginServices.test);
-		
-		// TODO(Jovan -> Kris): Pogledaj da li je samo za guest
-		// ili da stavimo u uopsteni UserServices
-		get("rest/getUser", GuestServices.getGuest);
-		
 		// TODO(Jovan -> Kris): Moved to UserServices
 		post(Path.Rest.PERSONAL_DATA, UserServices.personalData);
 		
+		get("rest/test", LoginServices.test);
+		// TODO(Jovan -> Kris): Pogledaj da li je samo za guest
+		// ili da stavimo u uopsteni UserServices
+		get("rest/getUser", GuestServices.getGuest);
 		get(Path.Rest.ADMIN_ALL_USERS, AdminServices.getAllUsers);
-		
-		
 		get(Path.Rest.HOST_ALL_APARTMENTS, HostServices.allApartments);
 	
 		// NOTE(Jovan): Gzip compression
