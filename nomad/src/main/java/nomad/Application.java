@@ -22,16 +22,28 @@ import nomad.dao.UserGuestDAO;
 import nomad.dao.UserHostDAO;
 import nomad.dto.LoginDTO;
 import nomad.services.AdminServices;
+import nomad.services.GuestServices;
 import nomad.services.HostsServices;
-import nomad.services.UserLoginService;
-import nomad.services.UserRegistrationService;
+import nomad.services.LoginServices;
+import nomad.services.RegistrationServices;
 import nomad.utils.Path;
+import spark.Filter;
 import spark.Request;
+import spark.Response;
 
 public class Application{
 	
-	static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+	public static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
+	public static Gson gson;
+	
+	// TODO(Jovan): Prepraviti na logicko brisanje??
+	public static UserAdminDAO adminDAO;
+	public static UserGuestDAO guestDAO;
+	public static UserHostDAO hostDAO;
+
+	// TODO(Jovan): Separate into utility classes?
+	
 	public static String parseJws(Request request)
 	{
 		String auth = request.headers("Authorization");
@@ -42,18 +54,22 @@ public class Application{
 		
 		return auth.length() <= 7 ? null : auth.substring(auth.indexOf("Bearer") + 7);
 	}
+
+	public static Filter addGzipHeader = (Request request, Response response) ->
+	{
+		response.header("Content-Encoding", "gzip");
+	};
+	
+	
 	
 	public static void main(String args[])
 	{
-		Gson gson = new Gson();
+		gson = new Gson();
 		
-		// TODO(Jovan): Prepraviti na logicko brisanje??
-		UserAdminDAO adminDAO = new UserAdminDAO("admins.json");
-		UserGuestDAO guestDAO = new UserGuestDAO("guests.json");
-		UserHostDAO hostDAO = new UserHostDAO("hosts.json");
+		adminDAO  = new UserAdminDAO("admins.json");
+		guestDAO = new UserGuestDAO("guests.json");
+		hostDAO = new UserHostDAO("hosts.json");
 		
-		UserRegistrationService userRegistrationService = new UserRegistrationService(guestDAO);
-		UserLoginService userLoginService = new UserLoginService(adminDAO, guestDAO, hostDAO);
 		HostsServices hostsServices = new HostsServices(hostDAO);
 		
 		AdminServices adminServices = new AdminServices(guestDAO, adminDAO, hostDAO);
@@ -63,84 +79,13 @@ public class Application{
 		
 		// TODO(Jovan): Ukloniti
 		get(Path.Web.HELLO, (request, response) -> "Hello");
-		post(Path.Rest.REG_GUEST, (request, response)->
-		{
-			response.type("application/json");
-			String payload = request.body();
-			UserGuest guest = gson.fromJson(payload, UserGuest.class);
-			response.status(userRegistrationService.registerGuest(guest) ? 200 : 404);
-			return response;
-		});
+		post(Path.Rest.REG_GUEST, RegistrationServices.registerGuest);
 		
-		post(Path.Rest.LOGIN, (request, response)->
-		{
-			response.type("application/json");
-			String payload = request.body();
-			LoginDTO user = gson.fromJson(payload, LoginDTO.class);
-			UserBase loggedInUser = userLoginService.validate(user);
-			if(loggedInUser == null)
-			{
-				response.status(404);
-				return null;
-			}
-			response.status(200);
-			String jws = Jwts.builder().setSubject(loggedInUser.getUsername()).signWith(key).compact();
-			
-			return jws;
-		});
+		post(Path.Rest.LOGIN, LoginServices.login);
 		
-		get("rest/test", (request, response) ->
-		{
-			response.type("application/json");
-			String jws = parseJws(request);
-			if(jws == null)
-			{
-				response.status(404);
-				return response;
-			}
-			else
-			{
-				try
-				{
-					Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
-					response.body(claims.getBody().getSubject());
-					response.status(200);
-					return response;
-				}
-				catch(Exception e)
-				{
-					e.printStackTrace();
-					response.status(404);
-					return response;
-				}
-			}
-		});
+		get("rest/test", LoginServices.test);
 		
-		get("rest/getUser", (request, response)->
-		{
-			String jws = parseJws(request);
-			if(jws == null)
-			{
-				response.status(404);
-				return response;
-			}
-			else
-			{
-				try
-				{
-					Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
-					UserGuest guest = guestDAO.get(claims.getBody().getSubject());
-					response.status(200);
-					return gson.toJson(guest);
-				}
-				catch(Exception e)
-				{
-					e.printStackTrace();
-					response.status(404);
-					return response;
-				}
-			}
-		});
+		get("rest/getUser", GuestServices.getGuest);
 		
 		post(Path.Rest.PERSONAL_DATA, (request, response)->
 		{
@@ -227,7 +172,10 @@ public class Application{
 			ArrayList<Apartment> apartments = (ArrayList<Apartment>) hostsServices.getApartments(host.getUsername());
 			return gson.toJson(apartments);
 		});
-		
+	
+		// NOTE(Jovan): Gzip compression
+		after("*", addGzipHeader);
+
 	}
 	
 }
