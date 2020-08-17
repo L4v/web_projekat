@@ -18,34 +18,34 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class AdminServices {
+public class AdminServices
+{
 
 	private static Collection<UserBase> getAll()
 	{
 		Collection<UserBase> users = new ArrayList<UserBase>();
-		
+
 		users.addAll(guestDAO.getAll());
 		users.addAll(adminDAO.getAll());
 		users.addAll(hostDAO.getAll());
-		
+
 		return users;
 	}
-	
+
 	public static Route getAllUsers = (Request request, Response response) ->
 	{
 		String jws = parseJws(request);
-		if(jws == null)
+		if (jws == null)
 		{
 			response.status(404);
 			return response;
-		}
-		else
+		} else
 		{
 			try
 			{
 				Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
 				UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
-				if(admin == null)
+				if (admin == null)
 				{
 					response.status(404);
 					return response;
@@ -54,8 +54,7 @@ public class AdminServices {
 				ArrayList<UserBase> users = (ArrayList<UserBase>) getAll();
 				String usersJson = gson.toJson(users);
 				return usersJson;
-			}
-			catch(Exception e)
+			} catch (Exception e)
 			{
 				e.printStackTrace();
 				response.status(404);
@@ -63,5 +62,5 @@ public class AdminServices {
 			}
 		}
 	};
-	
+
 }

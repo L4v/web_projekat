@@ -19,46 +19,43 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class LoginServices {
+public class LoginServices
+{
 
-	
 	public static UserBase loggedInUser(LoginDTO loginDTO)
 	{
-		for(UserAdmin u : adminDAO.getAll())
+		for (UserAdmin u : adminDAO.getAll())
 		{
-			if(u.getUsername().equals(loginDTO.getUsername())
-					&& u.getPassword().equals(loginDTO.getPassword()))
+			if (u.getUsername().equals(loginDTO.getUsername()) && u.getPassword().equals(loginDTO.getPassword()))
 			{
 				return u;
 			}
 		}
-	
-		for(UserGuest u : guestDAO.getAll())
+
+		for (UserGuest u : guestDAO.getAll())
 		{
-			if(u.getUsername().equals(loginDTO.getUsername())
-					&& u.getPassword().equals(loginDTO.getPassword()))
+			if (u.getUsername().equals(loginDTO.getUsername()) && u.getPassword().equals(loginDTO.getPassword()))
 			{
 				return u;
 			}
 		}
-		
-		for(UserHost u : hostDAO.getAll())
+
+		for (UserHost u : hostDAO.getAll())
 		{
-			if(u.getUsername().equals(loginDTO.getUsername())
-					&& u.getPassword().equals(loginDTO.getPassword()))
+			if (u.getUsername().equals(loginDTO.getUsername()) && u.getPassword().equals(loginDTO.getPassword()))
 			{
 				return u;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public static Route test = (Request request, Response response) ->
 	{
 		response.type("application/json");
 		String jws = parseJws(request);
-		if(jws == null)
+		if (jws == null)
 		{
 			response.status(404);
 			return response;
@@ -69,30 +66,29 @@ public class LoginServices {
 			response.body(claims.getBody().getSubject());
 			response.status(200);
 			return response;
-		}
-		catch(Exception e)
+		} catch (Exception e)
 		{
 			e.printStackTrace();
 			response.status(404);
 			return response;
 		}
-		
+
 	};
-	
+
 	public static Route login = (Request request, Response response) ->
 	{
 		response.type("application/json");
 		String payload = request.body();
 		LoginDTO user = gson.fromJson(payload, LoginDTO.class);
 		UserBase loggedInUser = LoginServices.loggedInUser(user);
-		if(loggedInUser == null)
+		if (loggedInUser == null)
 		{
 			response.status(404);
 			return null;
 		}
 		response.status(200);
 		String jws = Jwts.builder().setSubject(loggedInUser.getUsername()).signWith(key).compact();
-		
+
 		return jws;
 	};
 }

@@ -9,7 +9,8 @@ import java.util.HashMap;
 import nomad.beans.enums.ApartmentStatus;
 import nomad.beans.enums.ApartmentType;
 
-public class Apartment implements Serializable {
+public class Apartment implements Serializable
+{
 	private static final long serialVersionUID = -8563884059267108747L;
 	private String id;
 	private ApartmentType type;
@@ -30,8 +31,9 @@ public class Apartment implements Serializable {
 	private ArrayList<Amenity> amenities;
 	private ArrayList<Reservation> reservations;
 
-	public Apartment(String id, ApartmentType type, int noRooms, int noGuests, Location location, UserHost host, double price,
-			LocalTime checkinTime, LocalTime checkoutTime) {
+	public Apartment(String id, ApartmentType type, int noRooms, int noGuests, Location location, UserHost host,
+			double price, LocalTime checkinTime, LocalTime checkoutTime)
+	{
 		this.id = id;
 		this.type = type;
 		this.noRooms = noRooms;
@@ -43,7 +45,9 @@ public class Apartment implements Serializable {
 		this.checkoutTime = checkoutTime;
 	}
 
-	public Apartment(String id, ApartmentType type, int noRooms, int noGuests, Location location, UserHost host, double price) {
+	public Apartment(String id, ApartmentType type, int noRooms, int noGuests, Location location, UserHost host,
+			double price)
+	{
 		this.id = id;
 		this.type = type;
 		this.noRooms = noRooms;
@@ -55,131 +59,163 @@ public class Apartment implements Serializable {
 		this.checkoutTime = LocalTime.of(22, 0);
 	}
 
-	public String getId() {
+	public String getId()
+	{
 		return id;
 	}
-	
-	public void setId(String id) {
+
+	public void setId(String id)
+	{
 		this.id = id;
 	}
-	
-	public ApartmentType getType() {
+
+	public ApartmentType getType()
+	{
 		return type;
 	}
 
-	public void setType(ApartmentType type) {
+	public void setType(ApartmentType type)
+	{
 		this.type = type;
 	}
 
-	public int getNoRooms() {
+	public int getNoRooms()
+	{
 		return noRooms;
 	}
 
-	public void setNoRooms(int noRooms) {
+	public void setNoRooms(int noRooms)
+	{
 		this.noRooms = noRooms;
 	}
 
-	public int getNoGuests() {
+	public int getNoGuests()
+	{
 		return noGuests;
 	}
 
-	public void setNoGuests(int noGuests) {
+	public void setNoGuests(int noGuests)
+	{
 		this.noGuests = noGuests;
 	}
 
-	public Location getLocation() {
+	public Location getLocation()
+	{
 		return location;
 	}
 
-	public void setLocation(Location location) {
+	public void setLocation(Location location)
+	{
 		this.location = location;
 	}
 
-	public ArrayList<Date> getRentDates() {
+	public ArrayList<Date> getRentDates()
+	{
 		return rentDates;
 	}
 
-	public void setRentDates(ArrayList<Date> rentDates) {
+	public void setRentDates(ArrayList<Date> rentDates)
+	{
 		this.rentDates = rentDates;
 	}
 
-	public HashMap<Date, Boolean> getAvailableDates() {
+	public HashMap<Date, Boolean> getAvailableDates()
+	{
 		return availableDates;
 	}
 
-	public void setAvailableDates(HashMap<Date, Boolean> availableDates) {
+	public void setAvailableDates(HashMap<Date, Boolean> availableDates)
+	{
 		this.availableDates = availableDates;
 	}
 
-	public UserHost getHost() {
+	public UserHost getHost()
+	{
 		return host;
 	}
 
-	public void setHost(UserHost host) {
+	public void setHost(UserHost host)
+	{
 		this.host = host;
 	}
 
-	public HashMap<String, Comment> getComments() {
+	public HashMap<String, Comment> getComments()
+	{
 		return comments;
 	}
 
-	public void setComments(HashMap<String, Comment> comments) {
+	public void setComments(HashMap<String, Comment> comments)
+	{
 		this.comments = comments;
 	}
 
-	public ArrayList<String> getImages() {
+	public ArrayList<String> getImages()
+	{
 		return images;
 	}
 
-	public void setImages(ArrayList<String> images) {
+	public void setImages(ArrayList<String> images)
+	{
 		this.images = images;
 	}
 
-	public double getPrice() {
+	public double getPrice()
+	{
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(double price)
+	{
 		this.price = price;
 	}
 
-	public LocalTime getCheckinTime() {
+	public LocalTime getCheckinTime()
+	{
 		return checkinTime;
 	}
 
-	public void setCheckinTime(LocalTime checkinTime) {
+	public void setCheckinTime(LocalTime checkinTime)
+	{
 		this.checkinTime = checkinTime;
 	}
 
-	public LocalTime getCheckoutTime() {
+	public LocalTime getCheckoutTime()
+	{
 		return checkoutTime;
 	}
 
-	public void setCheckoutTime(LocalTime checkoutTime) {
+	public void setCheckoutTime(LocalTime checkoutTime)
+	{
 		this.checkoutTime = checkoutTime;
 	}
 
-	public ApartmentStatus getStatus() {
+	public ApartmentStatus getStatus()
+	{
 		return status;
 	}
 
-	public void setStatus(ApartmentStatus status) {
+	public void setStatus(ApartmentStatus status)
+	{
 		this.status = status;
 	}
 
-	public ArrayList<Amenity> getAmenities() {
+	public ArrayList<Amenity> getAmenities()
+	{
 		return amenities;
 	}
 
-	public void setAmenities(ArrayList<Amenity> amenities) {
+	public void setAmenities(ArrayList<Amenity> amenities)
+	{
 		this.amenities = amenities;
 	}
 
-	public ArrayList<Reservation> getReservations() {
+	public ArrayList<Reservation> getReservations()
+	{
 		return reservations;
 	}
 
-	public void setReservations(ArrayList<Reservation> reservations) {
+	public void setReservations(ArrayList<Reservation> reservations)
+	{
 		this.reservations = reservations;
 	}
 

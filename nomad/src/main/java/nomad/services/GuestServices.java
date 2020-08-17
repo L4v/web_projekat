@@ -12,18 +12,18 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class GuestServices {
+public class GuestServices
+{
 
 	// TODO(Jovan -> Kris): UserServices?
 	public static Route getGuest = (Request request, Response response) ->
 	{
 		String jws = parseJws(request);
-		if(jws == null)
+		if (jws == null)
 		{
 			response.status(404);
 			return response;
-		}
-		else
+		} else
 		{
 			try
 			{
@@ -31,8 +31,7 @@ public class GuestServices {
 				UserGuest guest = guestDAO.get(claims.getBody().getSubject());
 				response.status(200);
 				return gson.toJson(guest);
-			}
-			catch(Exception e)
+			} catch (Exception e)
 			{
 				e.printStackTrace();
 				response.status(404);

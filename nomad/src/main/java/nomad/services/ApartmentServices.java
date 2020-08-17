@@ -15,13 +15,14 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class ApartmentServices {
+public class ApartmentServices
+{
 
 	public static Route hostAddApartment = (Request request, Response response) ->
 	{
 		response.type("text/html");
 		String jws = parseJws(request);
-		if(jws == null)
+		if (jws == null)
 		{
 			response.status(404);
 			return response;
@@ -30,22 +31,22 @@ public class ApartmentServices {
 		{
 			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
 			UserHost host = hostDAO.get(claims.getBody().getSubject());
-			if(host == null)
+			if (host == null)
 			{
 				response.status(404);
 				response.body("Not host!");
 				return response;
 			}
-			
+
 			String json = request.body();
 			Apartment apartment = gson.fromJson(json, Apartment.class);
-			if(apartment == null)
+			if (apartment == null)
 			{
 				response.status(404);
 				response.body("Invalid apartment object!");
 				return response;
 			}
-			if(apartmentDAO.add(apartment) == true)
+			if (apartmentDAO.add(apartment) == true)
 			{
 				response.status(200);
 				response.body("Apartment added!");
@@ -54,8 +55,7 @@ public class ApartmentServices {
 			response.status(404);
 			response.body("Failed adding apartment!");
 			return response;
-		}
-		catch(Exception e)
+		} catch (Exception e)
 		{
 			e.printStackTrace();
 			response.status(404);

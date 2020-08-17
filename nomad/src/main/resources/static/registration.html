@@ -1,49 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Guest Registration</title>
-        <link rel="stylesheet" type="text/css" href="css/normalize.css">
-        <link rel="stylesheet" type="text/css" href="css/skeleton.css">
-        <link rel="stylesheet" type="text/css" href="css/registration.css">
-    </head>
-    <body>
-        <div id="registrationForm">
-            <h1>Registration</h1>
-            <h2 v-bind:class="exists ? 'regFail' : 'regSuccess'">{{successMsg}}</h2>
-            
-            <div class="tab">
-                <input type="text" placeholder="Name" name="name" v-model="guest.name">
-                <input type="text" placeholder="Surname" name="surname" v-model="guest.surname">
-                <select name="sex" v-model="guest.sex">
-                    <option value="MALE">Male</option>
-                    <option value="FEMALE">Female</option>
-                    <option value="OTHER">Other</option>
-                    <option value="PRIVATE">Prefer not to say</option>
-                </select>
-            </div>
-            
-            <div class="tab">
-                <input type="text" placeholder="Username" name="username" v-model="guest.username">
-                <input type="text" placeholder="Password" name="password" v-model="guest.password">
-                <input type="text" placeholder="Confirm Password" name="confirmPassword">
-                <button class="button-primary" v-on:click="registerGuest(guest)">Register</button>
-            </div>
+<head>
+<meta charset="UTF-8">
+<title>Guest Registration</title>
+<link rel="stylesheet" type="text/css" href="css/normalize.css">
+<link rel="stylesheet" type="text/css" href="css/skeleton.css">
+<link rel="stylesheet" type="text/css" href="css/registration.css">
+</head>
+<body>
+	<div id="registrationForm">
+		<h1>Registration</h1>
+		<h2 v-bind:class="exists ? 'regFail' : 'regSuccess'">{{successMsg}}</h2>
 
-        </div>
+		<div class="tab">
+			<input type="text" placeholder="Name" name="name"
+				v-model="guest.name"> <input type="text"
+				placeholder="Surname" name="surname" v-model="guest.surname">
+			<select name="sex" v-model="guest.sex">
+				<option value="MALE">Male</option>
+				<option value="FEMALE">Female</option>
+				<option value="OTHER">Other</option>
+				<option value="PRIVATE">Prefer not to say</option>
+			</select>
+		</div>
 
-        <div>
-            <button id="prevBtn">Previous</button>
-            <button id="nextBtn" class="button-primary">Next</button>
-        </div>
+		<div class="tab">
+			<input type="text" placeholder="Username" name="username"
+				v-model="guest.username"> <input type="text"
+				placeholder="Password" name="password" v-model="guest.password">
+			<input type="text" placeholder="Confirm Password"
+				name="confirmPassword">
+			<button class="button-primary" v-on:click="registerGuest(guest)">Register</button>
+		</div>
 
-        <div>
-            <span class="step"></span>
-            <span class="step"></span>
-        </div>
+	</div>
 
-		<script src="js/vue.js"></script>
-        <script src="js/axios.min.js"></script>
-        <script src="js/registration.js"></script>
-    </body>
+	<div>
+		<button id="prevBtn">Previous</button>
+		<button id="nextBtn" class="button-primary">Next</button>
+	</div>
+
+	<div>
+		<span class="step"></span> <span class="step"></span>
+	</div>
+
+	<script src="js/vue.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script src="js/registration.js"></script>
+</body>
 </html>
