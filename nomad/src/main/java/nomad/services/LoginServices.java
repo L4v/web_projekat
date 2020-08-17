@@ -63,22 +63,20 @@ public class LoginServices {
 			response.status(404);
 			return response;
 		}
-		else
+		try
 		{
-			try
-			{
-				Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
-				response.body(claims.getBody().getSubject());
-				response.status(200);
-				return response;
-			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-				response.status(404);
-				return response;
-			}
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			response.body(claims.getBody().getSubject());
+			response.status(200);
+			return response;
 		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			response.status(404);
+			return response;
+		}
+		
 	};
 	
 	public static Route login = (Request request, Response response) ->

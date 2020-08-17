@@ -11,7 +11,9 @@ import io.jsonwebtoken.security.Keys;
 import nomad.dao.UserAdminDAO;
 import nomad.dao.UserGuestDAO;
 import nomad.dao.UserHostDAO;
+import nomad.dao.ApartmentDAO;
 import nomad.services.AdminServices;
+import nomad.services.ApartmentServices;
 import nomad.services.GuestServices;
 import nomad.services.HostServices;
 import nomad.services.LoginServices;
@@ -31,6 +33,7 @@ public class Application{
 	public static UserAdminDAO adminDAO;
 	public static UserGuestDAO guestDAO;
 	public static UserHostDAO hostDAO;
+	public static ApartmentDAO apartmentDAO;
 
 	// TODO(Jovan): Separate into utility classes?
 	
@@ -54,6 +57,7 @@ public class Application{
 		adminDAO  = new UserAdminDAO("admins.json");
 		guestDAO = new UserGuestDAO("guests.json");
 		hostDAO = new UserHostDAO("hosts.json");
+		apartmentDAO = new ApartmentDAO("apartments.json");
 		
 		port(8080);
 		staticFiles.location("/static");
@@ -62,6 +66,7 @@ public class Application{
 		post(Path.Rest.LOGIN, LoginServices.login);
 		// TODO(Jovan -> Kris): Moved to UserServices
 		post(Path.Rest.PERSONAL_DATA, UserServices.personalData);
+		post(Path.Rest.HOST_ADD_APARTMENT, ApartmentServices.hostAddApartment);
 		
 		get("rest/test", LoginServices.test);
 		// TODO(Jovan -> Kris): Pogledaj da li je samo za guest
