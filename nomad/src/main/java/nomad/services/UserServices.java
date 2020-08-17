@@ -12,7 +12,7 @@ import io.jsonwebtoken.Jwts;
 
 import static nomad.Application.gson;
 
-import nomad.beans.UserBase;
+import nomad.beans.UserAdmin;
 import nomad.beans.UserGuest;
 import nomad.beans.UserHost;
 import spark.Route;
@@ -21,28 +21,35 @@ import spark.Response;
 
 public class UserServices
 {
+	private static String loggedInUsername;
 
 	public static Route personalData = (Request request, Response response) ->
 	{
 		response.type("application/json");
 		String payload = request.body();
-		UserBase user = gson.fromJson(payload, UserBase.class);
 		
+		if(guestDAO.get(loggedInUsername) != null)
+		{
+			guestDAO.update(gson.fromJson(payload, UserGuest.class));
+		}
+		else if (hostDAO.get(loggedInUsername) != null) 
+		{
+			UserHost userHost = gson.fromJson(payload, UserHost.class);
+			hostDAO.update(userHost);
+			System.out.println(userHost.getName());
+		}
+		else if(adminDAO.get(loggedInUsername) != null)
+		{
+			adminDAO.update(gson.fromJson(payload, UserAdmin.class));
+		} 
+		else 
+		{
+			response.status(404); // pitati!!!
+			return response;
+		}
 		
-		//hostDAO.update(user);
-
-		System.out.println(user.getName());
 		response.status(200);
 		return response;
-
-		/*
-		 * response.type("application/json"); String payload = request.body(); UserBase
-		 * user = gson.fromJson(payload, UserBase.class); if(user instanceof UserGuest)
-		 * { guestDAO.update((UserGuest)user); } else if(user instanceof UserAdmin) {
-		 * adminDAO.update((UserAdmin)user); } else if(user instanceof UserHost) {
-		 * hostDAO.update((UserHost)user); } System.out.println(user.getName());
-		 * response.status(200); return response;
-		 */
 	};
 	
 	public static Route getUser = (Request request, Response response) ->
@@ -58,6 +65,7 @@ public class UserServices
 			try
 			{
 				Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+				loggedInUsername = claims.getBody().getSubject();
 				
 				if(guestDAO.get(claims.getBody().getSubject()) != null)
 				{
@@ -77,7 +85,7 @@ public class UserServices
 				else 
 				{
 					response.status(404); // pitati!!!
-					return null;
+					return response;
 				}
 			}
 			catch(Exception e)

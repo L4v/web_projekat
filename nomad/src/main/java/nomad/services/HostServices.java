@@ -23,7 +23,7 @@ import spark.Route;
 public class HostServices
 {
 
-	private static Collection<UserGuest> getGuests()
+	private static Collection<UserGuest> getGuests(String username)
 	{
 		Collection<UserGuest> users = new ArrayList<UserGuest>();
 
@@ -31,7 +31,7 @@ public class HostServices
 		{
 			for (Reservation reservation : userGuest.getReservations())
 			{
-				// if(reservation.getApartment().getHost().equals())
+				if(reservation.getApartment().getHost().getUsername().equals(username))
 				{
 					users.add(userGuest);
 					break;
