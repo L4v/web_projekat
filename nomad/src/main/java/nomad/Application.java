@@ -19,6 +19,7 @@ import nomad.services.GuestServices;
 import nomad.services.HostServices;
 import nomad.services.LoginServices;
 import nomad.services.RegistrationServices;
+import nomad.services.ReservationServices;
 import nomad.services.UserServices;
 import nomad.utils.Filters;
 import nomad.utils.Path;
@@ -76,6 +77,7 @@ public class Application
 		get("rest/getUser", GuestServices.getGuest);
 		get(Path.Rest.ADMIN_ALL_USERS, AdminServices.getAllUsers);
 		get(Path.Rest.HOST_ALL_APARTMENTS, HostServices.allApartments);
+		get(Path.Rest.HOST_VIEW_RESERVATIONS, ReservationServices.hostViewReservations);
 
 		// NOTE(Jovan): Gzip compression
 		after("*", Filters.addGzipHeader);
