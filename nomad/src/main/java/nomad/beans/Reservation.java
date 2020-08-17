@@ -14,8 +14,9 @@ public class Reservation implements Serializable {
 	private String reservationMessage;
 	private UserGuest guest;
 	private ReservationStatus status;
+	private String id;
 
-	private Reservation(Apartment apartment, Date startDate, int noDays, double totalPrice, String reservationMessage,
+	private Reservation(String id, Apartment apartment, Date startDate, int noDays, double totalPrice, String reservationMessage,
 			UserGuest guest, ReservationStatus status) {
 		this.apartment = apartment;
 		this.startDate = startDate;
@@ -26,7 +27,7 @@ public class Reservation implements Serializable {
 		this.status = status;
 	}
 
-	private Reservation(Apartment apartment, Date startDate, double totalPrice, String reservationMessage,
+	private Reservation(String id, Apartment apartment, Date startDate, double totalPrice, String reservationMessage,
 			UserGuest guest, ReservationStatus status) {
 		this.apartment = apartment;
 		this.startDate = startDate;
@@ -91,6 +92,11 @@ public class Reservation implements Serializable {
 
 	public void setStatus(ReservationStatus status) {
 		this.status = status;
+	}
+	
+	public String getId()
+	{
+		return this.id;
 	}
 
 }

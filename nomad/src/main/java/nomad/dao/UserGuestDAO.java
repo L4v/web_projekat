@@ -1,5 +1,7 @@
 package nomad.dao;
 
+import static nomad.Application.gson;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -7,8 +9,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -43,7 +43,6 @@ public class UserGuestDAO{
 	
 	private void saveAll(Collection<UserGuest> guests)
 	{
-		Gson gson = new Gson();
 		try(FileWriter writer = new FileWriter(this.filename))
 		{
 			gson.toJson(guests, writer);
@@ -107,7 +106,6 @@ public class UserGuestDAO{
 		try(FileReader freader = new FileReader(this.filename);
 			JsonReader jreader = new JsonReader(freader))
 		{
-			Gson gson = new Gson();
 			guests = gson.fromJson(jreader, collectionType);
 		}
 		catch (IOException e) 
