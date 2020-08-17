@@ -11,7 +11,9 @@ public abstract class UserBase {
 	private String surname;
 	private Sex sex;
 	private UserType userType;
-
+	
+	public UserBase() {}
+	
 	public UserBase(String username, String password, String name, String surname, Sex sex, UserType userType) {
 		this.username = username;
 		this.password = password;

@@ -71,7 +71,7 @@ public class Application{
 		get("rest/test", LoginServices.test);
 		// TODO(Jovan -> Kris): Pogledaj da li je samo za guest
 		// ili da stavimo u uopsteni UserServices
-		get("rest/getUser", GuestServices.getGuest);
+		get("rest/getUser", UserServices.getUser);
 		get(Path.Rest.ADMIN_ALL_USERS, AdminServices.getAllUsers);
 		get(Path.Rest.HOST_ALL_APARTMENTS, HostServices.allApartments);
 	
