@@ -7,6 +7,7 @@ import nomad.beans.enums.ReservationStatus;
 
 public class Reservation implements Serializable
 {
+	// TODO(Jovan): Keep ID's instead of objects
 	private static final long serialVersionUID = 1318727009852237993L;
 	private Apartment apartment;
 	private Date startDate;

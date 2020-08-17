@@ -23,20 +23,18 @@ public class GuestServices
 		{
 			response.status(404);
 			return response;
-		} else
+		}
+		try
 		{
-			try
-			{
-				Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
-				UserGuest guest = guestDAO.get(claims.getBody().getSubject());
-				response.status(200);
-				return gson.toJson(guest);
-			} catch (Exception e)
-			{
-				e.printStackTrace();
-				response.status(404);
-				return response;
-			}
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
+			response.status(200);
+			return gson.toJson(guest);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			response.status(500);
+			return response;
 		}
 	};
 }

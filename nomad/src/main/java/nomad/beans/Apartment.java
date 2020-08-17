@@ -11,6 +11,7 @@ import nomad.beans.enums.ApartmentType;
 
 public class Apartment implements Serializable
 {
+	// TODO(Jovan): Use ID's instead of objects
 	private static final long serialVersionUID = -8563884059267108747L;
 	private String id;
 	private ApartmentType type;
