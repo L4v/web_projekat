@@ -1,6 +1,6 @@
 package nomad.beans.enums;
 
-public enum ApartmentType {
-	WHOLE,
-	ROOM
+public enum ApartmentType
+{
+	WHOLE, ROOM
 }

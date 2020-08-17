@@ -7,13 +7,14 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class RegistrationServices {
-	
+public class RegistrationServices
+{
+
 	private static boolean registerGuest(UserGuest guest)
 	{
 		return guestDAO.add(guest);
 	}
-	
+
 	public static Route registerGuest = (Request request, Response response) ->
 	{
 		response.type("application/json");
@@ -22,5 +23,5 @@ public class RegistrationServices {
 		response.status(registerGuest(guest) ? 200 : 404);
 		return response;
 	};
-	
+
 }

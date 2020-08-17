@@ -1,12 +1,11 @@
-table, tr, td{
+table, tr, td {
 	border: none;
 }
 
-#emptyUsername, #emptyPassword{
+#emptyUsername, #emptyPassword {
 	color: red;
 }
 
-#loginButton{
+#loginButton {
 	align-items: center;
 }
-

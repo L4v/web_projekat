@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<link rel="stylesheet" type="text/css" href="css/normalize.css">
-        <link rel="stylesheet" type="text/css" href="css/skeleton.css">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="css/normalize.css">
+<link rel="stylesheet" type="text/css" href="css/skeleton.css">
 
-        <title>Guests</title>
-	</head>
-	<body>
-		<div class="container">
+<title>Guests</title>
+</head>
+<body>
+	<div class="container">
 		<div id="showGuests">
-		<h1>Guests</h1>
-			<label>Search: </label>
-			<input id="searchParam" type="text"/>
+			<h1>Guests</h1>
+			<label>Search: </label> <input id="searchParam" type="text" />
 			<button v-on:click="searchGuest()">Search</button>
 			<table id="MyGuests">
 				<tr bgcolor="lightgrey">
@@ -27,9 +26,9 @@
 				</tr>
 			</table>
 		</div>
-		</div>
-		<script src="js/vue.js"></script>
-		<script src="js/axios.min.js"></script>
-		<script src="js/showGuests.js"></script>
-	</body>
+	</div>
+	<script src="js/vue.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script src="js/showGuests.js"></script>
+</body>
 </html>

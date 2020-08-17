@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<link rel="stylesheet" type="text/css" href="css/normalize.css">
-        <link rel="stylesheet" type="text/css" href="css/skeleton.css">
-        <link rel="stylesheet" type="text/css" href="css/personalData.css">
-        
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="css/normalize.css">
+<link rel="stylesheet" type="text/css" href="css/skeleton.css">
+<link rel="stylesheet" type="text/css" href="css/personalData.css">
 
-        <title>Personal data</title>
-	</head>
-	<body>
-		<div class="container">
+
+<title>Personal data</title>
+</head>
+<body>
+	<div class="container">
 		<div id="personalData">
-		<h1>Personal data</h1>
+			<h1>Personal data</h1>
 			<table id="tabela">
 				<tr>
 					<td>Name:</td>
@@ -27,16 +27,16 @@
 				<tr>
 					<td>Sex:</td>
 					<td><select name="sex" v-model="guest.sex">
-		                    <option value="MALE">Male</option>
-		                    <option value="FEMALE">Female</option>
-		                    <option value="OTHER">Other</option>
-		                    <option value="PRIVATE">Prefer not to say</option>
-                		</select>
-                	</td>
+							<option value="MALE">Male</option>
+							<option value="FEMALE">Female</option>
+							<option value="OTHER">Other</option>
+							<option value="PRIVATE">Prefer not to say</option>
+					</select></td>
 				</tr>
 				<tr>
 					<td>Password:</td>
-					<td><input type="password" id="password" v-model="guest.password"></td>
+					<td><input type="password" id="password"
+						v-model="guest.password"></td>
 					<td id="emptyPassword">Enter your password</td>
 				</tr>
 				<!-- <tr>
@@ -44,15 +44,17 @@
 					<td>{{guest.username}}</td>
 				</tr> -->
 				<tr>
-					<td><button v-on:click="updatePersonalData(guest)">Save changes</button></td>
-					<td><button >Back</button></td>
+					<td><button v-on:click="updatePersonalData(guest)">Save
+							changes</button></td>
+					<td><button>Back</button></td>
 				</tr>
-				<tr>{{successMsg}}</tr>
+				<tr>{{successMsg}}
+				</tr>
 			</table>
 		</div>
-		</div>
-		<script src="js/vue.js"></script>
-		<script src="js/axios.min.js"></script>
-		<script src="js/personalData.js"></script>
-	</body>
+	</div>
+	<script src="js/vue.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script src="js/personalData.js"></script>
+</body>
 </html>

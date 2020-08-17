@@ -7,11 +7,13 @@ import java.util.HashMap;
 import nomad.beans.enums.Sex;
 import nomad.beans.enums.UserType;
 
-public class UserHost extends UserBase implements Serializable {
+public class UserHost extends UserBase implements Serializable
+{
 	private static final long serialVersionUID = 5032688984515531286L;
 	private HashMap<String, Apartment> apartments;
 
-	public UserHost(String username, String password, String name, String surname, Sex sex) {
+	public UserHost(String username, String password, String name, String surname, Sex sex)
+	{
 		super(username, password, name, surname, sex, UserType.HOST);
 	}
 
@@ -19,6 +21,5 @@ public class UserHost extends UserBase implements Serializable {
 	{
 		return this.apartments.values();
 	}
-
 
 }

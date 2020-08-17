@@ -1,5 +1,6 @@
 package nomad.dao;
 
+import static nomad.Application.gson;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -8,62 +9,63 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
 import nomad.beans.UserHost;
 
+public class UserHostDAO
+{
 
-public class UserHostDAO {
-	
 	private String filename;
-	
-	public UserHostDAO() {
+
+	public UserHostDAO()
+	{
 		this.filename = "hosts.json";
 		this.initFile();
 	}
-	
-	public UserHostDAO(String contextPath) {
+
+	public UserHostDAO(String contextPath)
+	{
 		this.filename = contextPath;
 		this.initFile();
 	}
-	
+
 	private void initFile()
 	{
 		File f = new File(this.filename);
-		if(!f.isFile())
+		if (!f.isFile())
 		{
 			this.saveAll(new ArrayList<UserHost>());
 		}
 	}
-	
+
 	private void saveAll(Collection<UserHost> hosts)
 	{
-		Gson gson = new Gson();
-		try(FileWriter writer = new FileWriter(this.filename))
+		try (FileWriter writer = new FileWriter(this.filename))
 		{
 			gson.toJson(hosts, writer);
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public boolean remove(String username)
 	{
-		ArrayList<UserHost> hosts = (ArrayList<UserHost>)this.getAll();
+		ArrayList<UserHost> hosts = (ArrayList<UserHost>) this.getAll();
 		boolean success = hosts.removeIf(h -> h.getUsername().equals(username));
-		if(success == true)
+		if (success == true)
 		{
 			this.saveAll(hosts);
 		}
 		return success;
 	}
-	
+
 	public boolean add(UserHost host)
 	{
-		ArrayList<UserHost> hosts = (ArrayList<UserHost>)this.getAll();
-		if(hosts.stream().filter(h -> h.getUsername().equals(host.getUsername())).findAny().orElse(null) == null)
+		ArrayList<UserHost> hosts = (ArrayList<UserHost>) this.getAll();
+		if (hosts.stream().filter(h -> h.getUsername().equals(host.getUsername())).findAny().orElse(null) == null)
 		{
 			hosts.add(host);
 			this.saveAll(hosts);
@@ -71,14 +73,13 @@ public class UserHostDAO {
 		}
 		return false;
 	}
-	
-	public boolean update(UserHost userHost) {
+
+	public boolean update(UserHost userHost)
+	{
 		ArrayList<UserHost> hosts = (ArrayList<UserHost>) this.getAll();
-		for(int i = 0;
-				i < hosts.size();
-				++i)
+		for (int i = 0; i < hosts.size(); ++i)
 		{
-			if(hosts.get(i).getUsername().equals(userHost.getUsername()))
+			if (hosts.get(i).getUsername().equals(userHost.getUsername()))
 			{
 				hosts.set(i, userHost);
 				this.saveAll(hosts);
@@ -87,22 +88,23 @@ public class UserHostDAO {
 		}
 		return false;
 	}
-	
-	public UserHost get(String username) {
-		ArrayList<UserHost> hosts = (ArrayList<UserHost>)this.getAll();
+
+	public UserHost get(String username)
+	{
+		ArrayList<UserHost> hosts = (ArrayList<UserHost>) this.getAll();
 		return hosts.stream().filter(h -> h.getUsername().equals(username)).findAny().orElse(null);
 	}
-	
-	public Collection<UserHost> getAll(){
+
+	public Collection<UserHost> getAll()
+	{
 		Collection<UserHost> hosts = null;
-		Type collectionType = new TypeToken<Collection<UserHost>>() {}.getType();
-		try(FileReader freader = new FileReader(this.filename);
-			JsonReader jreader = new JsonReader(freader))
+		Type collectionType = new TypeToken<Collection<UserHost>>()
 		{
-			Gson gson = new Gson();
+		}.getType();
+		try (FileReader freader = new FileReader(this.filename); JsonReader jreader = new JsonReader(freader))
+		{
 			hosts = gson.fromJson(jreader, collectionType);
-		}
-		catch(IOException e)
+		} catch (IOException e)
 		{
 			e.printStackTrace();
 		}

@@ -1,6 +1,6 @@
 package nomad.beans.enums;
 
-public enum ApartmentStatus {
-	ACTIVE,
-	INACTIVE
+public enum ApartmentStatus
+{
+	ACTIVE, INACTIVE
 }
