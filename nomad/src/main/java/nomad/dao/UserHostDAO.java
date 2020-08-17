@@ -29,8 +29,6 @@ public class UserHostDAO {
 		this.initFile();
 	}
 	
-	// NOTE(Jovan): Kreiramo prazan JSON u slucaju
-	// da ne postoji
 	private void initFile()
 	{
 		File f = new File(this.filename);
