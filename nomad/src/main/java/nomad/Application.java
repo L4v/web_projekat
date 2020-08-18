@@ -67,17 +67,15 @@ public class Application
 
 		post(Path.Rest.REG_GUEST, RegistrationServices.registerGuest);
 		post(Path.Rest.LOGIN, LoginServices.login);
-		// TODO(Jovan -> Kris): Moved to UserServices
 		post(Path.Rest.PERSONAL_DATA, UserServices.personalData);
 		post(Path.Rest.HOST_ADD_APARTMENT, ApartmentServices.hostAddApartment);
 
 		get("rest/test", LoginServices.test);
-		// TODO(Jovan -> Kris): Pogledaj da li je samo za guest
-		// ili da stavimo u uopsteni UserServices
 		get("rest/getUser", UserServices.getUser);
 		get(Path.Rest.ADMIN_ALL_USERS, AdminServices.getAllUsers);
 		get(Path.Rest.HOST_ALL_APARTMENTS, HostServices.allApartments);
 		get(Path.Rest.HOST_VIEW_RESERVATIONS, ReservationServices.hostViewReservations);
+		get(Path.Rest.HOST_ALL_GUESTS, HostServices.getMyGuests);
 
 		// NOTE(Jovan): Gzip compression
 		after("*", Filters.addGzipHeader);

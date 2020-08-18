@@ -38,9 +38,29 @@ public class HostServices
 				}
 			}
 		}
-
 		return users;
 	}
+	
+	public static Route getMyGuests = (Request request, Response response) ->
+	{
+		response.type("application/json");
+		String jws = parseJws(request);
+
+		if (jws == null)
+		{
+			response.status(404);
+			return response;
+		}
+		Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+		UserHost host = hostDAO.get(claims.getBody().getSubject());
+		if (host == null)
+		{
+			response.status(404);
+			return response;
+		}
+		ArrayList<UserGuest> guests = (ArrayList<UserGuest>) getGuests(host.getUsername());
+		return gson.toJson(guests);
+	};
 
 	private static Collection<Apartment> getApartments(String username)
 	{

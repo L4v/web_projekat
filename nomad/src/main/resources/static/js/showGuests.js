@@ -6,12 +6,16 @@ var showGuestsVue = new Vue
         guests: {},
     },
     mounted(){
-    	var jwt = localStorage.jwt;
-    	
-    	if(jwt)
-		{
-	    	//getMyGuests
-		}
+    	 var jwt = localStorage.jwt;
+         axios.get("rest/host_all_guests", {headers:{"Authorization": "Bearer " + jwt}})
+             .then(response =>
+             {
+                 this.users = response;
+             })
+             .catch(response =>
+             {
+                 this.users = "Empty";
+             });
     },
     	
     methods:
