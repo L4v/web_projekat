@@ -6,12 +6,14 @@ import static nomad.Application.key;
 import static nomad.Application.guestDAO;
 import static nomad.Application.hostDAO;
 import static nomad.Application.adminDAO;
+import static nomad.Application.apartmentDAO;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import nomad.beans.Apartment;
 import nomad.beans.UserAdmin;
 import nomad.beans.UserBase;
 import spark.Request;
@@ -61,6 +63,13 @@ public class AdminServices
 				return response;
 			}
 		}
+	};
+	
+	public static Route allApartments = (Request request, Response response) ->
+	{
+		response.type("application/json");
+		ArrayList<Apartment> apartments = (ArrayList<Apartment>) apartmentDAO.getAll();
+		return gson.toJson(apartments);
 	};
 
 }

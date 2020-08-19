@@ -73,9 +73,11 @@ public class Application
 		get("rest/test", LoginServices.test);
 		get("rest/getUser", UserServices.getUser);
 		get(Path.Rest.ADMIN_ALL_USERS, AdminServices.getAllUsers);
+		get(Path.Rest.ADMIN_ALL_APARTMENTS, AdminServices.allApartments);
 		get(Path.Rest.HOST_ALL_APARTMENTS, HostServices.allApartments);
 		get(Path.Rest.HOST_VIEW_RESERVATIONS, ReservationServices.hostViewReservations);
 		get(Path.Rest.HOST_ALL_GUESTS, HostServices.getMyGuests);
+		get(Path.Rest.GUEST_ALL_APARTMENTS, GuestServices.allApartments);
 
 		// NOTE(Jovan): Gzip compression
 		after("*", Filters.addGzipHeader);

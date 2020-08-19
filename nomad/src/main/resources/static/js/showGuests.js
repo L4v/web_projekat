@@ -10,11 +10,11 @@ var showGuestsVue = new Vue
          axios.get("rest/host_all_guests", {headers:{"Authorization": "Bearer " + jwt}})
              .then(response =>
              {
-                 this.users = response;
+                 this.guests = response;
              })
              .catch(response =>
              {
-                 this.users = "Empty";
+                 this.guests = "Empty";
              });
     },
     	
