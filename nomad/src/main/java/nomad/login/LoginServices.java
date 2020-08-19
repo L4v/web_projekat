@@ -3,6 +3,7 @@ package nomad.login;
 import static nomad.Application.adminDAO;
 import static nomad.Application.guestDAO;
 import static nomad.Application.hostDAO;
+import static nomad.Application.invalidResponse;
 import static nomad.Application.parseJws;
 import static nomad.Application.key;
 import static nomad.Application.gson;
@@ -68,8 +69,7 @@ public class LoginServices
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-			response.status(404);
-			return response;
+			return invalidResponse("Server error: " + e.getMessage(), response);
 		}
 
 	};

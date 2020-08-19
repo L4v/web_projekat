@@ -10,6 +10,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import nomad.apartment.ApartmentDAO;
 import nomad.apartment.ApartmentServices;
+import nomad.comment.CommentDAO;
+import nomad.comment.CommentServices;
 import nomad.login.LoginServices;
 import nomad.registration.RegistrationServices;
 import nomad.reservation.ReservationDAO;
@@ -39,6 +41,7 @@ public class Application
 	public static UserHostDAO hostDAO;
 	public static ApartmentDAO apartmentDAO;
 	public static ReservationDAO reservationDAO;
+	public static CommentDAO commentDAO;
 
 	// TODO(Jovan): Separate into utility classes?
 
@@ -69,6 +72,7 @@ public class Application
 		hostDAO = new UserHostDAO("hosts.json");
 		apartmentDAO = new ApartmentDAO("apartments.json");
 		reservationDAO = new ReservationDAO("reservations.json");
+		commentDAO = new CommentDAO("comments.json");
 
 		port(8080);
 		staticFiles.location("/static");
@@ -85,8 +89,9 @@ public class Application
 		get(Path.Rest.ADMIN_ALL_APARTMENTS, AdminServices.allApartments);
 		get(Path.Rest.ADMIN_VIEW_RESERVATIONS, ReservationServices.adminViewReservations);
 		get(Path.Rest.HOST_ALL_APARTMENTS, HostServices.allApartments);
-		get(Path.Rest.HOST_VIEW_RESERVATIONS, ReservationServices.hostViewReservations);
+		get(Path.Rest.HOST_ALL_RESERVATIONS, ReservationServices.hostViewReservations);
 		get(Path.Rest.HOST_ALL_GUESTS, HostServices.getMyGuests);
+		get(Path.Rest.HOST_ALL_COMMENTS, CommentServices.hostViewComments);
 		get(Path.Rest.GUEST_ALL_APARTMENTS, GuestServices.allApartments);
 		get(Path.Rest.GUEST_VIEW_RESERVATIONS, ReservationServices.guestViewReservations);
 		
