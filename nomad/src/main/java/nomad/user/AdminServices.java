@@ -66,7 +66,16 @@ public class AdminServices
 	public static Route allApartments = (Request request, Response response) ->
 	{
 		response.type("application/json");
+		String jws = parseJws(request);
+		
+		if (jws == null)
+		{
+			response.status(404);
+			response.body("Invalid login!");
+			return response;
+		}
 		ArrayList<Apartment> apartments = (ArrayList<Apartment>) apartmentDAO.getAll();
+		response.status(200);
 		return gson.toJson(apartments);
 	};
 
