@@ -5,6 +5,7 @@ import static nomad.Application.gson;
 import static nomad.Application.key;
 import static nomad.Application.guestDAO;
 import static nomad.Application.hostDAO;
+import static nomad.Application.invalidResponse;
 import static nomad.Application.adminDAO;
 import static nomad.Application.apartmentDAO;
 import java.util.ArrayList;
@@ -67,16 +68,30 @@ public class AdminServices
 	{
 		response.type("application/json");
 		String jws = parseJws(request);
-		
 		if (jws == null)
 		{
+			return invalidResponse("Invalid login", response);
+		} 
+		
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
+			if (admin == null)
+			{
+				response.status(404);
+				return response;
+			}
+			response.status(200);
+			ArrayList<Apartment> apartments = (ArrayList<Apartment>) apartmentDAO.getAll();
+			response.status(200);
+			return gson.toJson(apartments);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
 			response.status(404);
-			response.body("Invalid login!");
 			return response;
 		}
-		ArrayList<Apartment> apartments = (ArrayList<Apartment>) apartmentDAO.getAll();
-		response.status(200);
-		return gson.toJson(apartments);
 	};
 
 }

@@ -88,6 +88,7 @@ public class Application
 		get(Path.Rest.ADMIN_ALL_USERS, AdminServices.getAllUsers);
 		get(Path.Rest.ADMIN_ALL_APARTMENTS, AdminServices.allApartments);
 		get(Path.Rest.ADMIN_ALL_RESERVATIONS, ReservationServices.adminViewReservations);
+		get(Path.Rest.ADMIN_ALL_COMMENTS, CommentServices.adminViewComments);
 		get(Path.Rest.HOST_ALL_APARTMENTS, HostServices.allApartments);
 		get(Path.Rest.HOST_ALL_RESERVATIONS, ReservationServices.hostViewReservations);
 		get(Path.Rest.HOST_ALL_GUESTS, HostServices.getMyGuests);

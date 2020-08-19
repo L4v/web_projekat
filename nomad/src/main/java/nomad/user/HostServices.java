@@ -2,6 +2,7 @@ package nomad.user;
 
 import static nomad.Application.guestDAO;
 import static nomad.Application.hostDAO;
+import static nomad.Application.invalidResponse;
 import static nomad.Application.parseJws;
 import static nomad.Application.gson;
 import static nomad.Application.key;
@@ -46,18 +47,28 @@ public class HostServices
 
 		if (jws == null)
 		{
-			response.status(404);
-			return response;
+			return invalidResponse("Invalid login", response);
 		}
-		Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
-		UserHost host = hostDAO.get(claims.getBody().getSubject());
-		if (host == null)
+		
+		try
 		{
-			response.status(404);
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			
+			UserHost host = hostDAO.get(claims.getBody().getSubject());
+			if(host == null)
+			{
+				return invalidResponse("Invalid host", response);
+			}
+			response.status(200);
+			ArrayList<UserGuest> guests = (ArrayList<UserGuest>) getGuests(host.getUsername());
+			response.body(gson.toJson(guests));
 			return response;
 		}
-		ArrayList<UserGuest> guests = (ArrayList<UserGuest>) getGuests(host.getUsername());
-		return gson.toJson(guests);
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return invalidResponse("Server error: " + e.getMessage(), response);
+		}
 	};
 
 	private static Collection<Apartment> getApartments(String username)

@@ -3,6 +3,7 @@ package nomad.reservation;
 import static nomad.Application.gson;
 import static nomad.Application.guestDAO;
 import static nomad.Application.hostDAO;
+import static nomad.Application.adminDAO;
 import static nomad.Application.key;
 import static nomad.Application.parseJws;
 import static nomad.Application.invalidResponse;
@@ -16,6 +17,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import nomad.apartment.Apartment;
+import nomad.user.UserAdmin;
 import nomad.user.UserGuest;
 import nomad.user.UserHost;
 import spark.Request;
@@ -126,12 +128,25 @@ public class ReservationServices
 		{
 			return invalidResponse("Invalid login", response);
 		}
-		ArrayList<Reservation> reservations = (ArrayList<Reservation>) reservationDAO.getAll();
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
+			if (admin == null)
+			{
+				response.status(404);
+				return response;
+			}
 
-		response.status(200);
-		response.body(gson.toJson(reservations));
-		return response;
+			ArrayList<Reservation> reservations = (ArrayList<Reservation>) reservationDAO.getAll();
 
+			response.status(200);
+			response.body(gson.toJson(reservations));
+			return response;
+		} catch (Exception e)
+		{
+			return invalidResponse("Server error: " + e.getMessage(), response);
+		}
 	};
 
 	public static Route createReservation = (Request request, Response response) ->

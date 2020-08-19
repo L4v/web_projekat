@@ -2,11 +2,17 @@ package nomad.user;
 
 import static nomad.Application.apartmentDAO;
 import static nomad.Application.gson;
+import static nomad.Application.guestDAO;
+import static nomad.Application.invalidResponse;
+import static nomad.Application.key;
 import static nomad.Application.parseJws;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import nomad.apartment.Apartment;
 import nomad.apartment.ApartmentStatus;
 import spark.Request;
@@ -37,13 +43,29 @@ public class GuestServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			response.status(404);
-			response.body("Invalid login!");
-			return response;
+			return invalidResponse("Invalid login", response);
 		}
-		ArrayList<Apartment> apartments = (ArrayList<Apartment>) getActiveApartments();
-		response.status(200);
-		return gson.toJson(apartments);
+		
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			
+			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
+			if(guest == null)
+			{
+				return invalidResponse("Invalid guest", response);
+			}
+			response.type("application/json");
+			response.status(200);
+			ArrayList<Apartment> apartments = (ArrayList<Apartment>) getActiveApartments();
+			response.status(200);
+			return gson.toJson(apartments);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return invalidResponse("Server error: " + e.getMessage(), response);
+		}
 	};
 
 }

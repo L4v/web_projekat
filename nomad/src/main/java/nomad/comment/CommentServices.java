@@ -6,6 +6,8 @@ import static nomad.Application.invalidResponse;
 import static nomad.Application.key;
 import static nomad.Application.gson;
 import static nomad.Application.hostDAO;
+import static nomad.Application.commentDAO;
+import static nomad.Application.adminDAO;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +16,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import nomad.apartment.Apartment;
+import nomad.user.UserAdmin;
 import nomad.user.UserHost;
 import spark.Route;
 import spark.Request;
@@ -56,6 +59,38 @@ public class CommentServices
 			response.type("application/json");
 			response.status(200);
 			ArrayList<Comment> comments = (ArrayList<Comment>) allHostComments(host);
+			response.body(gson.toJson(comments));
+			return response;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return invalidResponse("Server error: " + e.getMessage(), response);
+		}
+	};
+	
+	public static Route adminViewComments = (Request request, Response response) ->
+	{
+		response.type("application/json");
+		String jws = parseJws(request);
+		if(jws == null)
+		{
+			return invalidResponse("Invalid login", response);
+		}
+		
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			
+			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
+			if(admin == null)
+			{
+				response.status(404);
+				return response;
+			}
+			response.type("application/json");
+			response.status(200);
+			ArrayList<Comment> comments = (ArrayList<Comment>) commentDAO.getAll();
 			response.body(gson.toJson(comments));
 			return response;
 		}
