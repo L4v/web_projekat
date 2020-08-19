@@ -2,6 +2,7 @@ package nomad.services;
 
 import static nomad.Application.apartmentDAO;
 import static nomad.Application.gson;
+import static nomad.Application.parseJws;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,7 +34,15 @@ public class GuestServices
 	public static Route allApartments = (Request request, Response response) ->
 	{
 		response.type("application/json");
+		String jws = parseJws(request);
+		if (jws == null)
+		{
+			response.status(404);
+			response.body("Invalid login!");
+			return response;
+		}
 		ArrayList<Apartment> apartments = (ArrayList<Apartment>) getActiveApartments();
+		response.status(200);
 		return gson.toJson(apartments);
 	};
 
