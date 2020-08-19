@@ -77,6 +77,7 @@ public class Application
 		post(Path.Rest.LOGIN, LoginServices.login);
 		post(Path.Rest.PERSONAL_DATA, UserServices.personalData);
 		post(Path.Rest.HOST_ADD_APARTMENT, ApartmentServices.hostAddApartment);
+		post(Path.Rest.CREATE_RESERVATION, ReservationServices.createReservation);
 
 		get("rest/test", LoginServices.test);
 		get("rest/getUser", UserServices.getUser);

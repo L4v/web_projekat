@@ -27,6 +27,8 @@ public class Path
 		public static final String REG_GUEST = "/rest/reg_guest";
 		public static final String LOGIN = "/rest/login";
 		public static final String PERSONAL_DATA = "/rest/personal_data";
+		
+		public static final String CREATE_RESERVATION = "/rest/create_reservation";
 	}
 
 }
