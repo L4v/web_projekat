@@ -3,6 +3,7 @@ package nomad.apartment;
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -142,9 +143,9 @@ public class Apartment implements Serializable
 		this.host = host;
 	}
 
-	public HashMap<String, Comment> getComments()
+	public Collection<Comment> getComments()
 	{
-		return comments;
+		return comments.values();
 	}
 
 	public void setComments(HashMap<String, Comment> comments)
@@ -220,6 +221,11 @@ public class Apartment implements Serializable
 	public void setReservations(ArrayList<Reservation> reservations)
 	{
 		this.reservations = reservations;
+	}
+	
+	public void addReservation(Reservation reservation)
+	{
+		this.reservations.add(reservation);
 	}
 
 }

@@ -8,17 +8,29 @@ import nomad.user.UserGuest;
 public class Comment implements Serializable
 {
 	private static final long serialVersionUID = 2251140122076809587L;
+	private String id;
 	private UserGuest guest;
 	private Apartment apartment;
 	private String text;
 	private int rating;
 
-	public Comment(UserGuest guest, Apartment apartment, String text, int rating)
+	public Comment(String id, UserGuest guest, Apartment apartment, String text, int rating)
 	{
+		this.id = id;
 		this.guest = guest;
 		this.apartment = apartment;
 		this.text = text;
 		this.rating = rating;
+	}
+	
+	public String getId()
+	{
+		return this.id;
+	}
+	
+	public void setId(String id)
+	{
+		this.id = id;
 	}
 
 	public UserGuest getGuest()

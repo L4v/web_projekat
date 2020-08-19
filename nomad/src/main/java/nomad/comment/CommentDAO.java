@@ -1,36 +1,114 @@
 package nomad.comment;
 
+import static nomad.Application.gson;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
 public class CommentDAO
 {
 
-	private static Map<String, Comment> comments = new HashMap<>();
+	private String filename;
 
 	public CommentDAO()
 	{
-
+		this.filename = "comments.json";
+		this.initFile();
 	}
 
-	public CommentDAO(String contextPath)
+	public CommentDAO(String filename)
 	{
-		loadComments(contextPath);
+		this.filename = filename;
+		this.initFile();
 	}
 
-	private void loadComments(String contextPath)
+	private void initFile()
 	{
-		// TODO
+		File f = new File(this.filename);
+		if (!f.isFile())
+		{
+			this.saveAll(new ArrayList<Comment>());
+		}
 	}
 
-	public Comment find(String id)
+	private void saveAll(ArrayList<Comment> comments)
 	{
-		return comments.containsKey(id) ? comments.get(id) : null;
+		try(FileWriter writer = new FileWriter(this.filename))
+		{
+			gson.toJson(comments, writer);
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public boolean add(Comment comment)
+	{
+		ArrayList<Comment> comments = (ArrayList<Comment>) this.getAll();
+		if(comments.stream().filter(c -> c.getId().equals(comment.getId())).findAny().orElse(null) == null)
+		{
+			comments.add(comment);
+			this.saveAll(comments);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean remove(String id)
+	{
+		ArrayList<Comment> comments = (ArrayList<Comment>) this.getAll();
+		boolean success = comments.removeIf(c -> c.getId().equals(id));
+		if(success == true)
+		{
+			this.saveAll(comments);
+		}
+		return success;
 	}
 
-	public Collection<Comment> findAll()
+	public boolean update(Comment comment)
 	{
-		return comments.values();
+		ArrayList<Comment> comments = (ArrayList<Comment>)this.getAll();
+		for(int i = 0; i < comments.size(); ++i)
+		{
+			if(comments.get(i).getId().contentEquals(comment.getId()))
+			{
+				comments.set(i, comment);
+				this.saveAll(comments);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public Comment get(String id)
+	{
+		ArrayList<Comment> comments = (ArrayList<Comment>) this.getAll();
+		return comments.stream().filter(c -> c.getId().equals(id)).findAny().orElse(null);
+	}
+
+	public Collection<Comment> getAll()
+	{
+		Collection<Comment> comments = null;
+		Type collectionType = new TypeToken<Collection<Comment>>() {}.getType();
+		try(FileReader freader = new FileReader(this.filename);
+			JsonReader jreader = new JsonReader(freader))
+		{
+			comments = gson.fromJson(jreader, collectionType);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return comments == null ? new ArrayList<Comment>() : comments;
 	}
 }

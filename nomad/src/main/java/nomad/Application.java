@@ -10,6 +10,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import nomad.apartment.ApartmentDAO;
 import nomad.apartment.ApartmentServices;
+import nomad.comment.CommentDAO;
+import nomad.comment.CommentServices;
 import nomad.login.LoginServices;
 import nomad.registration.RegistrationServices;
 import nomad.reservation.ReservationDAO;
@@ -24,6 +26,7 @@ import nomad.user.UserServices;
 import nomad.utils.Filters;
 import nomad.utils.Path;
 import spark.Request;
+import spark.Response;
 
 public class Application
 {
@@ -38,6 +41,7 @@ public class Application
 	public static UserHostDAO hostDAO;
 	public static ApartmentDAO apartmentDAO;
 	public static ReservationDAO reservationDAO;
+	public static CommentDAO commentDAO;
 
 	// TODO(Jovan): Separate into utility classes?
 
@@ -51,6 +55,13 @@ public class Application
 
 		return auth.length() <= 7 ? null : auth.substring(auth.indexOf("Bearer") + 7);
 	}
+	
+	public static Response invalidResponse(String msg, Response response)
+	{
+		response.body(msg);
+		response.status(404);
+		return response;
+	}
 
 	public static void main(String args[])
 	{
@@ -61,6 +72,7 @@ public class Application
 		hostDAO = new UserHostDAO("hosts.json");
 		apartmentDAO = new ApartmentDAO("apartments.json");
 		reservationDAO = new ReservationDAO("reservations.json");
+		commentDAO = new CommentDAO("comments.json");
 
 		port(8080);
 		staticFiles.location("/static");
@@ -69,6 +81,7 @@ public class Application
 		post(Path.Rest.LOGIN, LoginServices.login);
 		post(Path.Rest.PERSONAL_DATA, UserServices.personalData);
 		post(Path.Rest.HOST_ADD_APARTMENT, ApartmentServices.hostAddApartment);
+		post(Path.Rest.CREATE_RESERVATION, ReservationServices.createReservation);
 
 		get("rest/test", LoginServices.test);
 		get("rest/getUser", UserServices.getUser);
@@ -76,8 +89,9 @@ public class Application
 		get(Path.Rest.ADMIN_ALL_APARTMENTS, AdminServices.allApartments);
 		get(Path.Rest.ADMIN_ALL_RESERVATIONS, ReservationServices.adminViewReservations);
 		get(Path.Rest.HOST_ALL_APARTMENTS, HostServices.allApartments);
-		get(Path.Rest.HOST_VIEW_RESERVATIONS, ReservationServices.hostViewReservations);
+		get(Path.Rest.HOST_ALL_RESERVATIONS, ReservationServices.hostViewReservations);
 		get(Path.Rest.HOST_ALL_GUESTS, HostServices.getMyGuests);
+		get(Path.Rest.HOST_ALL_COMMENTS, CommentServices.hostViewComments);
 		get(Path.Rest.GUEST_ALL_APARTMENTS, GuestServices.allApartments);
 		get(Path.Rest.GUEST_ALL_RESERVATIONS, ReservationServices.guestViewReservations);
 		
