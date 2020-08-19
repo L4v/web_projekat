@@ -1,6 +1,7 @@
 package nomad.reservation;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import nomad.apartment.Apartment;
@@ -116,6 +117,12 @@ public class Reservation implements Serializable
 	public String getId()
 	{
 		return this.id;
+	}
+	
+	public Date getEndDate()
+	{
+		LocalDateTime.from(this.startDate.toInstant()).plusDays(this.noDays);
+		return null;
 	}
 
 }

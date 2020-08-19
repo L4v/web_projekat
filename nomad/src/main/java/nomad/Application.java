@@ -24,6 +24,7 @@ import nomad.user.UserServices;
 import nomad.utils.Filters;
 import nomad.utils.Path;
 import spark.Request;
+import spark.Response;
 
 public class Application
 {
@@ -50,6 +51,13 @@ public class Application
 		}
 
 		return auth.length() <= 7 ? null : auth.substring(auth.indexOf("Bearer") + 7);
+	}
+	
+	public static Response invalidResponse(String msg, Response response)
+	{
+		response.body(msg);
+		response.status(404);
+		return response;
 	}
 
 	public static void main(String args[])

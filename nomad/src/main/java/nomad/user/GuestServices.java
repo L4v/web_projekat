@@ -23,7 +23,7 @@ public class GuestServices
 		ArrayList<Apartment> apartments = (ArrayList<Apartment>) apartmentDAO.getAll();
 		for (Apartment apartment : apartments) 
 		{
-			if(apartment.getType().equals(ApartmentStatus.ACTIVE))
+			if(apartment.getStatus() == ApartmentStatus.ACTIVE)
 			{
 				activeApartments.add(apartment);
 			}

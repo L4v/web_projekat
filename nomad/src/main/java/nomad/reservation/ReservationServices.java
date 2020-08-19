@@ -5,7 +5,9 @@ import static nomad.Application.guestDAO;
 import static nomad.Application.hostDAO;
 import static nomad.Application.key;
 import static nomad.Application.parseJws;
+import static nomad.Application.invalidResponse;
 import static nomad.Application.reservationDAO;
+import static nomad.Application.apartmentDAO;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,15 +36,39 @@ public class ReservationServices
 		return hostsReservations;
 	}
 
+	public static boolean verifyReservation(Reservation reservation)
+	{
+
+		// NOTE(Jovan): Check if apartment exists
+		Apartment apartment = apartmentDAO.get(reservation.getApartment().getId());
+		if (apartment == null)
+		{
+			return false;
+		}
+
+		// NOTE(Jovan): Check if reservation already exists
+		if (apartment.getReservations().stream().filter(r -> r.getId().equals(reservation.getId())).findAny()
+				.orElse(null) != null)
+		{
+			return false;
+		}
+
+		// NOTE(Jovan): Check if reservation interval is valid
+		boolean validTimeInterval = reservationDAO.getAll().stream()
+				.filter(r -> r.getStartDate().after(reservation.getStartDate())
+						&& r.getEndDate().before(reservation.getEndDate()))
+				.findAny().orElse(null) == null;
+
+		return validTimeInterval;
+	}
+
 	public static Route hostViewReservations = (Request request, Response response) ->
 	{
 		response.type("application/json");
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			response.status(404);
-			response.body("Invalid login!");
-			return response;
+			return invalidResponse("Invalid login", response);
 		}
 		try
 		{
@@ -50,9 +76,7 @@ public class ReservationServices
 			UserHost host = hostDAO.get(claims.getBody().getSubject());
 			if (host == null)
 			{
-				response.status(404);
-				response.body("Not host!");
-				return response;
+				return invalidResponse("Not a host", response);
 			}
 
 			ArrayList<Reservation> reservations = (ArrayList<Reservation>) getHostReservations(host);
@@ -62,21 +86,17 @@ public class ReservationServices
 			return response;
 		} catch (Exception e)
 		{
-			e.printStackTrace();
-			response.status(500);
-			return response;
+			return invalidResponse("Server error: " + e.getMessage(), response);
 		}
 	};
-	
+
 	public static Route guestViewReservations = (Request request, Response response) ->
 	{
 		response.type("application/json");
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			response.status(404);
-			response.body("Invalid login!");
-			return response;
+			return invalidResponse("Invalid login", response);
 		}
 		try
 		{
@@ -84,9 +104,7 @@ public class ReservationServices
 			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
 			if (guest == null)
 			{
-				response.status(404);
-				response.body("Not guest!");
-				return response;
+				return invalidResponse("Not a guest", response);
 			}
 
 			ArrayList<Reservation> reservations = guest.getReservations();
@@ -96,21 +114,17 @@ public class ReservationServices
 			return response;
 		} catch (Exception e)
 		{
-			e.printStackTrace();
-			response.status(500);
-			return response;
+			return invalidResponse("Server error: " + e.getMessage(), response);
 		}
 	};
-	
+
 	public static Route adminViewReservations = (Request request, Response response) ->
 	{
 		response.type("application/json");
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			response.status(404);
-			response.body("Invalid login!");
-			return response;
+			return invalidResponse("Invalid login", response);
 		}
 		ArrayList<Reservation> reservations = (ArrayList<Reservation>) reservationDAO.getAll();
 
@@ -118,5 +132,32 @@ public class ReservationServices
 		response.body(gson.toJson(reservations));
 		return response;
 
+	};
+
+	public static Route createReservation = (Request request, Response response) ->
+	{
+		// TODO(Jovan): Pull parsing and jws check into function?
+		String jws = parseJws(request);
+		if (jws == null)
+		{
+			return invalidResponse("Invalid login", response);
+		}
+
+		String json = request.body();
+		Reservation reservation = gson.fromJson(json, Reservation.class);
+		if (verifyReservation(reservation) == false)
+		{
+			return invalidResponse("Invalid reservation", response);
+		}
+
+		Apartment apartment = reservation.getApartment();
+		apartment.addReservation(reservation);
+		apartmentDAO.update(apartment);
+		
+		reservationDAO.add(reservation);
+		
+		response.status(200);
+		response.body("Reservation added");
+		return response;
 	};
 }

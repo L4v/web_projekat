@@ -221,5 +221,10 @@ public class Apartment implements Serializable
 	{
 		this.reservations = reservations;
 	}
+	
+	public void addReservation(Reservation reservation)
+	{
+		this.reservations.add(reservation);
+	}
 
 }
