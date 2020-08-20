@@ -3,7 +3,9 @@ new Vue
     el: "#app",
     data:
     {
-        active: false
+        active: false,
+        selectedDate: null,
+        range: new Date(),
     },
     methods:
     {
@@ -67,3 +69,4 @@ new Vue
         };
     }
 });
+
