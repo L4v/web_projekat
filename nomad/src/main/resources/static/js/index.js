@@ -6,6 +6,7 @@ new Vue
         active: false,
         selectedDate: null,
         range: new Date(),
+        modal_active: false,
     },
     methods:
     {
@@ -40,7 +41,11 @@ new Vue
             } else {
                 alert("You are not logged in");
             }
-        }
+        },
+        showModal: function()
+        {
+            this.modal_active = true;
+        },
     },
     mounted()
     {
