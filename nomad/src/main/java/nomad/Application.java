@@ -95,6 +95,7 @@ public class Application
 		get(Path.Rest.HOST_ALL_COMMENTS, CommentServices.hostViewComments);
 		get(Path.Rest.GUEST_ALL_APARTMENTS, GuestServices.allApartments);
 		get(Path.Rest.GUEST_ALL_RESERVATIONS, ReservationServices.guestViewReservations);
+		get(Path.Rest.GUEST_ADD_COMMENT, CommentServices.addComment);
 		
 		// NOTE(Jovan): Gzip compression
 		after("*", Filters.addGzipHeader);

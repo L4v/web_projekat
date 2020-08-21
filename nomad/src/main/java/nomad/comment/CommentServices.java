@@ -8,6 +8,7 @@ import static nomad.Application.gson;
 import static nomad.Application.hostDAO;
 import static nomad.Application.commentDAO;
 import static nomad.Application.adminDAO;
+import static nomad.Application.guestDAO;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,7 +17,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import nomad.apartment.Apartment;
+import nomad.reservation.Reservation;
+import nomad.reservation.ReservationStatus;
 import nomad.user.UserAdmin;
+import nomad.user.UserGuest;
 import nomad.user.UserHost;
 import spark.Route;
 import spark.Request;
@@ -100,4 +104,59 @@ public class CommentServices
 			return invalidResponse("Server error: " + e.getMessage(), response);
 		}
 	};
+	
+	public static Route addComment = (Request request, Response response) ->
+	{
+		response.type("application/json");
+		String jws = parseJws(request);
+		if(jws == null)
+		{
+			return invalidResponse("Invalid login", response);
+		}
+		
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			
+			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
+			if(guest == null)
+			{
+				return invalidResponse("Invalid guest", response);
+			}
+			
+			//here comes adding comment to the specific apartment
+			
+			/*dobaviti jos komentar i apartman
+			Apartment apartment;
+			Comment comment;
+			if(!addCommentToApartment(guest.getUsername(), comment, apartment))
+			{
+				return invalidResponse("Don't have a rejected or cancelled reservation!", response);
+			}*/
+			
+			response.status(200);
+			return response;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return invalidResponse("Server error: " + e.getMessage(), response);
+		}
+	};
+	
+	private static boolean addCommentToApartment(String username, Comment comment, Apartment apartment) 
+	{
+		if(apartment.getReservations() != null)
+		{
+			for(Reservation reservation : apartment.getReservations())
+			{
+				if(reservation.getStatus() == ReservationStatus.CANCELLED || reservation.getStatus() == ReservationStatus.REJECTED)
+				{
+					apartment.addComment(username, comment);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
