@@ -4,9 +4,10 @@ new Vue
     data:
     {
         active: false,
-        selectedDate: null,
-        range: new Date(),
+        selected_date: null,
+        daterange: new Date(),
         modal_active: false,
+        float_label: false,
     },
     methods:
     {
@@ -42,26 +43,12 @@ new Vue
                 alert("You are not logged in");
             }
         },
-        showModal: function()
-        {
-            this.modal_active = true;
-        },
+
     },
     mounted()
     {
         window.document.onscroll = () =>
         {
-            /*
-            let navbar = document.getElementById("nav");
-            if(window.scrollY > navbar.offsetTop)
-            {
-                this.active = true;
-            }
-            else
-            {
-                this.active = false;
-            }
-            */
             let searchbar = document.getElementById("searchbar");
             if(window.scrollY > searchbar.offsetTop)
             {

@@ -24,7 +24,7 @@ a:link, a:visited {
 	/*background-color: #fff;*/
 	position: fixed;
 	top: 0;
-	z-index: 999;
+	z-index: 3;
 }
 
 /* NOTE(Jovan):
@@ -229,13 +229,6 @@ a:link, a:visited {
 	flex-grow: 2;
 }
 
-
-
-.search-field
-{
-	padding: 10px 0px 10px 0px;
-}
-
 .search-btn {
 	border-radius: 50%;
 }
@@ -271,6 +264,8 @@ a:link, a:visited {
 	
 }
 
+/* NOTE(Jovan): Login dialogue */
+
 #login > input[type=text],
 #login > input[type=password]
 {
@@ -282,13 +277,87 @@ a:link, a:visited {
     box-sizing: border-box;
 }
 
+/* TODO(Jovan): Animate display? */
 #login
 {
-    display: none;
+    top: 0;
+    display:none;
+    position: fixed;
+    z-index: 4;
+    width: 100vw;
+    height: 100vh;
+    background: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: all .9s;
 }
 
-#login.modal-active
+#login.modal_active
 {
-    top: 0;
     display: block;
+}
+
+#loginForm
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin: auto;
+    margin-top: 5vh;
+    width: 30%;
+    height: 90vh;
+
+    border-radius: 20px;
+
+    background: none;
+    background-color: #fff;
+}
+
+.loginField 
+{
+    width: 80%;
+}
+
+.loginField input
+{
+    width: 100%;
+}
+
+.loginButtons
+{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}
+
+/* NOTE(Jovan): Floating labels */
+
+.floating-label
+{
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.floating-label label
+{
+    pointer-events: none;
+    position: absolute;
+    white-space: nowrap;
+    overflow: hidden;
+    top: 0;
+    display: inline-block;
+    background: #fff;
+    margin: 8px 5px;
+    padding: 0 10px;
+    transition: position .2s linear;
+    opacity: 0.6;
+}
+
+.focused label
+{
+    transition: all .2s linear;
+    opacity: 1;
+	color: #ff5722;
+    top: -20px;
 }

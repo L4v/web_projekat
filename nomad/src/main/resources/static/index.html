@@ -70,7 +70,7 @@
 						</button>
 						<!-- TODO(Jovan): Make Log and Sign into dropdown like menus -->
 						<ul class="navbar-list">
-							<li><a @click="showModal()" href="#">Log in</a></li>
+							<li><a @click="modal_active = true" href="#">Log in</a></li>
 							<li><a href="registration.html">Sign up</a></li>
 						</ul>
 					</div>
@@ -104,31 +104,40 @@
 				<li class="footer-item"><a href="">About</a></li>
 				<li class="footer-item"><a href="footer-item">Contact</a></li>
 			</ul>
-	</div>
-	</section>
+        </section>
 
-    <div class="modal-container" :class="{modal-active: modal_active}" id="login">
-		<h1>Login</h1>
-		<h2>{{successMsg}}</h2>
-		<table id="tabela">
-			<tr>
-				<td>Username:</td>
-				<td><input type="text" id="username" v-model="user.username"
-					placeholder="Username"></td>
-				<td id="emptyUsername">Enter your username</td>
-			</tr>
-			<tr>
-				<td>Password:</td>
-				<td><input type="password" id="password"
-					v-model="user.password" placeholder="Password"></td>
-				<td id="emptyPassword">Enter your password</td>
-			</tr>
-			<tr>
-				<td colspan="2"><button v-on:click="login()">Log in</button></td>
-			</tr>
-		</table>
-		<h2>Verify login: {{loggedIn}}</h2>
-		<button v-on:click="verify()">Test</button>
+
+        <!-- NOTE(Jovan): Modal login dialog -->
+        <div id="login" class="modal-container" :class="{modal_active: modal_active}">
+            <form id="loginForm">
+                <h3>Login</h3>
+                <div class="loginField floating-label">
+                    <label for="username">Username</label>
+                    <input 
+                        @focus="$event.target.parentElement.classList.toggle('focused')"
+                        @blur="$event.target.parentElement.classList.toggle('focused')"
+                        type="text" 
+                        name="username" 
+                        required
+                    />
+                </div>
+                <div class="loginField floating-label">
+                    <label for="password">Password</label>
+                    <input
+                        @focus="$event.target.parentElement.classList.toggle('focused')"
+                        @blur="$event.target.parentElement.classList.toggle('focused')"
+                        type="text" 
+                        name="password" 
+                        required
+                    />
+                </div>
+                <div class="loginButtons">
+                    <button class="button-primary">Log in</button>
+                    <button>Forgot password?</button>
+                    <button @click="modal_active=false">Cancel</button>
+                </div>
+            </form>
+        </div>
 	</div>
 
 	<script src="js/vue.js"></script>
