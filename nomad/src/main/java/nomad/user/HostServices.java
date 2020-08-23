@@ -28,12 +28,15 @@ public class HostServices
 
 		for (UserGuest userGuest : guestDAO.getAll())
 		{
-			for (Reservation reservation : userGuest.getReservations())
+			if(userGuest.getReservations() != null) 
 			{
-				if(reservation.getApartment().getHost().getUsername().equals(username))
+				for (Reservation reservation : userGuest.getReservations())
 				{
-					users.add(userGuest);
-					break;
+					if(reservation.getApartment().getHost().getUsername().equals(username))
+					{
+						users.add(userGuest);
+						break;
+					}
 				}
 			}
 		}
@@ -44,7 +47,7 @@ public class HostServices
 	{
 		response.type("application/json");
 		String jws = parseJws(request);
-
+		
 		if (jws == null)
 		{
 			return invalidResponse("Invalid login", response);

@@ -82,7 +82,9 @@ public class Application
 		post(Path.Rest.PERSONAL_DATA, UserServices.personalData);
 		post(Path.Rest.HOST_ADD_APARTMENT, ApartmentServices.hostAddApartment);
 		post(Path.Rest.CREATE_RESERVATION, ReservationServices.createReservation);
-
+		post(Path.Rest.GUEST_ADD_COMMENT, CommentServices.addComment);
+		post(Path.Rest.UPDATE_APARTMENT, ApartmentServices.updateApartment);
+		
 		get("rest/test", LoginServices.test);
 		get("rest/getUser", UserServices.getUser);
 		get(Path.Rest.ADMIN_ALL_USERS, AdminServices.getAllUsers);
@@ -95,7 +97,6 @@ public class Application
 		get(Path.Rest.HOST_ALL_COMMENTS, CommentServices.hostViewComments);
 		get(Path.Rest.GUEST_ALL_APARTMENTS, GuestServices.allApartments);
 		get(Path.Rest.GUEST_ALL_RESERVATIONS, ReservationServices.guestViewReservations);
-		get(Path.Rest.GUEST_ADD_COMMENT, CommentServices.addComment);
 		
 		// NOTE(Jovan): Gzip compression
 		after("*", Filters.addGzipHeader);

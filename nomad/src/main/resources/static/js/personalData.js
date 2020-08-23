@@ -16,6 +16,7 @@ var personalDataVue = new Vue
 	    		.catch(response => 
     			{
     				//TODO(Kristian): handle 404
+    				alert("Please log in");
     			});
 		}
     },
