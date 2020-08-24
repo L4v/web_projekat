@@ -32,7 +32,7 @@ public class Path
 		public static final String PERSONAL_DATA = "/rest/personal_data";
 		
 		public static final String CREATE_RESERVATION = "/rest/create_reservation";
-		public static final String UPDATE_APARTMENT = "/rest/update_apartment";
+		public static final String UPDATE_AMENITY = "/rest/update_amenity";
 	}
 
 }

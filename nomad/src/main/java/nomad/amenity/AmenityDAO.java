@@ -1,36 +1,113 @@
 package nomad.amenity;
 
+import static nomad.Application.gson;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
 public class AmenityDAO
 {
 
-	private static Map<String, Amenity> amenities = new HashMap<>();
+	private String filename;
 
 	public AmenityDAO()
 	{
-
+		this.filename = "amenities.json";
+		this.initFile();
+	}
+	
+	public AmenityDAO(String filename)
+	{
+		this.filename = filename;
+		this.initFile();
 	}
 
-	public AmenityDAO(String contextPath)
+	private void initFile()
 	{
-		loadAmenities(contextPath);
+		File f = new File(this.filename);
+		if (!f.isFile())
+		{
+			this.saveAll(new ArrayList<Amenity>());
+		}
+	}
+	
+	private void saveAll(ArrayList<Amenity> amenities)
+	{
+		try (FileWriter writer = new FileWriter(this.filename))
+		{
+			gson.toJson(amenities, writer);
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
-	private void loadAmenities(String contextPath)
+	public boolean remove(String id)
 	{
-		// TODO
+		ArrayList<Amenity> amenities = (ArrayList<Amenity>) this.getAll();
+		boolean success = amenities.removeIf(a -> a.getId().equals(id));
+		if (success == true)
+		{
+			this.saveAll(amenities);
+		}
+		return success;
 	}
 
-	public Amenity find(String id)
+	public boolean add(Amenity amenity)
 	{
-		return amenities.containsKey(id) ? amenities.get(id) : null;
+		ArrayList<Amenity> amenities = (ArrayList<Amenity>) this.getAll();
+		if (amenities.stream().filter(a -> a.getId().equals(amenity.getId())).findAny().orElse(null) == null)
+		{
+			amenities.add(amenity);
+			this.saveAll(amenities);
+			return true;
+		}
+		return false;
 	}
 
-	public Collection<Amenity> findAll()
+	public boolean update(Amenity amenity)
 	{
-		return amenities.values();
+		ArrayList<Amenity> amenities = (ArrayList<Amenity>) this.getAll();
+		for (int i = 0; i < amenities.size(); ++i)
+		{
+			if (amenities.get(i).getId().contentEquals(amenity.getId()))
+			{
+				amenities.set(i, amenity);
+				this.saveAll(amenities);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Amenity get(String id)
+	{
+		ArrayList<Amenity> amenities = (ArrayList<Amenity>) this.getAll();
+		return amenities.stream().filter(a -> a.getId().equals(id)).findAny().orElse(null);
+	}
+
+	public Collection<Amenity> getAll()
+	{
+		Collection<Amenity> amenities = null;
+		Type collectionType = new TypeToken<Collection<Amenity>>()
+		{
+		}.getType();
+		try (FileReader freader = new FileReader(this.filename); JsonReader jreader = new JsonReader(freader))
+		{
+			amenities = gson.fromJson(jreader, collectionType);
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+
+		return amenities == null ? new ArrayList<Amenity>() : amenities;
 	}
 }
