@@ -8,12 +8,14 @@ import static nomad.Application.hostDAO;
 import static nomad.Application.invalidResponse;
 import static nomad.Application.adminDAO;
 import static nomad.Application.apartmentDAO;
+import static nomad.Application.amenityDAO;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import nomad.amenity.Amenity;
 import nomad.apartment.Apartment;
 import spark.Request;
 import spark.Response;
@@ -89,8 +91,35 @@ public class AdminServices
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-			response.status(404);
-			return response;
+			return invalidResponse("Server error: " + e.getMessage(), response);
+		}
+	};
+	
+	public static Route allAmenities = (Request request, Response response) ->
+	{
+		response.type("application/json");
+		String jws = parseJws(request);
+		if (jws == null)
+		{
+			return invalidResponse("Invalid login", response);
+		} 
+		
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
+			if (admin == null)
+			{
+				return invalidResponse("Not admin", response);
+			}
+			response.status(200);
+			ArrayList<Amenity> amenities = (ArrayList<Amenity>) amenityDAO.getAll();
+			response.status(200);
+			return gson.toJson(amenities);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			return invalidResponse("Server error: " + e.getMessage(), response);
 		}
 	};
 

@@ -16,6 +16,7 @@ public class Path
 		public static final String ADMIN_ALL_APARTMENTS = "/rest/admin_all_apartments";
 		public static final String ADMIN_ALL_RESERVATIONS = "/rest/admin_view_reservations";
 		public static final String ADMIN_ALL_COMMENTS = "/rest/admin_view_comments";
+		public static final String ADMIN_ALL_AMENITIES = "/rest/admin_all_amenities";
 		
 		public static final String HOST_ALL_APARTMENTS = "/rest/host_all_apartments";
 		public static final String HOST_ALL_GUESTS = "/rest/host_all_guests";
@@ -30,8 +31,11 @@ public class Path
 		public static final String REG_GUEST = "/rest/reg_guest";
 		public static final String LOGIN = "/rest/login";
 		public static final String PERSONAL_DATA = "/rest/personal_data";
+		public static final String GET_USER = "/rest/get_user";
 		
 		public static final String CREATE_RESERVATION = "/rest/create_reservation";
+		public static final String ADD_AMENITY = "/rest/add_amenity";
+		public static final String REMOVE_AMENITY = "/rest/remove_amenity";
 		public static final String UPDATE_AMENITY = "/rest/update_amenity";
 	}
 

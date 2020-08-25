@@ -11,7 +11,7 @@ var personalDataVue = new Vue
     	
     	if(jwt)
 		{
-	    	axios.get("rest/getUser",{headers:{"Authorization": "Bearer " + localStorage.jwt}})
+	    	axios.get("rest/get_user",{headers:{"Authorization": "Bearer " + localStorage.jwt}})
 		        .then(response => (this.guest = response.data))
 	    		.catch(response => 
     			{
@@ -25,24 +25,14 @@ var personalDataVue = new Vue
     {
         updatePersonalData: function(guest)
         {
-            let g = 
-                {
-                    username: guest.username,
-                    password: guest.password,
-                    name:     guest.name,
-                    surname:  guest.surname,
-                    sex:      guest.sex,
-                    userType: guest.userType,
-                };
-            const vm = this;
-            axios.post("rest/personal_data", g)
-            .then(response =>
-                {
-                    this.successMsg = "Changes successfully saved.";
-                })
-            .catch(response => {
-            		this.successMsg = "Something's wrong :(";
-            });
+	        axios.post("rest/personal_data", guest)
+	        .then(response =>
+	            {
+	                this.successMsg = "Changes successfully saved.";
+	            })
+	        .catch(response => {
+	        		this.successMsg = "Something's wrong :(";
+	        });
         }
     }
 });
