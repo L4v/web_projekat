@@ -8,6 +8,8 @@ import com.google.gson.Gson;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import nomad.amenity.AmenityDAO;
+import nomad.amenity.AmenityServices;
 import nomad.apartment.ApartmentDAO;
 import nomad.apartment.ApartmentServices;
 import nomad.comment.CommentDAO;
@@ -43,6 +45,7 @@ public class Application
 	public static ApartmentDAO apartmentDAO;
 	public static ReservationDAO reservationDAO;
 	public static CommentDAO commentDAO;
+	public static AmenityDAO amenityDAO;
 
 	// TODO(Jovan): Separate into utility classes?
 
@@ -112,6 +115,7 @@ public class Application
 		apartmentDAO = new ApartmentDAO("apartments.json");
 		reservationDAO = new ReservationDAO("reservations.json");
 		commentDAO = new CommentDAO("comments.json");
+		amenityDAO = new AmenityDAO("amenities.json");
 
 		port(8080);
 		staticFiles.location("/static");
@@ -128,12 +132,15 @@ public class Application
 		post(Path.Rest.HOST_ADD_APARTMENT, ApartmentServices.hostAddApartment);
 		post(Path.Rest.CREATE_RESERVATION, ReservationServices.createReservation);
 		post(Path.Rest.GUEST_ADD_COMMENT, CommentServices.addComment);
-		post(Path.Rest.UPDATE_APARTMENT, ApartmentServices.updateApartment);
+		post(Path.Rest.ADD_AMENITY, AmenityServices.addAmenity);
+		post(Path.Rest.REMOVE_AMENITY, AmenityServices.removeAmenity);
+		post(Path.Rest.UPDATE_AMENITY, AmenityServices.updateAmenity);
 		
 		get("rest/test", LoginServices.test);
-		get("rest/getUser", UserServices.getUser);
+		get(Path.Rest.GET_USER, UserServices.getUser);
 		get(Path.Rest.ADMIN_ALL_USERS, AdminServices.getAllUsers);
 		get(Path.Rest.ADMIN_ALL_APARTMENTS, AdminServices.allApartments);
+		get(Path.Rest.ADMIN_ALL_AMENITIES, AdminServices.allAmenities);
 		get(Path.Rest.ADMIN_ALL_RESERVATIONS, ReservationServices.adminViewReservations);
 		get(Path.Rest.ADMIN_ALL_COMMENTS, CommentServices.adminViewComments);
 		get(Path.Rest.HOST_ALL_APARTMENTS, HostServices.allApartments);

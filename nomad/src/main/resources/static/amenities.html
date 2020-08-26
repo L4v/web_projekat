@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="css/normalize.css">
+<link rel="stylesheet" type="text/css" href="css/skeleton.css">
+<link rel="stylesheet" type="text/css" href="css/personalData.css">
+
+
+<title>Amenity</title>
+</head>
+<body>
+	<div class="container">
+		<div id="amenities">
+			<h1>Amenity</h1>
+			<!--<table id="tabela">
+				 <v-for="amenity in amenities">
+					<tr>
+						<td>{{amenity.id}}</td>
+					</tr>
+					<tr>
+						<td>{{amenity.name}}</td>
+					</tr>
+					
+				<tr>
+					{{successMsg}}
+				</tr>
+			</table>-->
+			<ul id="example-1">
+			  <li v-for="amenity in amenities">
+			    {{ amenity.id }}
+			  </li>
+			</ul>
+		</div>
+	</div>
+	<script src="js/vue.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script src="js/amenities.js"></script>
+</body>
+</html>

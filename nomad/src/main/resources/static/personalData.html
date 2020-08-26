@@ -15,6 +15,10 @@
 			<h1>Personal data</h1>
 			<table id="tabela">
 				<tr>
+					<td>Username:</td>
+					<td><label v-model="guest.username"></td>
+				</tr>
+				<tr>
 					<td>Name:</td>
 					<td><input type="text" id="name" v-model="guest.name"></td>
 					<td id="emptyName">Enter your name</td>
@@ -39,16 +43,18 @@
 						v-model="guest.password"></td>
 					<td id="emptyPassword">Enter your password</td>
 				</tr>
-				<!-- <tr>
-					<td>Username:</td>
-					<td>{{guest.username}}</td>
-				</tr> -->
+				<tr>
+					<td>Confirm password:</td>
+					<td><input type="text" id="name" v-model="guest.name"></td>
+					<td id="emptyName">Enter your password</td>
+				</tr>
 				<tr>
 					<td><button v-on:click="updatePersonalData(guest)">Save
 							changes</button></td>
 					<td><button v-on:click="index.html">Back</button></td>
 				</tr>
-				<tr>{{successMsg}}
+				<tr>
+					{{successMsg}}
 				</tr>
 			</table>
 		</div>

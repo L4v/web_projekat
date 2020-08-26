@@ -3,6 +3,7 @@ package nomad.user;
 import static nomad.Application.guestDAO;
 import static nomad.Application.adminDAO;
 import static nomad.Application.hostDAO;
+import static nomad.Application.invalidResponse;
 import static nomad.Application.key;
 import static nomad.Application.parseJws;
 
@@ -31,9 +32,7 @@ public class UserServices
 		}
 		else if (hostDAO.get(loggedInUsername) != null) 
 		{
-			UserHost userHost = gson.fromJson(payload, UserHost.class);
-			hostDAO.update(userHost);
-			System.out.println(userHost.getName());
+			hostDAO.update(gson.fromJson(payload, UserHost.class));
 		}
 		else if(adminDAO.get(loggedInUsername) != null)
 		{
@@ -41,8 +40,7 @@ public class UserServices
 		} 
 		else 
 		{
-			response.status(404); // pitati!!!
-			return response;
+			return invalidResponse("Invalid login", response);
 		}
 		
 		response.status(200);
@@ -51,11 +49,11 @@ public class UserServices
 	
 	public static Route getUser = (Request request, Response response) ->
 	{
+		response.type("application/json");
 		String jws = parseJws(request);
 		if(jws == null)
 		{
-			response.status(404);
-			return response;
+			return invalidResponse("Invalid login", response);
 		}
 		else
 		{
@@ -67,29 +65,30 @@ public class UserServices
 				if(guestDAO.get(claims.getBody().getSubject()) != null)
 				{
 					response.status(200);
-					return gson.toJson(guestDAO.get(claims.getBody().getSubject()));
+					response.body(gson.toJson(guestDAO.get(claims.getBody().getSubject())));
+					return response;
 				}
 				else if (hostDAO.get(claims.getBody().getSubject()) != null) 
 				{
 					response.status(200);
-					return gson.toJson(hostDAO.get(claims.getBody().getSubject()));
+					response.body(gson.toJson(hostDAO.get(claims.getBody().getSubject())));
+					return response;
 				}
 				else if(adminDAO.get(claims.getBody().getSubject()) != null)
 				{
 					response.status(200);
+					
 					return gson.toJson(adminDAO.get(claims.getBody().getSubject()));
 				} 
 				else 
 				{
-					response.status(404); // pitati!!!
-					return response;
+					return invalidResponse("Invalid login", response);
 				}
 			}
 			catch(Exception e)
 			{
 				e.printStackTrace();
-				response.status(404);
-				return response;
+				return invalidResponse("Server error: " + e.getMessage(), response);
 			}
 		}
 	};

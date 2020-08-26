@@ -9,6 +9,7 @@ import static nomad.Application.hostDAO;
 import static nomad.Application.commentDAO;
 import static nomad.Application.adminDAO;
 import static nomad.Application.guestDAO;
+import static nomad.Application.apartmentDAO;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -124,17 +125,16 @@ public class CommentServices
 				return invalidResponse("Invalid guest", response);
 			}
 			
-			//here comes adding comment to the specific apartment
-			
-			/*dobaviti jos komentar i apartman
-			Apartment apartment;
-			Comment comment;
-			if(!addCommentToApartment(guest.getUsername(), comment, apartment))
+			String json = request.body();
+			Comment comment = gson.fromJson(json, Comment.class);
+
+			if(!addCommentToApartment(comment))
 			{
 				return invalidResponse("Don't have a rejected or cancelled reservation!", response);
-			}*/
+			}
 			
 			response.status(200);
+			response.body("Comment added");
 			return response;
 		}
 		catch(Exception e)
@@ -144,15 +144,18 @@ public class CommentServices
 		}
 	};
 	
-	private static boolean addCommentToApartment(String username, Comment comment, Apartment apartment) 
+	private static boolean addCommentToApartment(Comment comment) 
 	{
+		Apartment apartment = comment.getApartment();
+		UserGuest guest = comment.getGuest();
 		if(apartment.getReservations() != null)
 		{
 			for(Reservation reservation : apartment.getReservations())
 			{
 				if(reservation.getStatus() == ReservationStatus.CANCELLED || reservation.getStatus() == ReservationStatus.REJECTED)
 				{
-					apartment.addComment(username, comment);
+					apartment.addComment(guest.getUsername(), comment);
+					apartmentDAO.update(apartment);
 					return true;
 				}
 			}
