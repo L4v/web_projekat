@@ -1,10 +1,18 @@
 <template>
+    <!-- NOTE(Jovan):
+        Input field with floating placeholders
+        
+        options:
+            placeholder - placeholder text
+            name        - defines input name
+            type        - defines input type (password or text)
+    -->
     <!-- TODO(Jovan): Fix floating label not detecting input -->
     <div class="loginField floating-label">
         <label for="username">{{placeholder}}</label>
         <input 
             v-bind:name="name"
-            type="text"
+            v-bind:type="type"
             @blur="$event.target.parentElement.classList.toggle('focused')"
             @focus="$event.target.parentElement.classList.toggle('focused')"
             />
@@ -12,7 +20,7 @@
 </template>
 <script>
     module.exports = {
-        props: ["placeholder", "name"]
+        props: ["placeholder", "name", "type"]
     }
 </script>
 <style scoped>
