@@ -68,7 +68,6 @@ public class LoginServices
 			return response;
 		} catch (Exception e)
 		{
-			e.printStackTrace();
 			return invalidResponse("Server error: " + e.getMessage(), response);
 		}
 
@@ -76,15 +75,14 @@ public class LoginServices
 
 	public static Route login = (Request request, Response response) ->
 	{
-		response.type("application/json");
 		String payload = request.body();
 		LoginDTO user = gson.fromJson(payload, LoginDTO.class);
 		UserBase loggedInUser = LoginServices.loggedInUser(user);
 		if (loggedInUser == null)
 		{
-			response.status(404);
-			return null;
+			return invalidResponse("Invalid user", response);
 		}
+		response.type("application/json");
 		response.status(200);
 		String jws = Jwts.builder().setSubject(loggedInUser.getUsername()).signWith(key).compact();
 

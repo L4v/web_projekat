@@ -20,129 +20,87 @@
 	<!-- TODO(Jovan): Merge search and navigation -->
 	<!-- NOTE(Jovan): Navigation bar -->
 	<div id="app" class="content">
-		<nav id="navbar">
-			<div id="nav" :class="{sticky:active}">
-				<div class="nav-container" :class="toggleNavClass()">
-					<!-- NOTE(Jovan): Logo -->
-					<div class="navbar-item logo">
-						<a class="button" href="index.html">nomad</a>
-					</div>
+		<main-navigation></main-navigation>
+        <router-view></router-view>
+    </div>
 
-					<!-- NOTE(Jovan): Searchbar -->
-					<transition name="fade"> <!-- NOTE(Jovan): Expanded searchbar -->
-					<div v-if="!active" id="searchbar" :class="toggleSearchClass()">
-						<div class="search-field">
-                            <!-- TODO(Jovan): Add floating label animation -->
-							<label class="search-field-label" for="country">Country</label>
-                            <input class="search-field-input" type="text"
-								placeholder="Country" name="country" >
-						</div>
-						<div class="search-field">
-							<label>City</label> <input type="text" placeholder="Which city?"
-								name="city">
-						</div>
-						<div class="search-field">
-							<label>Pick dates</label>
-                            <v-date-picker mode="range" v-model="daterange" :input-props="{placeholder: 'Arrival and departure dates'}"/>
-						</div>
-						<div class="search-field search-btn" :class="toggleSearchClass()">
-							<button class="button-primary">
-								<i class="fa fa-search" aria-hidden="true"></i>
-							</button>
-						</div>
-					</div>
+    <script src="js/vue.js"></script>
+    <script src="js/vue-router.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script src="js/v-calendar.min.js"></script>
+    <script src="js/httpVueLoader.js"></script>
+    <script>
+    	Vue.use(httpVueLoader);
+        const routes =
+        [
+            {
+                path: "/",
+                name: "Home",
+                component: httpVueLoader("components/Home.vue")
+            },
+            {
+                path: "/login",
+                name: "Login",
+                component: httpVueLoader("components/Login.vue")
+            },
+        ];
 
-					<!-- NOTE(Jovan): Collapsed, in navbar, searchbar -->
-					<div v-else id="searchbar" :class="toggleSearchClass()">
-						<div class="search-field search-btn" :class="toggleSearchClass()">
-							<input type="text" placeholder="Search for a home">
-							<button class="button-primary">
-								<i class="fa fa-search" aria-hidden="true"></i>
-							</button>
-						</div>
-					</div>
-					</transition>
+        const router = new VueRouter({routes});
 
-					<div class="navbar-dropdown">
-						<button class="navdropbtn">
-							<i class="fa fa-bars" aria-hidden="true"></i> <i
-								class="fa fa-user-o" aria-hidden="true"></i>
-						</button>
-						<!-- TODO(Jovan): Make Log and Sign into dropdown like menus -->
-						<ul class="navbar-list">
-							<li><a @click="modal_active = true" href="#">Log in</a></li>
-							<li><a href="registration.html">Sign up</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</nav>
+        new Vue
+        ({
+            el: "#app",
+            router: router,
+            data:
+            {
+                modal_active: false,
+                float_label: false,
+            },
+            components:
+           	{
+            	"main-navigation": httpVueLoader("components/MainNavigation.vue"),
+           	},
+            methods:
+            {
+                
+                logout: function()
+                {
+                    let jwt = localStorage.jwt;
+                    if(jwt){
+                        localStorage.removeItem("jwt");
+                        alert("You have successfully logged out");
+                    } else {
+                        alert("You are not logged in");
+                    }
+                },
+                verify: function()
+                {
+                    var jwt = localStorage.jwt;
+                    if(!jwt)
+                    {
+                        // NOTE(Jovan): Ako ne postoji jwt, ne pokusavaj login
+                        return;
+                    }
+                    axios.get("rest/test", {headers:{"Authorization": "Bearer " + jwt}})
+                        .then(response =>
+                        {
+                            this.loggedIn = true;
+                        })
+                        .catch(response =>
+                        {
+                            this.loggedIn = false;
+                        });
+                },
+            },
+            computed:
+            {
+                verifyLogin: function()
+                {
+                    return this.verify();
+                }
+            },
+        }).$mount("#app");
+    </script>
 
-		<!-- NOTE(Jovan): Main content -->
-		<!-- NOTE(Jovan): Header -->
-		<section class="header">
-
-
-			<div class="header-content row">
-				<!-- TODO(Jovan): Bolji slogan? Mozda generator? -->
-				<div class="one column">&nbsp;</div>
-				<div class="two columns">
-					<div class="slogan">
-						<div class="slogan-blur"></div>
-						<h2>Be at home, anywhere!</h2>
-						<p>Find yourself a home on your travels or offer other
-							travellers a place to stay</p>
-						<button class="button-primary">Find a home</button>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<!-- NOTE(Jovan): Footer -->
-		<section class="footer">
-			<ul class="footer-list">
-				<li class="footer-item"><a href="">About</a></li>
-				<li class="footer-item"><a href="footer-item">Contact</a></li>
-			</ul>
-        </section>
-
-
-        <!-- NOTE(Jovan): Modal login dialog -->
-        <div id="login" class="modal-container" :class="{modal_active: modal_active}">
-            <form id="loginForm">
-                <h3>Login</h3>
-                <div class="loginField floating-label">
-                    <label for="username">Username</label>
-                    <input 
-                        @focus="$event.target.parentElement.classList.toggle('focused')"
-                        @blur="$event.target.parentElement.classList.toggle('focused')"
-                        type="text" 
-                        name="username" 
-                        required
-                    />
-                </div>
-                <div class="loginField floating-label">
-                    <label for="password">Password</label>
-                    <input
-                        @focus="$event.target.parentElement.classList.toggle('focused')"
-                        @blur="$event.target.parentElement.classList.toggle('focused')"
-                        type="text" 
-                        name="password" 
-                        required
-                    />
-                </div>
-                <div class="loginButtons">
-                    <button class="button-primary">Log in</button>
-                    <button>Forgot password?</button>
-                    <button @click="modal_active=false">Cancel</button>
-                </div>
-            </form>
-        </div>
-	</div>
-
-	<script src="js/vue.js"></script>
-	<!-- TODO(Jovan): Datepicker -->
-	<script src="https://unpkg.com/v-calendar"></script>
-	<script src="js/index.js"></script>
 </body>
 </html>
