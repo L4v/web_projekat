@@ -13,24 +13,19 @@
 	<div class="container">
 		<div id="amenities">
 			<h1>Amenity</h1>
-			<!--<table id="tabela">
-				 <v-for="amenity in amenities">
-					<tr>
-						<td>{{amenity.id}}</td>
-					</tr>
-					<tr>
-						<td>{{amenity.name}}</td>
-					</tr>
-					
-				<tr>
+			<table id="tabela">
+				<tr bgcolor="lightgrey">
+					<th>ID</th>
+					<th>Name</th>
+				</tr>
+				 <tr v-for="amenity in amenities">
+					<td>{{amenity.id}}</td>
+					<td>{{amenity.name}}</td>
+					<td><button v-on:click="removeAmenity(amenity)">Delete</button>
+				</tr>
 					{{successMsg}}
 				</tr>
-			</table>-->
-			<ul id="example-1">
-			  <li v-for="amenity in amenities">
-			    {{ amenity.id }}
-			  </li>
-			</ul>
+			</table>
 		</div>
 	</div>
 	<script src="js/vue.js"></script>

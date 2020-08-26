@@ -175,4 +175,45 @@ public class ReservationServices
 		response.body("Reservation added");
 		return response;
 	};
+	
+	//TODO: da li je dovoljno ovo ili mora i kod apartmana i kod gosta da update-ujemo??
+	public static Route guestCancelReservation = (Request request, Response response) ->
+	{
+		response.type("application/json");
+		String jws = parseJws(request);
+		if (jws == null)
+		{
+			return invalidResponse("Invalid login", response);
+		}
+
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
+			if (guest == null)
+			{
+				return invalidResponse("Not guest", response);
+			}
+
+			String json = request.body();
+			Reservation reservation = gson.fromJson(json, Reservation.class);
+			if(reservation.getStatus() == ReservationStatus.ACCEPTED || reservation.getStatus() == ReservationStatus.CREATED)
+			{
+				reservation.setStatus(ReservationStatus.CANCELLED);
+				if(reservationDAO.update(reservation) && apartmentDAO.update(reservation.getApartment()) && guestDAO.update(reservation.getGuest()))
+				{
+					response.status(200);
+					response.body("Reservation cancelled");
+					return response;
+				}
+				return invalidResponse("Failed cancelling reservation", response);
+			}
+			return invalidResponse("Failed cancelling reservation - reservation status is not ACCEPTED or CREATED", response);
+			
+		} catch (Exception e)
+		{
+			return invalidResponse("Server error: " + e.getMessage(), response);
+		}
+	};
+	
 }
