@@ -1,26 +1,33 @@
 <template>
 	<div id="login">
-		<h1>Login</h1>
-		<h2>{{successMsg}}</h2>
-		<table id="tabela">
-			<tr>
-				<td>Username:</td>
-				<td><input type="text" id="username" v-model="user.username"
-					placeholder="Username"></td>
-				<td id="emptyUsername">Enter your username</td>
-			</tr>
-			<tr>
-				<td>Password:</td>
-				<td><input type="password" id="password"
-					v-model="user.password" placeholder="Password"></td>
-				<td id="emptyPassword">Enter your password</td>
-			</tr>
-			<tr>
-				<td colspan="2"><button v-on:click="login()">Log in</button></td>
-			</tr>
-		</table>
-		<h2>Verify login: {{loggedIn}}</h2>
-		<button v-on:click="verify()">Test</button>
+        <!-- TODO(Jovan): Fix floating label not detecting input -->
+        <div id="loginForm">
+            <h1>Login</h1>
+            <h2>{{successMsg}}</h2>
+            <div class="loginField floating-label">
+                <label for="username">Username</label>
+                <input 
+                    ref="float-input"
+                    name="username"
+                    type="text"
+                    @blur="$event.target.parentElement.classList.toggle('focused')"
+                    @focus="$event.target.parentElement.classList.toggle('focused')"
+                    />
+            </div>
+            <div class="loginField floating-label">
+                <label for="password">Username</label>
+                <input 
+                    name="password"
+                    type="password"
+                    @blur="$event.target.parentElement.classList.toggle('focused')"
+                    @focus="$event.target.parentElement.classList.toggle('focused')"
+                    />
+            </div>
+             <div class="loginButtons">
+                <button class="button-primary">Log in</button>
+                <button>Forgot password?</button>
+             </div>
+        </div> 
 	</div>
 </template>
 
@@ -77,15 +84,61 @@
 </script>
 
 <style scoped>
-    table, tr, td {
-        border: none;
+    #login > input[type=text],
+    #login > input[type=password]
+    {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
     }
 
-    #emptyUsername, #emptyPassword {
-        color: red;
+
+    #login
+    {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        background: none;
+        background-color: rgb(245, 245, 245);
     }
 
-    #loginButton {
+    #loginForm
+    {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
+
+        margin: auto;
+        margin-top: 5vh;
+        width: 25%;
+        height: 60vh;
+
+        border: 1px solid rgba(127, 127, 127, 0.5);
+        border-radius: 20px;
+
+        background: none;
+        background-color: #fff;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    }
+
+    .loginField 
+    {
+        width: 80%;
+    }
+
+    .loginField input
+    {
+        width: 100%;
+    }
+
+    .loginButtons
+    {
+        display: flex;
+        flex-direction: column;
+        width: 80%;
     }
 </style>
