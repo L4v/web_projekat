@@ -1,3 +1,14 @@
+const routes =
+[
+    {
+        path: "/",
+        name: "Home",
+        component: httpVueLoader("components/Home.vue")
+    },
+];
+
+const router = new VueRouter({routes});
+
 new Vue
 ({
     el: "#app",
@@ -9,6 +20,7 @@ new Vue
         modal_active: false,
         float_label: false,
     },
+    router: router,
     methods:
     {
         toggleNavClass()
@@ -43,7 +55,31 @@ new Vue
                 alert("You are not logged in");
             }
         },
-
+        verify: function()
+        {
+            var jwt = localStorage.jwt;
+            if(!jwt)
+            {
+                // NOTE(Jovan): Ako ne postoji jwt, ne pokusavaj login
+                return;
+            }
+            axios.get("rest/test", {headers:{"Authorization": "Bearer " + jwt}})
+                .then(response =>
+                {
+                    this.loggedIn = true;
+                })
+                .catch(response =>
+                {
+                    this.loggedIn = false;
+                });
+        },
+    },
+    computed:
+    {
+        verifyLogin: function()
+        {
+            return this.verify();
+        }
     },
     mounted()
     {
@@ -60,5 +96,4 @@ new Vue
             }
         };
     }
-});
-
+}).$mount("#app");
