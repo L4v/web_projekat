@@ -3,8 +3,8 @@
         <div id="loginForm">
             <h1>Login</h1>
             <h2>{{successMsg}}</h2>
-            <floating-label placeholder="Username" name="username"></floating-label>
-            <floating-label placeholder="Password" name="password"></floating-label>
+            <floating-label placeholder="Username" name="username" type="text"></floating-label>
+            <floating-label placeholder="Password" name="password" type="password"></floating-label>
              <div class="loginButtons">
                 <button class="button-primary">Log in</button>
                 <button>Forgot password?</button>
