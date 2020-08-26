@@ -1,28 +1,10 @@
 <template>
 	<div id="login">
-        <!-- TODO(Jovan): Fix floating label not detecting input -->
         <div id="loginForm">
             <h1>Login</h1>
             <h2>{{successMsg}}</h2>
-            <div class="loginField floating-label">
-                <label for="username">Username</label>
-                <input 
-                    ref="float-input"
-                    name="username"
-                    type="text"
-                    @blur="$event.target.parentElement.classList.toggle('focused')"
-                    @focus="$event.target.parentElement.classList.toggle('focused')"
-                    />
-            </div>
-            <div class="loginField floating-label">
-                <label for="password">Username</label>
-                <input 
-                    name="password"
-                    type="password"
-                    @blur="$event.target.parentElement.classList.toggle('focused')"
-                    @focus="$event.target.parentElement.classList.toggle('focused')"
-                    />
-            </div>
+            <floating-label placeholder="Username" name="username"></floating-label>
+            <floating-label placeholder="Password" name="password"></floating-label>
              <div class="loginButtons">
                 <button class="button-primary">Log in</button>
                 <button>Forgot password?</button>
