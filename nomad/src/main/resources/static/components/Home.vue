@@ -1,8 +1,9 @@
 <template>
 	<!-- TODO(Jovan): Merge search and navigation -->
 	<!-- NOTE(Jovan): Navigation bar -->
-	<div id="app" class="content">
+	<div class="content">
 
+        <main-navigation></main-navigation>
 		<!-- NOTE(Jovan): Main content -->
 		<!-- NOTE(Jovan): Header -->
 		<section class="header">
@@ -30,39 +31,65 @@
 				<li class="footer-item"><a href="footer-item">Contact</a></li>
 			</ul>
         </section>
-
-
-        <!-- NOTE(Jovan): Modal login dialog -->
-        <!-- TODO(Jovan): Make route???
-        <div id="login" class="modal-container" :class="{modal_active: modal_active}">
-            <form id="loginForm">
-                <h3>Login</h3>
-                <div class="loginField floating-label">
-                    <label for="username">Username</label>
-                    <input 
-                        @focus="$event.target.parentElement.classList.toggle('focused')"
-                        @blur="$event.target.parentElement.classList.toggle('focused')"
-                        type="text" 
-                        name="username" 
-                        required
-                    />
-                </div>
-                <div class="loginField floating-label">
-                    <label for="password">Password</label>
-                    <input
-                        @focus="$event.target.parentElement.classList.toggle('focused')"
-                        @blur="$event.target.parentElement.classList.toggle('focused')"
-                        type="text" 
-                        name="password" 
-                        required
-                    />
-                </div>
-                <div class="loginButtons">
-                    <button class="button-primary">Log in</button>
-                    <button>Forgot password?</button>
-                    <button @click="modal_active=false">Cancel</button>
-                </div>
-            </form>
-        </div> -->
 	</div>
 </template>
+<style scoped>
+    .header {
+        /* TODO(Jovan): Postaviti adekvatnu pozadinu*/
+        background-color: #fff;
+        background-image: url("../img/novisad.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        min-height: 100vh;
+        padding-top: 15vh;
+    }
+
+    .header-content {
+        padding-top: 10vh;
+    }
+
+    .slogan {
+        position: relative;
+    }
+
+    .slogan h2, .slogan p, .slogan button {
+        position: relative;
+        text-align: left;
+        color: #fff;
+        font-weight: 500;
+        z-index: 1;
+    }
+
+    .slogan-blur {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        filter: blur(8rem);
+        -webkit-filter: blur(8rem);
+        background-color: rgba(0, 0, 0, .5);
+        z-index: 0;
+    }
+
+    .header h1, h2 {
+        text-align: center;
+    }
+
+    .header-item {
+        display: inline;
+    }
+
+    .host-btn {
+        background-color: #fff;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity 500ms;
+    }
+
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
+    }
+</style>

@@ -27,7 +27,6 @@
 <script>
     module.exports = 
     {
-        el: "#login",
         data: function()
         {
             return{
@@ -74,5 +73,19 @@
                     });
             },
         }
-    };
+    }
 </script>
+
+<style scoped>
+    table, tr, td {
+        border: none;
+    }
+
+    #emptyUsername, #emptyPassword {
+        color: red;
+    }
+
+    #loginButton {
+        align-items: center;
+    }
+</style>

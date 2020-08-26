@@ -53,7 +53,7 @@
 	                           <li><router-link to="/login">Log in</router-link></li>
 							<li><a href="registration.html">Sign up</a></li>
 	                           <!-- TODO(Jovan): Make computed? -->
-	                           <li><button>Log out</button></li>
+	                           <li v-if="loggedIn"><a href="#" @click="logout()">Log out</a></li>
 						</ul>
 					</div>
 				</div>
@@ -67,7 +67,8 @@
 		{
 			return{
 				active: false,
-				daterange: null
+				daterange: null,
+                loggedIn: false,
 			}
 			
 		},
@@ -95,9 +96,22 @@
 	                return "search-collapse";
 	            }
 	        },
+            verifyLogin()
+            {
+                var jwt = localStorage.jwt;
+
+                if(!jwt) return false;
+                return true;
+            },
+            logout()
+            {
+                localStorage.removeItem("jwt");
+                window.location.reload(true);
+            },
 		},
         mounted()
         {
+            this.loggedIn = this.verifyLogin();
             window.document.onscroll = () =>
             {
                 let searchbar = document.getElementById("searchbar");
@@ -168,6 +182,7 @@
 		display: none;
 		float: right;
 		position: absolute;
+        text-align: center;
 		min-width: 160px;
 		background: #fff;
 		box-shadow: 0px 8px 16px 0px rgb(0, 0, 0, 0.2);
@@ -180,12 +195,21 @@
 		top: 7vh;
 	}
 	
-	.navbar-list a {
+	.navbar-list a
+     {
 		float: none;
 		color: black;
 		text-decoration: none;
 		display: block;
 		text-align: center;
+        border: none;
+
+		font-size: 1.5rem;
+		border: none;
+		text-transform: capitalize;
+		font-weight: 400;
+		color: #000;
+		padding: 5px;
 	}
 	
 	.navbar-item {
@@ -240,12 +264,6 @@
 	}
 	
 	.navbar-list a {
-		font-size: 1.5rem;
-		border: none;
-		text-transform: capitalize;
-		font-weight: 400;
-		color: #000;
-		padding: 5px;
 	}
 	
 	.navbar-list a:hover {
@@ -259,4 +277,44 @@
 		text-transform: uppercase;
 		font-weight: 600;
 	}
+
+    #searchbar {
+        order: 1;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        min-width: 70vw;
+        margin: auto;
+        background-color: #fff;
+        border-radius: 25px;
+    }
+
+    #searchbar.search-collapse {
+        order: 0;
+        flex-grow: 2;
+    }
+
+    .search-btn {
+        border-radius: 50%;
+    }
+
+    #searchbar button {
+        margin: 0px;
+        border-radius: 50%;
+        padding: 0px;
+        width: 4rem;
+        height: 4rem;
+    }
+
+    #searchbar input {
+        border: none;
+        padding: 0px;
+        margin: 0px;
+        height: 2rem;
+    }
+
+    #searchbar input:focus {
+        border: none;
+    }
 </style>

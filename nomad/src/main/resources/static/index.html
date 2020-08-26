@@ -20,7 +20,6 @@
 	<!-- TODO(Jovan): Merge search and navigation -->
 	<!-- NOTE(Jovan): Navigation bar -->
 	<div id="app" class="content">
-		<main-navigation></main-navigation>
         <router-view></router-view>
     </div>
 
@@ -31,6 +30,7 @@
     <script src="js/httpVueLoader.js"></script>
     <script>
     	Vue.use(httpVueLoader);
+    	Vue.component("main-navigation", httpVueLoader("components/MainNavigation.vue"));
         const routes =
         [
             {
@@ -58,7 +58,6 @@
             },
             components:
            	{
-            	"main-navigation": httpVueLoader("components/MainNavigation.vue"),
            	},
             methods:
             {
