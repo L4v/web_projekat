@@ -13,6 +13,8 @@
         <input 
             v-bind:name="name"
             v-bind:type="type"
+            v-bind:value="value"
+            v-on:input="$emit('input', $event.target.value)"
             @blur="$event.target.parentElement.classList.toggle('focused')"
             @focus="$event.target.parentElement.classList.toggle('focused')"
             />
@@ -20,7 +22,7 @@
 </template>
 <script>
     module.exports = {
-        props: ["placeholder", "name", "type"]
+        props: ["placeholder", "name", "type", "value"]
     }
 </script>
 <style scoped>

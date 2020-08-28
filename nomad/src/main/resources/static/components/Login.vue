@@ -2,11 +2,11 @@
 	<div id="login">
         <div id="loginForm">
             <h1>Login</h1>
-            <h2>{{successMsg}}</h2>
-            <floating-label placeholder="Username" name="username" type="text"></floating-label>
-            <floating-label placeholder="Password" name="password" type="password"></floating-label>
+            <h2 :class="loggedIn ? 'success' : 'failure'">{{successMsg}}</h2>
+            <floating-label v-model="user.username" placeholder="Username" name="username" type="text"></floating-label>
+            <floating-label v-model="user.password" placeholder="Password" name="password" type="password"></floating-label>
              <div class="loginButtons">
-                <button class="button-primary">Log in</button>
+                <button class="button-primary" @click="login()">Log in</button>
                 <button>Forgot password?</button>
              </div>
         </div> 
@@ -19,7 +19,7 @@
         data: function()
         {
             return{
-                user: {},
+                user: {username:"", password:""},
                 errors: [],
                 successMsg: "",
                 loggedIn: false,
@@ -30,13 +30,16 @@
             login: function()
             {
                 // TODO(Jovan): Validation
-                // TODO(Jovan): Cuvanje u memoriji preko refresh tokena, umesto u local
+                // TODO(Jovan): Using refresh tokens instead of localStorage
 
                 axios.post("rest/login", this.user)
                     .then(response =>
                     {
                         this.successMsg = "Logged in!";
                         localStorage.jwt = response.data;
+                        this.loggedIn = true;
+                        // NOTE(Jovan): Go back one page
+                        this.$router.go(-1);
                     })
                     .catch(response =>
                     {
@@ -122,5 +125,21 @@
         display: flex;
         flex-direction: column;
         width: 80%;
+    }
+
+    .success,
+    .failure
+    {
+        font-size: 1.5rem;
+    }
+
+    .success
+    {
+        color: #2ecc71;
+    }
+
+    .failure
+    {
+        color: #e74c3c;
     }
 </style>

@@ -150,6 +150,8 @@ public class Application
 		get(Path.Rest.GUEST_ALL_APARTMENTS, GuestServices.allApartments);
 		get(Path.Rest.GUEST_ALL_RESERVATIONS, ReservationServices.guestViewReservations);
 		
+		// TODO(Jovan): Catch all for vue router, not necessary?
+		// get("/", serveStaticResource);
 		// NOTE(Jovan): Gzip compression
 		after("*", Filters.addGzipHeader);
 
