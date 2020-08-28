@@ -1,7 +1,16 @@
 package nomad;
 
-import static spark.Spark.*;
+import static spark.Spark.after;
+import static spark.Spark.before;
+import static spark.Spark.get;
+import static spark.Spark.halt;
+import static spark.Spark.options;
+import static spark.Spark.port;
+import static spark.Spark.post;
+import static spark.Spark.staticFiles;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.Key;
 
 import com.google.gson.Gson;
@@ -27,9 +36,11 @@ import nomad.user.UserHostDAO;
 import nomad.user.UserServices;
 import nomad.utils.Filters;
 import nomad.utils.Path;
+import spark.Filter;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import spark.utils.IOUtils;
 
 public class Application
 {
@@ -126,6 +137,8 @@ public class Application
 		// NOTE(Jovan): For SPA
 		get("/", serveStaticResource);
 
+
+
 		post(Path.Rest.REG_GUEST, RegistrationServices.registerGuest);
 		post(Path.Rest.LOGIN, LoginServices.login);
 		post(Path.Rest.PERSONAL_DATA, UserServices.personalData);
@@ -151,7 +164,19 @@ public class Application
 		get(Path.Rest.GUEST_ALL_RESERVATIONS, ReservationServices.guestViewReservations);
 		
 		// TODO(Jovan): Catch all for vue router, not necessary?
-		// get("/", serveStaticResource);
+		/*before((request, response) ->
+		{
+			try(InputStream stream = Application.class.getResourceAsStream("/static/index.html")){
+				halt(200, IOUtils.toString(stream));
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+		});*/
+		get("*", (request, response) ->
+		{
+			response.redirect("/");
+			return response;
+		});
 		// NOTE(Jovan): Gzip compression
 		after("*", Filters.addGzipHeader);
 

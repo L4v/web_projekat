@@ -16,7 +16,7 @@
             v-model="content"
             @blur="removeFocus($event)"
             @focus="addFocus($event)"
-            v-on:input="isEmpty($event)"
+            v-on:input="isEmpty($event); $emit('input', $event.target.value)"
             />
     </div>
 </template>
