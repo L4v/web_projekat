@@ -7,22 +7,55 @@
             name        - defines input name
             type        - defines input type (password or text)
     -->
-    <!-- TODO(Jovan): Fix floating label not detecting input -->
-    <div class="loginField floating-label">
+    <div class="loginField floating-label" >
         <label for="username">{{placeholder}}</label>
         <input 
             v-bind:name="name"
             v-bind:type="type"
             v-bind:value="value"
-            v-on:input="$emit('input', $event.target.value)"
-            @blur="$event.target.parentElement.classList.toggle('focused')"
-            @focus="$event.target.parentElement.classList.toggle('focused')"
+            v-model="content"
+            @blur="removeFocus($event)"
+            @focus="addFocus($event)"
+            v-on:input="isEmpty($event)"
             />
     </div>
 </template>
 <script>
     module.exports = {
-        props: ["placeholder", "name", "type", "value"]
+        props: ["placeholder", "name", "type", "value"],
+        data: function()
+        {
+            return {
+                content: "",
+            }
+        },
+        methods:
+        {
+            addFocus: function(e)
+            {
+                let classList = e.target.parentElement.classList;
+                if(!classList.contains('focused'))
+                {
+                    classList.toggle('focused');
+                }
+            },
+            removeFocus: function(e)
+            {
+                let classList = e.target.parentElement.classList;
+                if(classList.contains('focused') && this.isEmpty())
+                {
+                    classList.toggle('focused');
+                }
+            },
+            isEmpty: function(e)
+            {
+                if(this.content)
+                {
+                    return false;
+                }
+                return true;
+            }
+        },
     }
 </script>
 <style scoped>
