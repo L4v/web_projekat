@@ -12,10 +12,10 @@
 					<transition name="fade"> <!-- NOTE(Jovan): Expanded searchbar -->
 					<div v-if="!active" id="searchbar" :class="toggleSearchClass()">
 						<div class="search-field">
-	                           <!-- TODO(Jovan): Add floating label animation -->
+                            <!-- TODO(Jovan): Add floating label animation -->
 							<label class="search-field-label" for="country">Country</label>
-	                           <input class="search-field-input" type="text"
-								placeholder="Country" name="country" >
+                            <input class="search-field-input" type="text"
+                                placeholder="Country" name="country" >
 						</div>
 						<div class="search-field">
 							<label>City</label> <input type="text" placeholder="Which city?"
@@ -23,7 +23,7 @@
 						</div>
 						<div class="search-field">
 							<label>Pick dates</label>
-	                           <v-date-picker mode="range" v-model="daterange" :input-props="{placeholder: 'Arrival and departure dates'}"/>
+                            <v-date-picker mode="range" v-model="daterange" :input-props="{placeholder: 'Arrival and departure dates'}"/>
 						</div>
 						<div class="search-field search-btn" :class="toggleSearchClass()">
 							<button class="button-primary">
@@ -50,10 +50,12 @@
 						</button>
 						<!-- TODO(Jovan): Make Log and Sign into dropdown like menus -->
 						<ul class="navbar-list">
-	                           <li><router-link to="/login">Log in</router-link></li>
-							<li><a href="registration.html">Sign up</a></li>
-	                           <!-- TODO(Jovan): Make computed? -->
-	                           <li v-if="loggedIn"><a href="#" @click="logout()">Log out</a></li>
+                            <li v-if="loggedIn" class="username">{{user.username}}</li>
+                            <hr v-if="loggedIn" />
+                            <li><router-link to="/login">Log in</router-link></li>
+                            <li><a href="registration.html">Sign up</a></li>
+                            <!-- TODO(Jovan): Make computed? -->
+                            <li v-if="loggedIn"><a href="#" @click="logout()">Log out</a></li>
 						</ul>
 					</div>
 				</div>
@@ -66,6 +68,7 @@
 		data: function() 
 		{
 			return{
+                user: {},
 				active: false,
 				daterange: null,
                 loggedIn: false,
@@ -101,12 +104,24 @@
                 var jwt = localStorage.jwt;
 
                 if(!jwt) return false;
+                this.getUser();
                 return true;
             },
             logout()
             {
                 localStorage.removeItem("jwt");
                 window.location.reload(true);
+            },
+            getUser()
+            {
+                var jwt = localStorage.jwt;
+                axios.get("/rest/get_user", {headers: {"Authorization": "Bearer " + jwt}})
+                    .then(response => 
+                        {
+                            this.user = response.data;
+                        })
+                    // TODO(Jovan): Handle exception?
+                    .catch(response => {});
             },
 		},
         mounted()
@@ -149,8 +164,8 @@
 	}
 	
 	/* NOTE(Jovan):
-	 * Koristi se za sticky navbar
-	 */
+    * Koristi se za sticky navbar
+    */
 	#nav.sticky {
 		transition: 150ms;
 		background-color: #fff;
@@ -211,6 +226,14 @@
 		color: #000;
 		padding: 5px;
 	}
+    
+    .username
+    {
+        color: #000;
+        font-size: 1.5rem;
+        font-weight: 500;
+        padding: 2px;
+    }
 	
 	.navbar-item {
 		margin: 0;
@@ -269,6 +292,12 @@
 	.navbar-list a:hover {
 		color: #ff5722;
 	}
+    
+    .navbar-list hr
+    {
+        padding: 0px;
+        margin: 0px;
+    }
 	
 	#nav.sticky>.nav-container>.logo a {
 		font-size: 1.8rem;
