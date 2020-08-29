@@ -53,7 +53,7 @@
                             <li v-if="loggedIn" class="username">{{user.username}}</li>
                             <hr v-if="loggedIn" />
                             <li><router-link to="/login">Log in</router-link></li>
-                            <li><a href="registration.html">Sign up</a></li>
+                            <li><router-link to="/registration">Sign up</router-link></li>
                             <!-- TODO(Jovan): Make computed? -->
                             <li v-if="loggedIn"><a href="#" @click="logout()">Log out</a></li>
 						</ul>

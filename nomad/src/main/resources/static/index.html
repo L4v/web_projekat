@@ -30,11 +30,15 @@
     <script src="js/httpVueLoader.js"></script>
     <script>
     	Vue.use(httpVueLoader);
+
+        // NOTE(Jovan): Component registration
     	Vue.component("main-navigation", httpVueLoader("components/MainNavigation.vue"));
     	Vue.component("floating-label", httpVueLoader("components/FloatingLabel.vue"),
             {
                props: ["placeholder", "name", "type", "value"]
             });
+
+        // NOTE(Jovan): Route registration
         const routes =
         [
             {
@@ -46,6 +50,11 @@
                 path: "/login",
                 name: "Login",
                 component: httpVueLoader("components/Login.vue")
+            },
+            {
+                path: "/registration",
+                name: "Registration",
+                component: httpVueLoader("components/Registration.vue")
             },
         ];
 
