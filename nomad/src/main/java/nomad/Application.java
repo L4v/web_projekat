@@ -3,14 +3,11 @@ package nomad;
 import static spark.Spark.after;
 import static spark.Spark.before;
 import static spark.Spark.get;
-import static spark.Spark.halt;
 import static spark.Spark.options;
 import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.security.Key;
 
 import com.google.gson.Gson;
@@ -36,11 +33,9 @@ import nomad.user.UserHostDAO;
 import nomad.user.UserServices;
 import nomad.utils.Filters;
 import nomad.utils.Path;
-import spark.Filter;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import spark.utils.IOUtils;
 
 public class Application
 {
@@ -151,6 +146,7 @@ public class Application
 		
 		get("rest/test", LoginServices.test);
 		get(Path.Rest.GET_USER, UserServices.getUser);
+		get(Path.Rest.GUEST_GET_USERNAME, GuestServices.getUsername);
 		get(Path.Rest.ADMIN_ALL_USERS, AdminServices.getAllUsers);
 		get(Path.Rest.ADMIN_ALL_APARTMENTS, AdminServices.allApartments);
 		get(Path.Rest.ADMIN_ALL_AMENITIES, AdminServices.allAmenities);

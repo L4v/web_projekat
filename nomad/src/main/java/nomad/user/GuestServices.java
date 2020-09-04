@@ -67,5 +67,23 @@ public class GuestServices
 			return invalidResponse("Server error: " + e.getMessage(), response);
 		}
 	};
+	
+	public static Route getUsername = (Request request, Response response) ->
+	{
+		String username = request.params("username");
+		if(username == null)
+		{
+			return invalidResponse("Invalid username", response);
+		}
+		UserGuest guest = guestDAO.get(username);
+		if(guest == null)
+		{
+			return invalidResponse("Invalid username", response);
+		}
+		
+		response.status(200);
+		response.body("Username exists");
+		return response;
+	};
 
 }

@@ -59,6 +59,7 @@
     }
 </script>
 <style scoped>
+
     .floating-label
     {
         position: relative;
@@ -67,6 +68,8 @@
 
     .floating-label label
     {
+        transition: all .2s ease-in-ease-out;
+        font-size: 1.5rem;
         pointer-events: none;
         position: absolute;
         white-space: nowrap;
@@ -76,8 +79,9 @@
         background: #fff;
         margin: 8px 5px;
         padding: 0 10px;
-        transition: position .2s linear;
         opacity: 0.6;
+        font-weight: 500;
+		text-transform: capitalize;
     }
 
     .focused label
@@ -86,5 +90,7 @@
         opacity: 1;
         color: #ff5722;
         top: -20px;
+        font-size: 1.1rem;
+		text-transform: uppercase;
     }
 </style>
