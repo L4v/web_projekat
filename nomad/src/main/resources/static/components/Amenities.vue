@@ -2,17 +2,22 @@
 	<div class="container">
 		<div id="amenities">
 			<h1>Amenity</h1>
-			<table id="tabela">
-				<tr bgcolor="lightgrey">
+			<table>
+				<tr>
 					<th>ID</th>
 					<th>Name</th>
 				</tr>
 				 <tr v-for="amenity in amenities">
 					<td>{{amenity.id}}</td>
 					<td>{{amenity.name}}</td>
-					<td><button v-on:click="removeAmenity(amenity)">Delete</button>
+					<td><button v-on:click="removeAmenity(amenity)">Remove</button>
 				</tr>
+				<tr>
 					{{successMsg}}
+				</tr>
+				<tr>
+					<td><floating-label placeholder="Amenity name" type="text" v-model="amenityName"></td>
+					<td><button v-on:click="addAmenity()">Add</button>
 				</tr>
 			</table>
 		</div>
@@ -21,13 +26,16 @@
 
 <script>
 	module.exports = {
-		data:function()
+		data: function()
 		{
-			amenities: {},
-        	successMsg: ""
+			return {
+				amenities: {},
+				successMsg: "",
+			}
 		},
 		
-		mounted(){
+		mounted()
+		{
 	    	var jwt = localStorage.jwt;
 	    	
 	    	if(jwt)
@@ -44,7 +52,34 @@
 	    
 	    methods:
 	    {
-	        
+	     	removeAmenity: function(amenity)
+	     	{
+	     		axios.post("rest/remove_amenity", amenity)
+		        .then(response =>
+		            {
+		                this.successMsg = "Amenity successfully removed.";
+		            })
+		        .catch(response => {
+		        		this.successMsg = "Failed removing amenity";
+		        });
+	     	},   
+	     	addAmenity: function()
+	     	{
+	     		let amenity = 
+	     		{
+	     			id: Math.random(),
+	     			name: this.amenityName,
+	     		};
+	     		
+	     		axios.post("rest/add_amenity", amenity)
+		        .then(response =>
+		            {
+		                this.successMsg = "Amenity successfully added.";
+		            })
+		        .catch(response => {
+		        		this.successMsg = "Failed adding amenity";
+		        });
+	     	}   
 	    }
 	}
 </script>

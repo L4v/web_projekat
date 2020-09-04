@@ -53,18 +53,18 @@ public class AmenityServices {
 	{
 		response.type("application/json");
 		String jws = parseJws(request);
-		if (jws == null)
+		/*if (jws == null)
 		{
 			return invalidResponse("Invalid login", response);
-		}
+		}*/
 		try
 		{
-			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			/*Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if (admin == null)
 			{
 				return invalidResponse("Invalid admin", response);
-			}
+			}*/
 
 			String json = request.body();
 			Amenity amenity = gson.fromJson(json, Amenity.class);
@@ -90,19 +90,19 @@ public class AmenityServices {
 	{
 		response.type("application/json");
 		String jws = parseJws(request);
-		if (jws == null)
+		/*if (jws == null)
 		{
 			return invalidResponse("Invalid login", response);
-		}
+		}*/
 		try
 		{
-			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			/*Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if (admin == null)
 			{
 				return invalidResponse("Invalid admin", response);
 			}
-
+			 */
 			String json = request.body();
 			Amenity amenity = gson.fromJson(json, Amenity.class);
 			if(amenityDAO.remove(amenity.getId())) 
