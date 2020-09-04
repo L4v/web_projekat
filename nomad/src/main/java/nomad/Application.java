@@ -139,6 +139,7 @@ public class Application
 		post(Path.Rest.PERSONAL_DATA, UserServices.personalData);
 		post(Path.Rest.HOST_ADD_APARTMENT, ApartmentServices.hostAddApartment);
 		post(Path.Rest.CREATE_RESERVATION, ReservationServices.createReservation);
+		post(Path.Rest.GUEST_CANCEL_RESERVATION, ReservationServices.guestCancelReservation);
 		post(Path.Rest.GUEST_ADD_COMMENT, CommentServices.addComment);
 		post(Path.Rest.ADD_AMENITY, AmenityServices.addAmenity);
 		post(Path.Rest.REMOVE_AMENITY, AmenityServices.removeAmenity);

@@ -28,6 +28,7 @@ public class Path
 		public static final String GUEST_ALL_RESERVATIONS = "/rest/guest_view_reservations";
 		public static final String GUEST_ADD_COMMENT = "/rest/guest_add_comment";
 		public static final String GUEST_GET_USERNAME = "/rest/guest_get_username";
+		public static final String GUEST_CANCEL_RESERVATION = "/rest/guest_cancel_reservation";
 		
 		public static final String REG_GUEST = "/rest/reg_guest";
 		public static final String LOGIN = "/rest/login";
