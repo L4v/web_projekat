@@ -8,7 +8,7 @@
 					<td>{{guest.username}}</td>
 				</tr>
 				<tr>
-					<td><floating-label placeholder="Name" type="text" id="name" v-model="guest.name"/></td>
+					<td><floating-label placeholder="Name" type="text" id="name" :value="guest.name" v-model="guest.name"/></td>
 					<td id="emptyName">Enter your name</td>
 				</tr>
 				<tr>

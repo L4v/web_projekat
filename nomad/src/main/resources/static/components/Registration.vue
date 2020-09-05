@@ -143,10 +143,8 @@
                 }
                 return isValid;
             },
-            getUsername: function()
-            {
-            },
-            validateUsername: function()
+            // TODO(Jovan): make async calls?
+            validateUsername: async function()
             {
                 axios.get("/rest/guest_get_username", { params: {"username": this.username} })
                     .then(function(response)

@@ -22,6 +22,7 @@
     <!-- TODO(Jovan): MainNavigation depending on current state of login-ness -->
 	<div id="app" class="content">
         <router-view></router-view>
+        <router-link to="/test">Test</router-link>
     </div>
 
     <script src="js/vue.js"></script>
@@ -36,7 +37,7 @@
     	Vue.component("main-navigation", httpVueLoader("components/MainNavigation.vue"));
     	Vue.component("floating-label", httpVueLoader("components/FloatingLabel.vue"),
             {
-               props: ["placeholder", "name", "type", "value"]
+               props: ["placeholder", "name", "type", "inputdata"]
             });
 
         // NOTE(Jovan): Route registration
@@ -66,6 +67,11 @@
                 path: "/amenities",
                 name: "Amenities",
                 component: httpVueLoader("components/Amenities.vue")
+            },
+            {
+                path: "/test",
+                name: "Test",
+                component: httpVueLoader("components/FloatingTest.vue")
             },
         ];
 

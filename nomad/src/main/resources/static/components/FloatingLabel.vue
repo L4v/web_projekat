@@ -7,30 +7,27 @@
             name        - defines input name
             type        - defines input type (password or text)
     -->
+            <!-- @input="$emit('input', $event.target.value); isEmpty($event)" -->
     <div class="loginField floating-label" >
+        <!-- TODO(Jovan): Solve warning??? -->
         <label for="username">{{placeholder}}</label>
         <input 
-            v-bind:name="name"
-            v-bind:type="type"
-            v-bind:value="value"
-            v-model="content"
+            :name="name"
+            :type="type"
             @blur="removeFocus($event)"
             @focus="addFocus($event)"
-            v-on:input="isEmpty($event); $emit('input', $event.target.value)"
+            v-model="inputdata"
+            @input="$emit('update:inputdata', inputdata)"
             />
     </div>
 </template>
 <script>
     module.exports = {
-        props: ["placeholder", "name", "type", "value"],
-        data: function()
-        {
-            return {
-                content: "",
-            }
-        },
+        props: ["placeholder", "name", "type", "inputdata"],
         methods:
         {
+            // NOTE(Jovan): If there is a value in input when mounting,
+            //              add 'focused' class
             addFocus: function(e)
             {
                 let classList = e.target.parentElement.classList;
@@ -49,7 +46,7 @@
             },
             isEmpty: function(e)
             {
-                if(this.content)
+                if(this.inputdata)
                 {
                     return false;
                 }
