@@ -108,9 +108,8 @@ public class ReservationServices
 			{
 				return invalidResponse("Not a guest", response);
 			}
-
 			ArrayList<Reservation> reservations = guest.getReservations();
-
+			
 			response.status(200);
 			response.body(gson.toJson(reservations));
 			return response;

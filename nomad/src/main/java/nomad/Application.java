@@ -144,6 +144,7 @@ public class Application
 		post(Path.Rest.ADD_AMENITY, AmenityServices.addAmenity);
 		post(Path.Rest.REMOVE_AMENITY, AmenityServices.removeAmenity);
 		post(Path.Rest.UPDATE_AMENITY, AmenityServices.updateAmenity);
+		post(Path.Rest.ADMIN_REMOVE_APARTMENTS, ApartmentServices.adminDeleteApartments);
 		
 		get("rest/test", LoginServices.test);
 		get(Path.Rest.GET_USER, UserServices.getUser);

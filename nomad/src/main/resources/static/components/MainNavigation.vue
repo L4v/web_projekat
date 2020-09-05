@@ -56,6 +56,7 @@
                             <li><router-link to="/registration">Sign up</router-link></li>
                             <li><router-link to="/personal_data">Personal data</router-link></li>
                             <li><router-link to="/amenities">Amenities</router-link></li>
+                            <li><router-link to="/guests_reservations">Reservations</router-link></li>
                             <!-- TODO(Jovan): Make computed? -->
                             <li v-if="loggedIn"><a href="#" @click="logout()">Log out</a></li>
 						</ul>
