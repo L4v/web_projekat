@@ -11,6 +11,7 @@
 					<td>{{amenity.id}}</td>
 					<td>{{amenity.name}}</td>
 					<td><button v-on:click="removeAmenity(amenity)">Remove</button>
+					<td><button v-on:click="updateAmenity(amenity)">Modificate</button>
 				</tr>
 				<tr>
 					{{successMsg}}
@@ -75,6 +76,18 @@
 		        .then(response =>
 		            {
 		                this.successMsg = "Amenity successfully added.";
+		            })
+		        .catch(response => {
+		        		this.successMsg = "Failed adding amenity";
+		        });
+	     	},
+	     	
+	     	updateAmenity: function()
+	     	{
+	     		axios.post("rest/update_amenity", amenity)
+		        .then(response =>
+		            {
+		                this.successMsg = "Amenity successfully updated.";
 		            })
 		        .catch(response => {
 		        		this.successMsg = "Failed adding amenity";
