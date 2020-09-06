@@ -85,7 +85,7 @@
                         localStorage.jwt = response.data;
                         this.loggedIn = true;
                         // NOTE(Jovan): Go back one page
-                        this.$router.go(-1);
+                        this.$router.push("/");
                     })
                     .catch(response =>
                     {
@@ -162,11 +162,6 @@
         padding: 0;
         padding-bottom: 8px;
         margin: 0;
-        font-weight: 500;
-    }
-    
-    .error b
-    {
         font-weight: 500;
     }
 

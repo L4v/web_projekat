@@ -3,26 +3,22 @@
         <div id="registrationForm">
             <!-- TODO(Jovan): Disable button? -->
             <h1>Registration</h1>
-            <div v-if="errors.length" class="errors">
-                <b>Please correct the following error(s):</b>
-                <ul>
-                    <li v-for="error in errors">{{error}}</li>
-                </ul>
-            </div>
+            <b class="error">{{registrationMsg}}</b>
 
             <div class="tab" :class="{'active': (activeTab === 0)}">
+                <small class="error">{{errors.name}}</small>
                 <floating-label
-                    v-model="name"
+                    :inputdata.sync="name"
                     placeholder="Name"
                     type="text">
-                <p class="error" v-if="errors.name">{{errors.name}}</p>
                 </floating-label>
+                <small class="error">{{errors.surname}}</small>
                 <floating-label
-                    v-model="surname"
+                    :inputdata.sync="surname"
                     placeholder="Surname"
                     type="text">
                 </floating-label>
-                <p class="error" v-if="errors.surname">{{errors.surname}}</p>
+                <small class="error">{{errors.sex}}</small>
                 <select name="sex" v-model="sex" required>
                     <option value="" disabled>Sex</option>
                     <option value="MALE">Male</option>
@@ -30,30 +26,29 @@
                     <option value="OTHER">Other</option>
                     <option value="PRIVATE">Prefer not to say</option>
                 </select>
-                <p class="error" v-if="errors.sex">{{errors.sex}}</p>
                 <button id="nextBtn" class="button-primary" @click="nextTab()">Next</button>
             </div>
 
             <div class="tab" :class="{'active': (activeTab === 1)}">
+                <small class="error">{{errors.username}}</small>
                 <floating-label
-                    v-model="username"
+                    :inputdata.sync="username"
                     placeholder="Username"
                     type="text">
                 </floating-label>
-                <p class="error" v-if="errors.username">{{errors.username}}</p>
+                <small class="error">{{errors.password}}</small>
                 <floating-label
-                    v-model="password"
+                    :inputdata.sync="password"
                     placeholder="Password"
                     type="password">
                 </floating-label>
-                <p class="error" v-if="errors.password">{{errors.password}}</p>
+                <small class="error">{{errors.confpassword}}</small>
                 <floating-label
-                    v-model="confpassword"
+                    :inputdata.sync="confpassword"
                     placeholder="Confirm password"
                     type="password">
                 </floating-label>
-                <p class="error" v-if="errors.confpassword">{{errors.confpassword}}</p>
-                <button class="button-primary" v-on:click="registerGuest()">Register</button>
+                <button class="button-primary" @click="registerGuest()">Register</button>
                 <button id="prevBtn" @click="prevTab">Previous</button>
             </div>
         </div>
@@ -69,16 +64,24 @@
         data: function()
         {
             return{
-                name:         "",
-                surname:      "",
-                sex:          "",
-                username:     "",
-                password:     "",
-                confpassword: "",
-                successMsg: "",
+                name:            "",
+                surname:         "",
+                sex:             "",
+                username:        "",
+                password:        "",
+                confpassword:    "",
                 exists: false,
                 activeTab: 0,
-                errors: [],
+                registrationMsg: "",
+                errors: 
+                    {
+                        name:         "",
+                        surname:      "",
+                        sex:          "",
+                        username:     "",
+                        password:     "",
+                        confpassword: "",
+                    },
             }
         },
         methods:
@@ -103,11 +106,11 @@
                 axios.post("rest/reg_guest", guest)
                 .then(response =>
                     {
-                        this.successMsg = "Registered";
+                        this.registrationMsg = "Registered";
                     })
                 .catch(error =>
                     {
-                        this.successMsg = "Already exists!";
+                        this.registrationMsg = "Username already taken";
                         this.exists = true;
                     });
             },
@@ -129,7 +132,7 @@
                 let isValid = regex.test(this.name);
                 if(!isValid)
                 {
-                    this.errors.push("Name must be of alphabet characters only");
+                    this.errors.name = "Name can contain alphabet letters only and must be uppercase";
                 }
                 return isValid;
             },
@@ -139,77 +142,103 @@
                 let isValid = regex.test(this.surname);
                 if(!isValid)
                 {
-                    this.errors.push("Surname must be of alphabet characters only");
+                    this.errors.surname = "Surname can contain alphabet letters only and must be uppercase";
                 }
                 return isValid;
             },
+            validateSex: function()
+            {
+                if(!this.sex)
+                {
+                    this.errors.sex = "Please select your sex";
+                    return false;
+                }
+                return true;
+            },
             // TODO(Jovan): make async calls?
+            // TODO(Jovan): Check existing username
             validateUsername: async function()
             {
-                axios.get("/rest/guest_get_username", { params: {"username": this.username} })
-                    .then(function(response)
-                    {
-                        // NOTE(Jovan): Username already exists -> invalid
-                        this.errors.push("Username must be unique");
-                        return false;
-                    })
-                    .catch(function(response)
-                    {
-                        // NOTE(Jovan): Username doesn't exist -> valid
-                        let regex = /^[A-Za-z]+/;
-                        let isRegexValid = regex.test(this.username);
-                        if(!isRegexValid)
-                        {
-                            this.errors.push("Username must contain alphabet letters only");
-                            return false;
-                        }
-                        return true;
-                    });
+                if(!this.username)
+                {
+                    this.errors.username = "Username cannot be empty";
+                    return false;
+                }
+
+                let regex = /^[A-Za-z]+/;
+                if(!regex.test(this.username))
+                {
+                    this.errors.username = "Username must contain alphabet letters only";
+                    return false;
+                }
+                return true;
             },
             validatePassword: function()
             {
-                if(this.password.len < 8)
+                if(!this.password)
                 {
-                    this.errors.push("Password must be at least 8 characters long");
+                    this.errors.password = "Password cannot be empty";
+                    return false;
+                }
+                if(this.password.length < 8)
+                {
+                    this.errors.password = "Password must be at least 8 characters long";
                     return false;
                 }
                 let regex = /^[A-Za-z0-9!@#\$%\^&\*]+/;
-                let isValid = regex.test(this.password);
-                if(!isValid)
+                if(!regex.test(this.password))
                 {
-                    this.errors.push("Password can only contain letters, numbers and !@#$%^&*");
+                    this.errors.password = "Password can only contain letters, numbers and !@#$%^&*";
+                    return false;
                 }
-                return isValid;
+                return true;
             },
             validateConfPassword: function()
             {
-                if(this.confpassword.len < 8)
+                if(!this.confpassword)
                 {
-                    this.errors.push("Passwords must match");
+                    this.errors.confpassword = "Confirmation password cannot be empty";
+                    return true;
+                }
+                if(this.confpassword.length < 8)
+                {
+                    this.errors.confpassword = "Confirmation password must be at least 8 letters long";
                     return false;
                 }
                 let regex = /^[A-Za-z0-9!@#\$%\^&\*]+/;
                 let isValid = regex.test(this.confpassword) && (this.password === this.confpassword);
                 if(!isValid)
                 {
-                    this.errors.push("Passwords must match");
+                    this.errors.confpassword = "Passwords must match";
                 }
                 return isValid;
             },
             // TODO(jovan): Promises???
-            validateInputs: async function()
+            validateInputs: function()
             {
+                this.errors =
+                    {
+                        name:         "",
+                        surname:      "",
+                        sex:          "",
+                        username:     "",
+                        password:     "",
+                        confpassword: "",
+                    };
                 this.errors = [];
                 if(this.activeTab === 0)
                 {
-                    return (this.validateName()
-                        && this.validateSurname());
+                    let nameValid = this.validateName();
+                    let surnameValid = this.validateSurname();
+                    let sexValid = this.validateSex();
+                    return nameValid && surnameValid && sexValid;
                 }
                 else
                 {
-                    let usernameValid = await this.validateUsername();
-                    let passwordValid = this.validatePassword() && this.validateConfPassword();
-                    return usernameValid && passwordValid;
+                    let usernameValid = this.validateUsername();
+                    let passwordValid = this.validatePassword() 
+                    let confPasswordValid = this.validateConfPassword();
+                    return usernameValid && passwordValid && confPasswordValid;
                 }
             }
         },
@@ -315,6 +344,15 @@
         background: none;
         background-color: #fff;
         box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    }
+
+    .error
+    {
+        color: #f00;
+        padding: 0;
+        padding-bottom: 9px;
+        margin: 0;
+        font-weight: 500;
     }
 
     .nav-buttons
