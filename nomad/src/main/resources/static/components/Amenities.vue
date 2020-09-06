@@ -7,11 +7,11 @@
 					<th>ID</th>
 					<th>Name</th>
 				</tr>
-				 <tr v-for="amenity in amenities">
+				 <tr v-for="amenity in amenities" :key='amenity.id'>
 					<td>{{amenity.id}}</td>
 					<td>{{amenity.name}}</td>
-					<td><button v-on:click="removeAmenity(amenity)">Remove</button>
-					<td><button v-on:click="updateAmenity(amenity)">Modificate</button>
+					<td><button @click="removeAmenity(amenity)">Remove</button>
+					<td><button @click="updateAmenity(amenity)">Modificate</button>
 				</tr>
 				<tr>
 					{{successMsg}}
