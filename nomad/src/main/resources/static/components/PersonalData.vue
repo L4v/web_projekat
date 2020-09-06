@@ -37,7 +37,7 @@
 				</tr>
 				<tr>
 					<td>
-						<small class="error">{{errors.confirmPassword}}</small>
+						<small class="error">{{errors.confirmPass}}</small>
 						<floating-label :inputdata.sync="guest.password" placeholder="Confirm password" name="confirmPassword" type="password"></floating-label>
 					</td>
 				</tr>
@@ -59,7 +59,7 @@
             return{
                 guest: {},
                 successMsg: "",
-                errors: {name: "", surname: "", password: "", confirmPassword: ""},
+                errors: {name: "", surname: "", password: "", confirmPass: ""},
             }
         },
         mounted(){
@@ -122,15 +122,15 @@
                     this.errors.password = "Password can contain alphabet letters, numbers and !@#$%^&* only";
                     return false;
                 }
-                
-                if(!this.guest.confirmPassword)
+                //TODO: resiti proveru za ispravnost pass i confirm
+                if(!personalData.getElementsByName("confirmPassword"))
                 {
-                    this.errors.confirmPassword = "Password must not be empty";
+                    this.errors.confirmPass = "Password must not be empty";
                     return false;
                 }
-                if(this.guest.confirmPassword.equals(this.guest.password))
+                if(!personalData.getElementsByName("confirmPassword").equals(this.guest.password))
                 {
-                	this.errors.confirmPassword = "Not same password";
+                	this.errors.confirmPass = "Not same password";
                 	return false;
                 }
                 return true;
@@ -141,7 +141,7 @@
 	        	this.errors.surname = "";
 	        	this.errors.password = "";
 	        	this.errors.confirmPassword = "";
-	        	return this.validateNameAndUsername() && this.validatePassword();
+	        	return this.validateNameAndSurname() && this.validatePassword();
 	    	},
 	        updatePersonalData: function(guest)
 	        {        

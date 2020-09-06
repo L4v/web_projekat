@@ -1,6 +1,9 @@
 package nomad.amenity;
 
 import static nomad.utils.Responses.notFound;
+
+import java.util.ArrayList;
+
 import static nomad.Application.adminDAO;
 import static nomad.Application.amenityDAO;
 import static nomad.Application.apartmentDAO;
@@ -22,25 +25,26 @@ public class AmenityServices {
 	public static Route updateAmenity = (Request request, Response response) ->
 	{
 		response.type("application/json");
-		String jws = parseJws(request);
+		/*String jws = parseJws(request);
 		if (jws == null)
 		{
 			return notFound("Invalid login", response);
-		}
+		}*/
 		try
 		{
-			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			/*Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if (admin == null)
 			{
 				return notFound("Invalid admin", response);
-			}
+			}*/
 
 			String json = request.body();
 			Amenity amenity = gson.fromJson(json, Amenity.class);
 			amenityDAO.update(amenity);
 			
 			response.status(200);
+			response.body("Amenity updated!");
 			return response;
 		} catch (Exception e)
 		{
@@ -68,15 +72,28 @@ public class AmenityServices {
 
 			String json = request.body();
 			Amenity amenity = gson.fromJson(json, Amenity.class);
+			
+			ArrayList<Amenity> amenities = (ArrayList<Amenity>) amenityDAO.getAll();
+			for(Amenity a : amenities)
+			{
+				if(amenity.getName().equalsIgnoreCase(a.getName()))
+				{
+					response.status(404);
+					response.body("Amenity already exists!");
+					return response;
+				}
+			}
+
 			if(amenityDAO.add(amenity)) 
 			{
 				response.status(200);
-				response.body("Amenity updated!");
+				response.body("Amenity added!");
 				return response;
 			}
 			else
 			{
 				response.status(404);
+				response.body("Failed adding amenity!");
 				return response;
 			}
 		} catch (Exception e)
@@ -89,8 +106,8 @@ public class AmenityServices {
 	public static Route removeAmenity = (Request request, Response response) ->
 	{
 		response.type("application/json");
-		String jws = parseJws(request);
-		/*if (jws == null)
+		/*String jws = parseJws(request);
+		if (jws == null)
 		{
 			return invalidResponse("Invalid login", response);
 		}*/
@@ -105,9 +122,11 @@ public class AmenityServices {
 			 */
 			String json = request.body();
 			Amenity amenity = gson.fromJson(json, Amenity.class);
+			
+			ArrayList<Apartment> apartments = (ArrayList<Apartment>) apartmentDAO.getAll();
 			if(amenityDAO.remove(amenity.getId())) 
 			{
-				for(Apartment apartment : apartmentDAO.getAll())
+				for(Apartment apartment : apartments)
 				{
 					for(Amenity apartmentAmenity : apartment.getAmenities())
 					{
