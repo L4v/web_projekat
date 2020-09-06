@@ -1,8 +1,8 @@
 package nomad.user;
 
+import static nomad.utils.Responses.notFound;
 import static nomad.Application.guestDAO;
 import static nomad.Application.hostDAO;
-import static nomad.Application.invalidResponse;
 import static nomad.Application.parseJws;
 import static nomad.Application.gson;
 import static nomad.Application.key;
@@ -50,7 +50,7 @@ public class HostServices
 		
 		if (jws == null)
 		{
-			return invalidResponse("Invalid login", response);
+			return notFound("Invalid login", response);
 		}
 		
 		try
@@ -60,7 +60,7 @@ public class HostServices
 			UserHost host = hostDAO.get(claims.getBody().getSubject());
 			if(host == null)
 			{
-				return invalidResponse("Invalid host", response);
+				return notFound("Invalid host", response);
 			}
 			response.status(200);
 			ArrayList<UserGuest> guests = (ArrayList<UserGuest>) getGuests(host.getUsername());
@@ -70,7 +70,7 @@ public class HostServices
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return invalidResponse("Server error: " + e.getMessage(), response);
+			return notFound("Server error: " + e.getMessage(), response);
 		}
 	};
 

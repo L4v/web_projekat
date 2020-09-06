@@ -1,6 +1,10 @@
 <template>
     <!-- NOTE(Jovan):
         Input field with floating placeholders
+
+        To simulate 'v-model', use :inputdata.sync
+        Example:
+        <floating-label :inputdata.sync="parentData" type="text" placeholder="test"></floating-label>
         
         options:
             placeholder - placeholder text
@@ -8,7 +12,7 @@
             type        - defines input type (password or text)
     -->
             <!-- @input="$emit('input', $event.target.value); isEmpty($event)" -->
-    <div class="loginField floating-label" >
+    <div class="loginField floating-label" ref="inputdiv">
         <!-- TODO(Jovan): Solve warning??? -->
         <label for="username">{{placeholder}}</label>
         <input 
@@ -51,6 +55,13 @@
                     return false;
                 }
                 return true;
+            }
+        },
+        mounted()
+        {
+            if(this.inputdata)
+            {
+                this.$refs["inputdiv"].classList.add("focused");
             }
         },
     }

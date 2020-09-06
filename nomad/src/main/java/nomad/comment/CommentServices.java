@@ -1,8 +1,8 @@
 package nomad.comment;
 
 
+import static nomad.utils.Responses.notFound;
 import static nomad.Application.parseJws;
-import static nomad.Application.invalidResponse;
 import static nomad.Application.key;
 import static nomad.Application.gson;
 import static nomad.Application.hostDAO;
@@ -49,7 +49,7 @@ public class CommentServices
 		String jws = parseJws(request);
 		if(jws == null)
 		{
-			return invalidResponse("Invalid login", response);
+			return notFound("Invalid login", response);
 		}
 		
 		try
@@ -59,7 +59,7 @@ public class CommentServices
 			UserHost host = hostDAO.get(claims.getBody().getSubject());
 			if(host == null)
 			{
-				return invalidResponse("Invalid host", response);
+				return notFound("Invalid host", response);
 			}
 			response.type("application/json");
 			response.status(200);
@@ -70,7 +70,7 @@ public class CommentServices
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return invalidResponse("Server error: " + e.getMessage(), response);
+			return notFound("Server error: " + e.getMessage(), response);
 		}
 	};
 	
@@ -80,7 +80,7 @@ public class CommentServices
 		String jws = parseJws(request);
 		if(jws == null)
 		{
-			return invalidResponse("Invalid login", response);
+			return notFound("Invalid login", response);
 		}
 		
 		try
@@ -102,7 +102,7 @@ public class CommentServices
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return invalidResponse("Server error: " + e.getMessage(), response);
+			return notFound("Server error: " + e.getMessage(), response);
 		}
 	};
 	
@@ -112,7 +112,7 @@ public class CommentServices
 		String jws = parseJws(request);
 		if(jws == null)
 		{
-			return invalidResponse("Invalid login", response);
+			return notFound("Invalid login", response);
 		}
 		
 		try
@@ -122,7 +122,7 @@ public class CommentServices
 			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
 			if(guest == null)
 			{
-				return invalidResponse("Invalid guest", response);
+				return notFound("Invalid guest", response);
 			}
 			
 			String json = request.body();
@@ -130,7 +130,7 @@ public class CommentServices
 
 			if(!addCommentToApartment(comment))
 			{
-				return invalidResponse("Don't have a rejected or cancelled reservation!", response);
+				return notFound("Don't have a rejected or cancelled reservation!", response);
 			}
 			
 			response.status(200);
@@ -140,7 +140,7 @@ public class CommentServices
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return invalidResponse("Server error: " + e.getMessage(), response);
+			return notFound("Server error: " + e.getMessage(), response);
 		}
 	};
 	

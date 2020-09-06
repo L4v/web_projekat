@@ -1,12 +1,12 @@
 package nomad.login;
 
+import static nomad.utils.Responses.notFound;
 import static nomad.Application.adminDAO;
+import static nomad.Application.gson;
 import static nomad.Application.guestDAO;
 import static nomad.Application.hostDAO;
-import static nomad.Application.invalidResponse;
-import static nomad.Application.parseJws;
 import static nomad.Application.key;
-import static nomad.Application.gson;
+import static nomad.Application.parseJws;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -68,7 +68,7 @@ public class LoginServices
 			return response;
 		} catch (Exception e)
 		{
-			return invalidResponse("Server error: " + e.getMessage(), response);
+			return notFound("Server error: " + e.getMessage(), response);
 		}
 
 	};
@@ -80,7 +80,7 @@ public class LoginServices
 		UserBase loggedInUser = LoginServices.loggedInUser(user);
 		if (loggedInUser == null)
 		{
-			return invalidResponse("Invalid user", response);
+			return notFound("Invalid user", response);
 		}
 		response.type("application/json");
 		response.status(200);

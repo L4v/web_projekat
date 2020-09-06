@@ -1,9 +1,9 @@
 package nomad.user;
 
+import static nomad.utils.Responses.notFound;
 import static nomad.Application.apartmentDAO;
 import static nomad.Application.gson;
 import static nomad.Application.guestDAO;
-import static nomad.Application.invalidResponse;
 import static nomad.Application.key;
 import static nomad.Application.parseJws;
 
@@ -43,7 +43,7 @@ public class GuestServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return invalidResponse("Invalid login", response);
+			return notFound("Invalid login", response);
 		}
 		
 		try
@@ -53,7 +53,7 @@ public class GuestServices
 			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
 			if(guest == null)
 			{
-				return invalidResponse("Invalid guest", response);
+				return notFound("Invalid guest", response);
 			}
 			response.type("application/json");
 			response.status(200);
@@ -64,7 +64,7 @@ public class GuestServices
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return invalidResponse("Server error: " + e.getMessage(), response);
+			return notFound("Server error: " + e.getMessage(), response);
 		}
 	};
 	
@@ -73,12 +73,12 @@ public class GuestServices
 		String username = request.params("username");
 		if(username == null)
 		{
-			return invalidResponse("Invalid username", response);
+			return notFound("Invalid username", response);
 		}
 		UserGuest guest = guestDAO.get(username);
 		if(guest == null)
 		{
-			return invalidResponse("Invalid username", response);
+			return notFound("Invalid username", response);
 		}
 		
 		response.status(200);
