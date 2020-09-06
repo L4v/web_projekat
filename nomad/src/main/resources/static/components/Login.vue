@@ -164,11 +164,6 @@
         margin: 0;
         font-weight: 500;
     }
-    
-    .error b
-    {
-        font-weight: 500;
-    }
 
     .loginField 
     {
