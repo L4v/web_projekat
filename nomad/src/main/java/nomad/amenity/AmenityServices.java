@@ -52,8 +52,8 @@ public class AmenityServices {
 	public static Route addAmenity = (Request request, Response response) ->
 	{
 		response.type("application/json");
-		String jws = parseJws(request);
-		/*if (jws == null)
+		/*String jws = parseJws(request);
+		if (jws == null)
 		{
 			return invalidResponse("Invalid login", response);
 		}*/

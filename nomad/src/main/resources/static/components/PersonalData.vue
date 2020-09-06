@@ -8,7 +8,7 @@
 					<td>{{guest.username}}</td>
 				</tr>
 				<tr>
-					<td><floating-label placeholder="Name" type="text" id="name" :value="guest.name" :inputdata.sync="guest.name"/></td>
+					<td><floating-label :inputdata.sync="guest.name" placeholder="Name" type="text"></floating-label></td>
 					<td id="emptyName">Enter your name</td>
 				</tr>
 				<tr>
