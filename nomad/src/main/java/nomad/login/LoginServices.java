@@ -51,14 +51,13 @@ public class LoginServices
 		return null;
 	}
 
-	public static Route test = (Request request, Response response) ->
+	public static Route verifyLogin = (Request request, Response response) ->
 	{
 		response.type("application/json");
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			response.status(404);
-			return response;
+			return notFound("User not found", response);
 		}
 		try
 		{
@@ -68,7 +67,7 @@ public class LoginServices
 			return response;
 		} catch (Exception e)
 		{
-			return notFound("Server error: " + e.getMessage(), response);
+			return notFound("S<erver error: " + e.getMessage(), response);
 		}
 
 	};

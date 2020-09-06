@@ -140,7 +140,7 @@ public class Application
 		post(Path.Rest.UPDATE_AMENITY, AmenityServices.updateAmenity);
 		post(Path.Rest.ADMIN_REMOVE_APARTMENTS, ApartmentServices.adminDeleteApartments);
 		
-		get("rest/test", LoginServices.test);
+		get("rest/test", LoginServices.verifyLogin);
 		get(Path.Rest.GET_USER, UserServices.getUser);
 		get(Path.Rest.GUEST_GET_USERNAME, GuestServices.getUsername);
 		get(Path.Rest.ADMIN_ALL_USERS, AdminServices.getAllUsers);

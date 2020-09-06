@@ -1,18 +1,18 @@
 <template>
-	<div id="login">
+	<form id="login" @submit.prevent="login">
         <div id="loginForm">
             <h1>Login</h1>
-            <b :class="loggedIn ? 'success' : 'failure'">{{successMsg}}</b>
+            <b class="error">{{errors.login}}</b>
+            <small class="error">{{errors.username}}</small>
             <floating-label :inputdata.sync="user.username" placeholder="Username" name="username" type="text"></floating-label>
-            <small>{{errors.username}}</small>
+            <small class="error">{{errors.password}}</small>
             <floating-label :inputdata.sync="user.password" placeholder="Password" name="password" type="password"></floating-label>
-            <small>{{errors.password}}</small>
              <div class="loginButtons">
                 <button class="button-primary" @click="login()">Log in</button>
                 <button>Forgot password?</button>
              </div>
         </div> 
-	</div>
+	</form>
 </template>
 
 <script>
@@ -22,36 +22,66 @@
         {
             return{
                 user: {username:"", password:""},
-                successMsg: "",
                 loggedIn: false,
-                errors: {username: "", password: ""},
+                errors: {username: "", password: "", login: ""},
             }
         },
         methods:
         {
             validateUsername: function()
             {
-                this.errors.username = "";
-                if(!user.username)
+                if(!this.user.username)
                 {
                     this.errors.username = "Username must not be empty";
                     return false;
                 }
                 let regex = /^[A-Za-z]+/;
-                if(!regex.test(user.username))
+                if(!regex.test(this.user.username))
                 {
                     this.errors.username = "Username must contain alphabet letters only";
                     return false;
                 }
+                return true;
+            },
+            validatePassword: function()
+            {
+                if(!this.user.password)
+                {
+                    this.errors.password = "Password must not be empty";
+                    return false;
+                }
+                if(this.user.password.length < 8)
+                {
+                    this.errors.password = "Password must be at least 8 characters long";
+                    return false;
+                }
+                let regex = /^[A-Za-z0-9!@#\$%\^&\*]+/;
+                if(!regex.test(this.user.password))
+                {
+                    this.errors.password = "Password can contain alphabet letters, numbers and !@#$%^&* only";
+                    return false;
+                }
+                return true;
+            },
+            validateFields: function()
+            {
+                this.errors.username = "";
+                this.errors.password = "";
+                this.errors.login = "";
+                return this.validateUsername()
+                    && this.validatePassword();
             },
             login: function()
             {
                 // TODO(Jovan): Using refresh tokens instead of localStorage
 
+                if(!this.validateFields())
+                {
+                    return;
+                }
                 axios.post("rest/login", this.user)
                     .then(response =>
                     {
-                        this.successMsg = "Logged in!";
                         localStorage.jwt = response.data;
                         this.loggedIn = true;
                         // NOTE(Jovan): Go back one page
@@ -59,7 +89,7 @@
                     })
                     .catch(response =>
                     {
-                        this.successMsg = "Wrong username or password";
+                        this.errors.login = "Invalid username or password";
                     });
             },
             verify: function()
@@ -125,6 +155,20 @@
         background-color: #fff;
         box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     }
+    
+    .error
+    {
+        color: #f00;
+        padding: 0;
+        padding-bottom: 8px;
+        margin: 0;
+        font-weight: 500;
+    }
+    
+    .error b
+    {
+        font-weight: 500;
+    }
 
     .loginField 
     {
@@ -143,19 +187,4 @@
         width: 80%;
     }
 
-    .success,
-    .failure
-    {
-        font-size: 1.5rem;
-    }
-
-    .success
-    {
-        color: #2ecc71;
-    }
-
-    .failure
-    {
-        color: #e74c3c;
-    }
 </style>
