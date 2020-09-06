@@ -22,7 +22,7 @@
     <!-- TODO(Jovan): MainNavigation depending on current state of login-ness -->
 	<div id="app" class="content">
         <router-view></router-view>
-        <router-link to="/test">Test</router-link>
+        <router-link to="/admin">Test</router-link>
     </div>
 
     <script src="js/vue.js"></script>
@@ -69,9 +69,17 @@
                 component: httpVueLoader("components/Amenities.vue")
             },
             {
-                path: "/test",
-                name: "Test",
-                component: httpVueLoader("components/FloatingTest.vue")
+                path: "/admin",
+                name: "Admin",
+                component: httpVueLoader("components/AdminPanel.vue"),
+                children:
+                [
+                    {
+                        path: "overview",
+                        name: "Overview",
+                        component: httpVueLoader("components/AdminOverview.vue"),
+                    },
+                ],
             },
             {
                 path: "/guests_reservations",
