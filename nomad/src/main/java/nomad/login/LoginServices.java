@@ -80,7 +80,7 @@ public class LoginServices
 		UserBase loggedInUser = LoginServices.loggedInUser(user);
 		if (loggedInUser == null)
 		{
-			return notFound("Invalid user", response);
+			return notFound("User not found", response);
 		}
 		response.type("application/json");
 		response.status(200);

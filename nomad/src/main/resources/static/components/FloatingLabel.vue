@@ -55,14 +55,30 @@
                     return false;
                 }
                 return true;
+            },
+            addFocusToDiv: function()
+            {
+                if(this.inputdata)
+                {
+                    this.$refs["inputdiv"].classList.add("focused");
+                }
             }
         },
         mounted()
         {
-            if(this.inputdata)
+            // NOTE(Jovan): If floating-label is loaded with predefined values
+            this.addFocusToDiv();
+        },
+        watch:
+        {
+            // NOTE(Jovan): Same as mounted call, only used for axios' async calls
+            inputdata: function(newVal, oldVal)
             {
-                this.$refs["inputdiv"].classList.add("focused");
-            }
+                if(!oldVal && newVal)
+                {
+                    this.addFocusToDiv();
+                }
+            },
         },
     }
 </script>

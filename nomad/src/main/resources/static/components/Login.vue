@@ -2,9 +2,11 @@
 	<div id="login">
         <div id="loginForm">
             <h1>Login</h1>
-            <h2 :class="loggedIn ? 'success' : 'failure'">{{successMsg}}</h2>
+            <b :class="loggedIn ? 'success' : 'failure'">{{successMsg}}</b>
             <floating-label :inputdata.sync="user.username" placeholder="Username" name="username" type="text"></floating-label>
+            <small>{{errors.username}}</small>
             <floating-label :inputdata.sync="user.password" placeholder="Password" name="password" type="password"></floating-label>
+            <small>{{errors.password}}</small>
              <div class="loginButtons">
                 <button class="button-primary" @click="login()">Log in</button>
                 <button>Forgot password?</button>
@@ -20,16 +22,30 @@
         {
             return{
                 user: {username:"", password:""},
-                errors: [],
                 successMsg: "",
                 loggedIn: false,
+                errors: {username: "", password: ""},
             }
         },
         methods:
         {
+            validateUsername: function()
+            {
+                this.errors.username = "";
+                if(!user.username)
+                {
+                    this.errors.username = "Username must not be empty";
+                    return false;
+                }
+                let regex = /^[A-Za-z]+/;
+                if(!regex.test(user.username))
+                {
+                    this.errors.username = "Username must contain alphabet letters only";
+                    return false;
+                }
+            },
             login: function()
             {
-                // TODO(Jovan): Validation
                 // TODO(Jovan): Using refresh tokens instead of localStorage
 
                 axios.post("rest/login", this.user)
@@ -43,7 +59,7 @@
                     })
                     .catch(response =>
                     {
-                        this.successMsg = "Failed to log in!";
+                        this.successMsg = "Wrong username or password";
                     });
             },
             verify: function()
@@ -51,7 +67,7 @@
                 var jwt = localStorage.jwt;
                 if(!jwt)
                 {
-                    // NOTE(Jovan): Ako ne postoji jwt, ne pokusavaj login
+                    // NOTE(Jovan): If jwt doesn't exist, don't attempt login
                     return;
                 }
                 axios.get("rest/test", {headers:{"Authorization": "Bearer " + jwt}})
