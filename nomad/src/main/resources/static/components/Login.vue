@@ -3,8 +3,8 @@
         <div id="loginForm">
             <h1>Login</h1>
             <h2 :class="loggedIn ? 'success' : 'failure'">{{successMsg}}</h2>
-            <floating-label v-model="user.username" placeholder="Username" name="username" type="text"></floating-label>
-            <floating-label v-model="user.password" placeholder="Password" name="password" type="password"></floating-label>
+            <floating-label :inputdata.sync="user.username" placeholder="Username" name="username" type="text"></floating-label>
+            <floating-label :inputdata.sync="user.password" placeholder="Password" name="password" type="password"></floating-label>
              <div class="loginButtons">
                 <button class="button-primary" @click="login()">Log in</button>
                 <button>Forgot password?</button>

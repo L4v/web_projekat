@@ -66,12 +66,6 @@ public class Application
 		return auth.length() <= 7 ? null : auth.substring(auth.indexOf("Bearer") + 7);
 	}
 	
-	public static Response invalidResponse(String msg, Response response)
-	{
-		response.body(msg);
-		response.status(404);
-		return response;
-	}
 	
 	public static Route serveStaticResource = (Request request, Response response) ->
 	{

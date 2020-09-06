@@ -1,11 +1,11 @@
 package nomad.user;
 
 import static nomad.Application.parseJws;
+import static nomad.utils.Responses.notFound;
 import static nomad.Application.gson;
 import static nomad.Application.key;
 import static nomad.Application.guestDAO;
 import static nomad.Application.hostDAO;
-import static nomad.Application.invalidResponse;
 import static nomad.Application.adminDAO;
 import static nomad.Application.apartmentDAO;
 import static nomad.Application.amenityDAO;
@@ -72,7 +72,7 @@ public class AdminServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return invalidResponse("Invalid login", response);
+			return notFound("Invalid login", response);
 		} 
 		
 		try
@@ -91,7 +91,7 @@ public class AdminServices
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-			return invalidResponse("Server error: " + e.getMessage(), response);
+			return notFound("Server error: " + e.getMessage(), response);
 		}
 	};
 	
@@ -101,7 +101,7 @@ public class AdminServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return invalidResponse("Invalid login", response);
+			return notFound("Invalid login", response);
 		} 
 		
 		try
@@ -110,7 +110,7 @@ public class AdminServices
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if (admin == null)
 			{
-				return invalidResponse("Not admin", response);
+				return notFound("Not admin", response);
 			}
 			response.status(200);
 			ArrayList<Amenity> amenities = (ArrayList<Amenity>) amenityDAO.getAll();
@@ -119,7 +119,7 @@ public class AdminServices
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-			return invalidResponse("Server error: " + e.getMessage(), response);
+			return notFound("Server error: " + e.getMessage(), response);
 		}
 	};
 

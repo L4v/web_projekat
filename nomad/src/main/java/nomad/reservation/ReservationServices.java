@@ -1,12 +1,12 @@
 package nomad.reservation;
 
+import static nomad.utils.Responses.notFound;
 import static nomad.Application.gson;
 import static nomad.Application.guestDAO;
 import static nomad.Application.hostDAO;
 import static nomad.Application.adminDAO;
 import static nomad.Application.key;
 import static nomad.Application.parseJws;
-import static nomad.Application.invalidResponse;
 import static nomad.Application.reservationDAO;
 import static nomad.Application.apartmentDAO;
 
@@ -70,7 +70,7 @@ public class ReservationServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return invalidResponse("Invalid login", response);
+			return notFound("Invalid login", response);
 		}
 		try
 		{
@@ -78,7 +78,7 @@ public class ReservationServices
 			UserHost host = hostDAO.get(claims.getBody().getSubject());
 			if (host == null)
 			{
-				return invalidResponse("Not a host", response);
+				return notFound("Not a host", response);
 			}
 
 			ArrayList<Reservation> reservations = (ArrayList<Reservation>) getHostReservations(host);
@@ -88,7 +88,7 @@ public class ReservationServices
 			return response;
 		} catch (Exception e)
 		{
-			return invalidResponse("Server error: " + e.getMessage(), response);
+			return notFound("Server error: " + e.getMessage(), response);
 		}
 	};
 
@@ -98,7 +98,7 @@ public class ReservationServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return invalidResponse("Invalid login", response);
+			return notFound("Invalid login", response);
 		}
 		try
 		{
@@ -106,7 +106,7 @@ public class ReservationServices
 			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
 			if (guest == null)
 			{
-				return invalidResponse("Not a guest", response);
+				return notFound("Not a guest", response);
 			}
 			ArrayList<Reservation> reservations = guest.getReservations();
 			
@@ -115,7 +115,7 @@ public class ReservationServices
 			return response;
 		} catch (Exception e)
 		{
-			return invalidResponse("Server error: " + e.getMessage(), response);
+			return notFound("Server error: " + e.getMessage(), response);
 		}
 	};
 
@@ -125,7 +125,7 @@ public class ReservationServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return invalidResponse("Invalid login", response);
+			return notFound("Invalid login", response);
 		}
 		try
 		{
@@ -144,7 +144,7 @@ public class ReservationServices
 			return response;
 		} catch (Exception e)
 		{
-			return invalidResponse("Server error: " + e.getMessage(), response);
+			return notFound("Server error: " + e.getMessage(), response);
 		}
 	};
 
@@ -154,14 +154,14 @@ public class ReservationServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return invalidResponse("Invalid login", response);
+			return notFound("Invalid login", response);
 		}
 
 		String json = request.body();
 		Reservation reservation = gson.fromJson(json, Reservation.class);
 		if (verifyReservation(reservation) == false)
 		{
-			return invalidResponse("Invalid reservation", response);
+			return notFound("Invalid reservation", response);
 		}
 
 		Apartment apartment = reservation.getApartment();
@@ -182,7 +182,7 @@ public class ReservationServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return invalidResponse("Invalid login", response);
+			return notFound("Invalid login", response);
 		}
 
 		try
@@ -191,7 +191,7 @@ public class ReservationServices
 			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
 			if (guest == null)
 			{
-				return invalidResponse("Not guest", response);
+				return notFound("Not guest", response);
 			}
 
 			String json = request.body();
@@ -205,13 +205,13 @@ public class ReservationServices
 					response.body("Reservation cancelled");
 					return response;
 				}
-				return invalidResponse("Failed cancelling reservation", response);
+				return notFound("Failed cancelling reservation", response);
 			}
-			return invalidResponse("Failed cancelling reservation - reservation status is not ACCEPTED or CREATED", response);
+			return notFound("Failed cancelling reservation - reservation status is not ACCEPTED or CREATED", response);
 			
 		} catch (Exception e)
 		{
-			return invalidResponse("Server error: " + e.getMessage(), response);
+			return notFound("Server error: " + e.getMessage(), response);
 		}
 	};
 	

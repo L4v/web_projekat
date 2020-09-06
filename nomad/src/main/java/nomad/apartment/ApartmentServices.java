@@ -1,9 +1,9 @@
 package nomad.apartment;
 
+import static nomad.utils.Responses.notFound;
 import static nomad.Application.apartmentDAO;
 import static nomad.Application.hostDAO;
 import static nomad.Application.adminDAO;
-import static nomad.Application.invalidResponse;
 import static nomad.Application.key;
 import static nomad.Application.parseJws;
 import static nomad.Application.gson;
@@ -71,7 +71,7 @@ public class ApartmentServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return invalidResponse("Invalid login", response);
+			return notFound("Invalid login", response);
 		}
 		try
 		{
@@ -79,7 +79,7 @@ public class ApartmentServices
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if (admin == null)
 			{
-				return invalidResponse("Not admin", response);
+				return notFound("Not admin", response);
 			}
 
 			if(apartmentDAO.removeAll()) 
@@ -88,11 +88,11 @@ public class ApartmentServices
 				response.body("Removed all apartments");
 				return response;
 			}
-			return invalidResponse("Failed removing all apartments", response);
+			return notFound("Failed removing all apartments", response);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-			return invalidResponse("Server error: " + e.getMessage(), response);
+			return notFound("Server error: " + e.getMessage(), response);
 		}
 	};
 	
