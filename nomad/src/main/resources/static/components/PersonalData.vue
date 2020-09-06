@@ -9,15 +9,14 @@
 				</tr>
 				<tr>
 					<td><floating-label :inputdata.sync="guest.name" placeholder="Name" type="text"></floating-label></td>
-					<td id="emptyName">Enter your name</td>
+					<td>Enter your name</td>
 				</tr>
 				<tr>
-					<td>Surname:</td>
-					<td><input type="text" id="surname" v-model="guest.surname"></td>
+					<td><floating-label :inputdata.sync="guest.surname" placeholder="Surname" type="text"></floating-label></td>
 					<td id="emptySurname">Enter your surname</td>
 				</tr>
 				<tr>
-					<td>Sex:</td>
+					<td>Sex</td>
 					<td><select name="sex" v-model="guest.sex">
 							<option value="MALE">Male</option>
 							<option value="FEMALE">Female</option>
@@ -26,20 +25,15 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td>Password:</td>
-					<td><input type="password" id="password"
-						v-model="guest.password"></td>
+					<td><floating-label :inputdata.sync="guest.password" placeholder="Password" type="password"></floating-label</td>
 					<td id="emptyPassword">Enter your password</td>
 				</tr>
 				<tr>
-					<td>Confirm password:</td>
-					<td><input type="text" id="name" v-model="guest.name"></td>
-					<td id="emptyName">Enter your password</td>
+					<td><floating-label :inputdata.sync="guest.password" placeholder="Confirm password" name="confirmPassword" type="password"></floating-label></td>
+					<td id="emptyConfirmPassword">Enter your password</td>
 				</tr>
 				<tr>
-					<td><button v-on:click="updatePersonalData(guest)">Save
-							changes</button></td>
-					<td><router-link to="/home">Back</router-link></td>
+					<td><button @click="updatePersonalData(guest)">Save changes</button></td>
 				</tr>
 				<tr>
 					{{successMsg}}
@@ -54,8 +48,8 @@
 		data: function()
         {
             return{
-                guest: { name: ""},
-                successMsg: ""
+                guest: {},
+                successMsg: "",
             }
         },
         mounted(){
@@ -76,7 +70,8 @@
 	    methods:
 	    {
 	        updatePersonalData: function(guest)
-	        {
+	        {        
+	        
 		        axios.post("rest/personal_data", guest)
 		        .then(response =>
 		            {
