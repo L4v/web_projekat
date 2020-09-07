@@ -71,6 +71,7 @@
 		data: function() 
 		{
 			return{
+                // NOTE(JOvan): TESTT
                 user: {},
 				active: false,
 				daterange: null,
@@ -133,6 +134,11 @@
             window.document.onscroll = () =>
             {
                 let searchbar = document.getElementById("searchbar");
+                if(!searchbar)
+                {
+                    // TODO(Jovan): Fix issue where this is called globally?!
+                    return;
+                }
                 if(window.scrollY > searchbar.offsetTop)
                 {
                     this.active = true;
@@ -142,7 +148,7 @@
                     this.active = false;
                 }
             };
-        }
+        },
 	}
 </script>
 <style scoped>

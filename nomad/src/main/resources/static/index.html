@@ -17,9 +17,6 @@
 <title>Nomad</title>
 </head>
 <body>
-	<!-- TODO(Jovan): Merge search and navigation -->
-	<!-- NOTE(Jovan): Navigation bar -->
-    <!-- TODO(Jovan): MainNavigation depending on current state of login-ness -->
 	<div id="app" class="content">
         <router-view></router-view>
         <router-link to="/admin">Test</router-link>
@@ -37,7 +34,11 @@
     	Vue.component("main-navigation", httpVueLoader("components/MainNavigation.vue"));
     	Vue.component("floating-label", httpVueLoader("components/FloatingLabel.vue"),
             {
-               props: ["placeholder", "name", "type", "inputdata"]
+               props: ["placeholder", "name", "type", "inputdata",],
+            });
+        Vue.component("sidebar", httpVueLoader("components/Sidebar.vue"),
+            {
+                props: ["title", "user",],
             });
 
         // NOTE(Jovan): Route registration
@@ -75,7 +76,7 @@
                 children:
                 [
                     {
-                        path: "overview",
+                        path: "",
                         name: "Overview",
                         component: httpVueLoader("components/AdminOverview.vue"),
                     },

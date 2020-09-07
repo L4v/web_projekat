@@ -83,17 +83,5 @@ new Vue
     },
     mounted()
     {
-        window.document.onscroll = () =>
-        {
-            let searchbar = document.getElementById("searchbar");
-            if(window.scrollY > searchbar.offsetTop)
-            {
-                this.active = true;
-            }
-            else
-            {
-                this.active = false;
-            }
-        };
     }
 }).$mount("#app");

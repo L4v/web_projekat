@@ -84,8 +84,10 @@
                     {
                         localStorage.jwt = response.data;
                         this.loggedIn = true;
-                        // NOTE(Jovan): Go back one page
-                        this.$router.push("/");
+                        if(this.$route.path !== "/")
+                        {
+                            this.$router.push("/");
+                        }
                     })
                     .catch(response =>
                     {
