@@ -1,24 +1,25 @@
 <template>
 	<div class="container">
 		<div id="amenities">
-			<h1>Amenity</h1>
+			<h1>Amenities</h1>
 			<table>
 				<td>
 					<small class="error">{{errorMsg}}</small>
-					<floating-label :inputdata.sync="amenityName" placeholder="New amenity name" name="amenityName" type="text"></floating label>
+					<floating-label :inputdata.sync="amenityName" placeholder="New amenity name" type="text"></floating label>
 				</td>
-				<td><button @click="addAmenity()">Add</button>
+				<td><button class="button-primary" @click="addAmenity()">Add</button>
 				<tr>
 					<th>ID</th>
 					<th>Name</th>
-					<th>Modificate</th>
+					<th>Modify</th>
 					<th>Remove</th>
 				</tr>
 				 <tr v-for="amenity in amenities">
 					<td>{{amenity.id}}</td>
-					<td v-if="!updating">{{amenity.name}}</td>
-					<td v-else><floating-label :inputdata.sync="amenity.name" placeholder="Amenity name" name="amenityName" type="text"></floating label></td>
-					<td><button @click="updateAmenity(amenity)">Modificate</button>
+					<td v-if="updating_id != amenity.id">{{amenity.name}}</td>
+					<td v-else><input v-model="amenity.name" type="text"/></td>
+					<td v-if="updating_id != amenity.id"><button class="button-primary" @click="modifyAmenity(amenity.id)">Modify</button>
+					<td v-else><button class="button-primary" @click="updateAmenity(amenity)">Save</button>
 					<td><button @click="removeAmenity(amenity)">Remove</button>
 				</tr>
 				<tr>
@@ -37,7 +38,8 @@
 				amenities: {},
 				successMsg: "",
 				errorMsg: "",
-				updating: false,
+				updating_id: "",
+				amenityName: "",
 			}
 		},
 		
@@ -47,7 +49,7 @@
 	    	
 	    	if(jwt)
 			{
-		    	axios.get("rest/admin_all_amenities",{headers:{"Authorization": "Bearer " + localStorage.jwt}})
+		    	axios.get("rest/admin_all_amenities", {headers:{"Authorization": "Bearer " + localStorage.jwt}})
 			        .then(response => (this.amenities = response.data))
 		    		.catch(response => 
 	    			{
@@ -61,14 +63,20 @@
 	    {
 	     	removeAmenity: function(amenity)
 	     	{
-	     		axios.post("rest/remove_amenity", amenity)
+	     		axios.post("rest/remove_amenity", amenity, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
 		        .then(response =>
 		            {
+		            	this.amenities = response.data;
 		                this.successMsg = "Amenity successfully removed.";
 		            })
 		        .catch(response => {
 		        		this.successMsg = "Failed removing amenity";
 		        });
+	     	},
+	     	
+	     	modifyAmenity: function(amenity_id)
+	     	{
+	     		this.updating_id = amenity_id;
 	     	},
 	     	
 	     	isEmpty()
@@ -95,9 +103,10 @@
 	     			name: this.amenityName,
 	     		};
 	     		
-	     		axios.post("rest/add_amenity", amenity)
+	     		axios.post("rest/add_amenity", amenity, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
 		        .then(response =>
 		            {
+		            	this.amenities = response.data;
 		                this.successMsg = "Amenity successfully added.";
 		            })
 		        .catch(response => {
@@ -107,18 +116,17 @@
 	     	
 	     	updateAmenity: function(amenity)
 	     	{
-	     		this.updating = true;
-	     	
-	     		axios.post("rest/update_amenity", amenity)
+	     		axios.post("rest/update_amenity", amenity, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
 		        .then(response =>
 		            {
+		            	this.amenities = response.data;
 		                this.successMsg = "Amenity successfully updated.";
 		            })
 		        .catch(response => {
 		        		this.successMsg = "Failed adding amenity";
 		        });
 		        
-		        this.updating = false;
+		        this.updating_id = "";
 	     	}   
 	    }
 	}

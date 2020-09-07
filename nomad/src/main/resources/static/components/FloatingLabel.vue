@@ -18,6 +18,7 @@
         <input 
             :name="name"
             :type="type"
+            :readonly="readonly"
             @blur="removeFocus($event)"
             @focus="addFocus($event)"
             v-model="inputdata"
@@ -27,7 +28,7 @@
 </template>
 <script>
     module.exports = {
-        props: ["placeholder", "name", "type", "inputdata"],
+        props: ["placeholder", "name", "type", "inputdata", "readonly"],
         methods:
         {
             // NOTE(Jovan): If there is a value in input when mounting,

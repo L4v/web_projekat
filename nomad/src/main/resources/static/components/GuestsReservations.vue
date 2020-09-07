@@ -8,7 +8,7 @@
 					<td>{{reservation.noDays}}</td>
 					<td>{{reservation.totalPrice}}</td>
 					<td>{{reservation.status}}</td>
-					<td><v-if="reservation.status == ACCEPTED || reservation.status == CREATED" button v-on:click="cancelReservation(reservation)">Cancel</button>
+					<td v-if="reservation.status === 'ACCEPTED' || reservation.status === 'CREATED'"><button @click="cancelReservation(reservation)">Cancel</button>
 				</tr>
 				<tr>
 					{{successMsg}}
@@ -31,7 +31,7 @@
 		mounted()
 		{
 	    	var jwt = localStorage.jwt;
-	    	
+
 	    	if(jwt)
 			{
 		    	axios.get("rest/guest_view_reservations",{headers:{"Authorization": "Bearer " + localStorage.jwt}})

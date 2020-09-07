@@ -34,7 +34,7 @@
     	Vue.component("main-navigation", httpVueLoader("components/MainNavigation.vue"));
     	Vue.component("floating-label", httpVueLoader("components/FloatingLabel.vue"),
             {
-               props: ["placeholder", "name", "type", "inputdata",],
+               props: ["placeholder", "name", "type", "inputdata", "readonly",],
             });
         Vue.component("sidebar", httpVueLoader("components/Sidebar.vue"),
             {
@@ -70,6 +70,11 @@
                 component: httpVueLoader("components/Amenities.vue")
             },
             {
+                path: "/hosts_guests",
+                name: "ShowGuests",
+                component: httpVueLoader("components/ShowGuests.vue")
+            },
+            {
                 path: "/admin",
                 name: "Admin",
                 component: httpVueLoader("components/AdminPanel.vue"),
@@ -80,6 +85,11 @@
                         name: "Overview",
                         component: httpVueLoader("components/AdminOverview.vue"),
                     },
+                   	{
+                    	path: "amenities",
+                    	name: "Amenities",
+                    	component: httpVueLoader("components/Amenities.vue"),
+                   	},
                 ],
             },
             {

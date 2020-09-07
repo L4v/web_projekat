@@ -63,7 +63,8 @@ public class HostServices
 				return notFound("Invalid host", response);
 			}
 			response.status(200);
-			ArrayList<UserGuest> guests = (ArrayList<UserGuest>) getGuests(host.getUsername());
+			//ArrayList<UserGuest> guests = (ArrayList<UserGuest>) getGuests(host.getUsername());
+			ArrayList<UserGuest> guests = (ArrayList<UserGuest>) guestDAO.getAll();
 			response.body(gson.toJson(guests));
 			return response;
 		}

@@ -22,30 +22,34 @@ import spark.Route;
 
 public class AmenityServices {
 
+
 	public static Route updateAmenity = (Request request, Response response) ->
 	{
 		response.type("application/json");
-		/*String jws = parseJws(request);
+		String jws = parseJws(request);
 		if (jws == null)
 		{
 			return notFound("Invalid login", response);
-		}*/
+		}
 		try
 		{
-			/*Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if (admin == null)
 			{
 				return notFound("Invalid admin", response);
-			}*/
+			}
 
 			String json = request.body();
 			Amenity amenity = gson.fromJson(json, Amenity.class);
 			amenityDAO.update(amenity);
 			
 			response.status(200);
-			response.body("Amenity updated!");
-			return response;
+			/*response.body("Amenity updated!");
+			return response;*/
+			ArrayList<Amenity> retVal = (ArrayList<Amenity>) amenityDAO.getAll();
+			return gson.toJson(retVal);
+			
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -56,19 +60,19 @@ public class AmenityServices {
 	public static Route addAmenity = (Request request, Response response) ->
 	{
 		response.type("application/json");
-		/*String jws = parseJws(request);
+		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return invalidResponse("Invalid login", response);
-		}*/
+			return notFound("Invalid login", response);
+		}
 		try
 		{
-			/*Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if (admin == null)
 			{
-				return invalidResponse("Invalid admin", response);
-			}*/
+				return notFound("Invalid admin", response);
+			}
 
 			String json = request.body();
 			Amenity amenity = gson.fromJson(json, Amenity.class);
@@ -87,8 +91,10 @@ public class AmenityServices {
 			if(amenityDAO.add(amenity)) 
 			{
 				response.status(200);
-				response.body("Amenity added!");
-				return response;
+				/*response.body("Amenity successfully added!");
+				return response;*/
+				ArrayList<Amenity> retVal = (ArrayList<Amenity>) amenityDAO.getAll();
+				return gson.toJson(retVal);
 			}
 			else
 			{
@@ -106,20 +112,20 @@ public class AmenityServices {
 	public static Route removeAmenity = (Request request, Response response) ->
 	{
 		response.type("application/json");
-		/*String jws = parseJws(request);
+		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return invalidResponse("Invalid login", response);
-		}*/
+			return notFound("Invalid login", response);
+		}
 		try
 		{
-			/*Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if (admin == null)
 			{
-				return invalidResponse("Invalid admin", response);
+				return notFound("Invalid admin", response);
 			}
-			 */
+			
 			String json = request.body();
 			Amenity amenity = gson.fromJson(json, Amenity.class);
 			
@@ -139,8 +145,10 @@ public class AmenityServices {
 					}
 				}
 				response.status(200);
-				response.body("Amenity removed!");
-				return response;
+				/*response.body("Amenity removed!");
+				return response;*/
+				ArrayList<Amenity> retVal = (ArrayList<Amenity>) amenityDAO.getAll();
+				return gson.toJson(retVal);
 			}
 			else
 			{

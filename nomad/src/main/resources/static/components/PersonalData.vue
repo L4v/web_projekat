@@ -4,8 +4,7 @@
 			<h1>Personal data</h1>
 			<table id="tabela">
 				<tr>
-					<td>Username:</td>
-					<td>{{guest.username}}</td>
+					<floating-label readonly :inputdata.sync="guest.username" placeholder="Username" type="text" class="no-focus" disabled="disabled" readonly="readonly" tabindex="-1"></floating-label>
 				</tr>
 				<tr>
 					<td>
@@ -20,13 +19,14 @@
 					</td>
 				</tr>
 				<tr>
-					<td>Sex</td>
-					<td><select name="sex" v-model="guest.sex">
-							<option value="MALE">Male</option>
-							<option value="FEMALE">Female</option>
-							<option value="OTHER">Other</option>
-							<option value="PRIVATE">Prefer not to say</option>
-						</select>
+					<td>
+						<select id="sex" v-model="guest.sex" required>
+		                    <option value="" disabled>Sex</option>
+		                    <option value="MALE">Male</option>
+		                    <option value="FEMALE">Female</option>
+		                    <option value="OTHER">Other</option>
+		                    <option value="PRIVATE">Prefer not to say</option>
+	                    </select>
 					</td>
 				</tr>
 				<tr>
@@ -38,11 +38,11 @@
 				<tr>
 					<td>
 						<small class="error">{{errors.confirmPass}}</small>
-						<floating-label :inputdata.sync="guest.password" placeholder="Confirm password" name="confirmPassword" type="password"></floating-label>
+						<floating-label :inputdata.sync="confirmPassword" placeholder="Confirm password" type="password"></floating-label>
 					</td>
 				</tr>
 				<tr>
-					<td><button @click="updatePersonalData(guest)">Save changes</button></td>
+					<td><button id="saveButton" class="button-primary" @click="updatePersonalData(guest)">Save changes</button></td>
 				</tr>
 				<tr>
 					{{successMsg}}
@@ -58,6 +58,7 @@
         {
             return{
                 guest: {},
+                confirmPassword: "",
                 successMsg: "",
                 errors: {name: "", surname: "", password: "", confirmPass: ""},
             }
@@ -123,12 +124,12 @@
                     return false;
                 }
                 //TODO: resiti proveru za ispravnost pass i confirm
-                if(!personalData.getElementsByName("confirmPassword"))
+                if(!this.confirmPassword)
                 {
                     this.errors.confirmPass = "Password must not be empty";
                     return false;
                 }
-                if(!personalData.getElementsByName("confirmPassword").equals(this.guest.password))
+                if(!(this.confirmPassword == this.guest.password))
                 {
                 	this.errors.confirmPass = "Not same password";
                 	return false;
@@ -145,10 +146,10 @@
 	    	},
 	        updatePersonalData: function(guest)
 	        {        
-				/*if(!this.validateFields())
+				if(!this.validateFields())
                 {
                     return;
-                }*/
+                }
 	        
 		        axios.post("rest/personal_data", guest)
 		        .then(response =>
@@ -176,4 +177,23 @@
         margin: 0;
         font-weight: 500;
     }
+    .no-focus 
+    {
+    	pointer-events: none;
+    	display: block;
+    	-webkit-user-select: none;
+  		-moz-user-select: none;
+ 		-ms-user-select: none;
+  		user-select: none; 
+ 		user-focus: none;
+ 		user-modify: read-only;
+	}
+	#sex
+    {
+    	display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
 </style>

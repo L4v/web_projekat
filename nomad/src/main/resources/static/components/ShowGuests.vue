@@ -2,8 +2,17 @@
 	<div class="container">
 		<div id="showGuests">
 			<h1>Guests</h1>
-			<floating-label :inputdata.sync="..." placeholder="Search parameter" type="text"></floating-label>
-			<button @click="searchGuest()">Search</button>
+			<div id="search">
+				<floating-label :inputdata.sync="guest_username" placeholder="Type username" type="text"></floating-label>
+				<select id="sex" v-model="guest_sex" required>
+		            <option value="" disabled>Sex</option>
+		            <option value="MALE">Male</option>
+		            <option value="FEMALE">Female</option>
+		            <option value="OTHER">Other</option>
+		            <option value="PRIVATE">Prefer not to say</option>
+		        </select>
+				<button @click="searchGuest()">Search</button>
+			</div>
 			<table id="MyGuests">
 				<tr>
 					<th>Username</th>
@@ -24,7 +33,9 @@
 	module.exports = {
 		data: function()
 		{
-			guests: {}
+			guests: {},
+			guest_username: "",
+			guest_sex: "",
 		},
 		
 		mounted(){
@@ -47,6 +58,12 @@
 	    {
 	        searchGuest: function()
 	        {
+	            if(!this.guest_username)
+	            {
+	            	alert("Username must not be empty.");
+	            	return;
+	            }
+
 	            
 	        }
 	    }
