@@ -3,8 +3,8 @@
         <!-- TODO(Jovan): Make into a separate component -->
         <sidebar title="Admin panel" :user="user">
             <li><router-link to="/admin">Overview</router-link></li>
-            <li><router-link to="/admin/amenities">Placeholder 1</router-link></li>
-            <li><router-link to="#">Placeholder 2</router-link></li>
+            <li><router-link to="/admin/amenities">Amenities</router-link></li>
+            <li><router-link to="/admin/all_users">All users</router-link></li>
             <li><router-link to="#">Placeholder 3</router-link></li>
         </sidebar>
 
@@ -61,6 +61,7 @@
     {
         margin-left: 15vw;
         background-color: #fafafa;
+        height: 100vh;
     }
     
 </style>

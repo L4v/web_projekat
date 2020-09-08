@@ -78,6 +78,10 @@
                 path: "/admin",
                 name: "Admin",
                 component: httpVueLoader("components/AdminPanel.vue"),
+                meta:
+                {
+                    requiresAuth: true,
+                },
                 children:
                 [
                     {
@@ -90,6 +94,11 @@
                     	name: "Amenities",
                     	component: httpVueLoader("components/Amenities.vue"),
                    	},
+                    {
+                        path: "all_users",
+                        name: "AllUsers",
+                        component: httpVueLoader("components/AdminAllUsers.vue"),
+                    },
                 ],
             },
             {
@@ -102,6 +111,31 @@
         const router = new VueRouter
         ({
             routes: routes,
+        });
+
+        // NOTE(Jovan): Router guard, used for login redirects and similar
+        router.beforeEach((to, from, next) =>
+        {
+            // NOTE(Jovan): Check if page requires authentication
+            if(to.matched.some(record => record.meta.requiresAuth))
+            {
+                axios.get("rest/get_user", {headers: {"Authorization": "Bearer " + localStorage.jwt}})
+                    .then(response =>
+                    {
+                        // NOTE(Jovan): User already logged in -> proceed
+                        next();
+                    })
+                    .catch(response =>
+                    {
+                        // NOTE(Jovan): User not logged in -> go to login page
+                        next({name: "Login"});   
+                    });
+            }
+            else
+            {
+                // NOTE(Jovan): Page does not require authentication -> proceed
+                next();
+            }
         });
 
         new Vue
