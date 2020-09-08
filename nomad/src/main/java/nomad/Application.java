@@ -135,6 +135,7 @@ public class Application
 
 
 		post(Path.Rest.REG_GUEST, RegistrationServices.registerGuest);
+		post(Path.Rest.REG_HOST, RegistrationServices.registerHost);
 		post(Path.Rest.LOGIN, LoginServices.login);
 		post(Path.Rest.PERSONAL_DATA, UserServices.personalData);
 		post(Path.Rest.HOST_ADD_APARTMENT, ApartmentServices.hostAddApartment);

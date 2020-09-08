@@ -105,7 +105,7 @@
                     },
                    	{
                     	path: "amenities",
-                    	name: "Amenities",
+                    	name: "AdminAmenities",
                     	component: httpVueLoader("components/Amenities.vue"),
                    	},
                     {
@@ -119,6 +119,23 @@
                 path: "/guests_reservations",
                 name: "GuestsReservations",
                 component: httpVueLoader("components/GuestsReservations.vue")
+            },
+            {
+                path: "/host",
+                name: "Host",
+                component: httpVueLoader("components/HostPanel.vue"),
+                meta:
+                {
+                    requiresAuth: true,
+                },
+                children:
+                [
+                    {
+                        path: "apartments",
+                        name: "HostApartments",
+                        component: httpVueLoader("components/HostApartments.vue"),
+                    },
+                ],
             },
         ];
 

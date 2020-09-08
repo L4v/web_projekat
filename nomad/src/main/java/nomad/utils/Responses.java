@@ -12,6 +12,14 @@ public class Responses
 		return response;
 	}
 	
+	// NOTE(Jovan): 400 Bad request
+	public static Response badRequest(String msg, Response response)
+	{
+		response.body(msg);
+		response.status(400);
+		return response;
+	}
+	
 	// NOTE(Jovan): 401 Unauthorized
 	public static Response unauthorized(String msg, Response response)
 	{

@@ -34,6 +34,7 @@ public class Path
 		public static final String GUEST_CANCEL_RESERVATION = "/rest/guest_cancel_reservation";
 		
 		public static final String REG_GUEST = "/rest/reg_guest";
+		public static final String REG_HOST = "/rest/reg_host";
 		public static final String LOGIN = "/rest/login";
 		public static final String PERSONAL_DATA = "/rest/personal_data";
 		public static final String GET_USER = "/rest/get_user";
