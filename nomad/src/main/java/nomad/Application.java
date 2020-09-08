@@ -62,8 +62,14 @@ public class Application
 		{
 			return null;
 		}
+		
+		String jws = auth.substring(auth.indexOf("Bearer") + 7);
+		if(jws.equalsIgnoreCase("undefined") || auth.length() <= 7)
+		{
+			return null;
+		}
 
-		return auth.length() <= 7 ? null : auth.substring(auth.indexOf("Bearer") + 7);
+		return jws;
 	}
 	
 	

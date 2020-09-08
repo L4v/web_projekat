@@ -87,7 +87,6 @@ public class UserServices
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace();
 				return notFound("Server error: " + e.getMessage(), response);
 			}
 		}
