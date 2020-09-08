@@ -34,6 +34,10 @@
 	</div>
 </template>
 <style scoped>
+    .content
+    {
+	    min-height: 200vh;
+    }
     .header {
         /* TODO(Jovan): Postaviti adekvatnu pozadinu*/
         background-color: #fff;

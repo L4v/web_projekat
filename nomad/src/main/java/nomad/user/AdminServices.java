@@ -2,6 +2,9 @@ package nomad.user;
 
 import static nomad.Application.parseJws;
 import static nomad.utils.Responses.notFound;
+import static nomad.utils.Responses.forbidden;
+import static nomad.utils.Responses.ok;
+import static nomad.utils.Responses.serverError;
 import static nomad.Application.gson;
 import static nomad.Application.key;
 import static nomad.Application.guestDAO;
@@ -34,6 +37,30 @@ public class AdminServices
 
 		return users;
 	}
+	
+	public static Route checkIfAdmin = (Request request, Response response) ->
+	{
+		String jws = parseJws(request);
+		if(jws == null)
+		{
+			return forbidden("User not authorized as admin", response);
+		}
+		
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
+			if(admin == null)
+			{
+				return forbidden("User not authorized as admin", response);
+			}
+			return ok("Access granted, user is admin", response);
+		}
+		catch(Exception e)
+		{
+			return serverError(e.getMessage(), response);
+		}
+	};
 
 	public static Route getAllUsers = (Request request, Response response) ->
 	{

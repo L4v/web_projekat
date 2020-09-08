@@ -62,17 +62,29 @@
             {
                 path: "/personal_data",
                 name: "PersonalData",
-                component: httpVueLoader("components/PersonalData.vue")
+                component: httpVueLoader("components/PersonalData.vue"),
+                meta:
+                {
+                    requiresAuth: true,
+                },
             },
             {
                 path: "/amenities",
                 name: "Amenities",
-                component: httpVueLoader("components/Amenities.vue")
+                component: httpVueLoader("components/Amenities.vue"),
+                meta:
+                {
+                    requiresAuth: true,
+                },
             },
             {
                 path: "/hosts_guests",
                 name: "ShowGuests",
-                component: httpVueLoader("components/ShowGuests.vue")
+                component: httpVueLoader("components/ShowGuests.vue"),
+                meta:
+                {
+                    requiresAuth: true,
+                },
             },
             {
                 path: "/admin",
@@ -80,7 +92,9 @@
                 component: httpVueLoader("components/AdminPanel.vue"),
                 meta:
                 {
-                    requiresAuth: true,
+                    requiresAdmin: true,
+                    // NOTE(Jovan): Admin already requires auth, so reduntant
+                    // requiresAuth: true,
                 },
                 children:
                 [
@@ -129,6 +143,21 @@
                     {
                         // NOTE(Jovan): User not logged in -> go to login page
                         next({name: "Login"});   
+                    });
+            }
+            else if(to.matched.some(record => record.meta.requiresAdmin))
+            {
+                axios.get("rest/check_if_admin", {headers: {"Authorization": "Bearer " + localStorage.jwt}})
+                    .then(response =>
+                    {
+                        // NOTE(Jovan): User is admin -> proceed
+                        next();
+                    })
+                    .catch(response =>
+                    {
+                        // NOTE(Jovan): User is not admin -> go to login page
+                        // TODO(Jovan): Display message about needing admin rights?
+                        next({name: "Login"});
                     });
             }
             else

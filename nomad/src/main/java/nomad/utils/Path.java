@@ -18,6 +18,7 @@ public class Path
 		public static final String ADMIN_ALL_COMMENTS = "/rest/admin_view_comments";
 		public static final String ADMIN_ALL_AMENITIES = "/rest/admin_all_amenities";
 		public static final String ADMIN_REMOVE_APARTMENTS = "/rest/admin_remove_apartments";
+		public static final String CHECK_IF_ADMIN = "/rest/check_if_admin";
 		
 		public static final String HOST_ALL_APARTMENTS = "/rest/host_all_apartments";
 		public static final String HOST_ALL_GUESTS = "/rest/host_all_guests";

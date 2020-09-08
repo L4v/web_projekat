@@ -1,8 +1,19 @@
 <template>
-    <div>
-        <ul>
-            <li v-for="user in users">{{user.username}}</li>
-        </ul>
+    <div class="container">
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>User Type</th>
+            </tr>
+            <tr v-for="user in users">
+                <td>{{user.username}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.surname}}</td>
+                <td>{{user.userType}}</td>
+            </tr>
+        </table>
     </div>
 </template>
 
@@ -43,3 +54,7 @@
         }
     }
 </script>
+
+<style>
+
+</style>

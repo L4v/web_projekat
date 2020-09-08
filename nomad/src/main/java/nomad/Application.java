@@ -150,6 +150,7 @@ public class Application
 		get("rest/test", LoginServices.verifyLogin);
 		get(Path.Rest.GET_USER, UserServices.getUser);
 		get(Path.Rest.GUEST_GET_USERNAME, GuestServices.getUsername);
+		get(Path.Rest.CHECK_IF_ADMIN, AdminServices.checkIfAdmin);
 		get(Path.Rest.ADMIN_ALL_USERS, AdminServices.getAllUsers);
 		get(Path.Rest.ADMIN_ALL_APARTMENTS, AdminServices.allApartments);
 		get(Path.Rest.ADMIN_ALL_AMENITIES, AdminServices.allAmenities);
