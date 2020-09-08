@@ -65,8 +65,8 @@ public class HostServices
 			response.status(200);
 			//ArrayList<UserGuest> guests = (ArrayList<UserGuest>) getGuests(host.getUsername());
 			ArrayList<UserGuest> guests = (ArrayList<UserGuest>) guestDAO.getAll();
-			response.body(gson.toJson(guests));
-			return response;
+			//response.body(gson.toJson(guests));
+			return gson.toJson(guests);
 		}
 		catch(Exception e)
 		{
@@ -104,6 +104,51 @@ public class HostServices
 		}
 		ArrayList<Apartment> apartments = (ArrayList<Apartment>) getApartments(host.getUsername());
 		return gson.toJson(apartments);
+	};
+	
+	public static Route hostSearchGuests = (Request request, Response response) ->
+	{
+		response.type("application/json");
+		String jws = parseJws(request);
+		
+		if (jws == null)
+		{
+			return notFound("Invalid login", response);
+		}
+		
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			
+			UserHost host = hostDAO.get(claims.getBody().getSubject());
+			if(host == null)
+			{
+				return notFound("Invalid host", response);
+			}
+			
+			//ArrayList<UserGuest> guests = (ArrayList<UserGuest>) getGuests(host.getUsername());
+			ArrayList<UserGuest> guests = (ArrayList<UserGuest>) guestDAO.getAll();
+			ArrayList<UserGuest> retVal = new ArrayList<UserGuest>();
+
+			String username = request.body();
+			//
+			
+			for(UserGuest userGuest : guests)
+			{
+				if(userGuest.getUsername().equalsIgnoreCase(username))
+				{
+					retVal.add(userGuest);
+				}
+			}
+			
+			response.status(200);
+			return gson.toJson(retVal);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return notFound("Server error: " + e.getMessage(), response);
+		}
 	};
 
 }

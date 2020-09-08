@@ -108,8 +108,8 @@ public class ReservationServices
 			{
 				return notFound("Not a guest", response);
 			}
-			ArrayList<Reservation> reservations = guest.getReservations();
-			
+			//ArrayList<Reservation> reservations = guest.getReservations();
+			ArrayList<Reservation> reservations = (ArrayList<Reservation>) reservationDAO.getAll();
 			response.status(200);
 			response.body(gson.toJson(reservations));
 			return response;

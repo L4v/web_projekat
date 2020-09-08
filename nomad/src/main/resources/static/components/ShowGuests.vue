@@ -11,20 +11,23 @@
 		            <option value="OTHER">Other</option>
 		            <option value="PRIVATE">Prefer not to say</option>
 		        </select>
-				<button @click="searchGuest()">Search</button>
+				<button class="button-primary" @click="searchGuest()">Search</button>
 			</div>
 			<table id="MyGuests">
 				<tr>
 					<th>Username</th>
 					<th>Name</th>
 					<th>Surname</th>
+					<th>Sex</th>
 				</tr>
 				<tr v-for="guest in guests">
 					<td>{{guest.username}}</td>
 					<td>{{guest.name}}</td>
 					<td>{{guest.surname}}</td>
+					<td>{{guest.sex}}</td>
 				</tr>
 			</table>
+			{{message}}
 		</div>
 	</div>
 </template>
@@ -33,9 +36,12 @@
 	module.exports = {
 		data: function()
 		{
-			guests: {},
-			guest_username: "",
-			guest_sex: "",
+			return{
+				guests: {},
+				guest_username: "",
+				guest_sex: "",
+				message: "",
+			}
 		},
 		
 		mounted(){
@@ -58,13 +64,28 @@
 	    {
 	        searchGuest: function()
 	        {
-	            if(!this.guest_username)
+	        
+	            if(!this.guest_username && !this.guest_sex)
 	            {
-	            	alert("Username must not be empty.");
+	            	alert("Search parameter must not be empty.");
 	            	return;
 	            }
-
 	            
+	            let searchParameter = 
+	            {
+	            	
+	            };
+	            
+	            axios.post("rest/host_search_guests", this.guest_username, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
+		             .then(response =>
+		             {
+		                 this.guests = response.data;
+		             })
+		             .catch(response =>
+		             {
+		                 this.message = "No results";
+		             });
+
 	        }
 	    }
 	}

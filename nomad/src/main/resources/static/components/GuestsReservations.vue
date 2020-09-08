@@ -3,12 +3,20 @@
 		<div id="reservations">
 			<h1>Reservations</h1>
 			<table>
+				<tr>
+					<th>Start date</th>
+					<th>Number of days</th>
+					<th>Total price</th>
+					<th>Status</th>
+					<th>Cancel reservation</th>
+				</tr>
 				 <tr v-for="reservation in reservations">
 					<td>{{reservation.startDate}}</td>
 					<td>{{reservation.noDays}}</td>
 					<td>{{reservation.totalPrice}}</td>
 					<td>{{reservation.status}}</td>
-					<td v-if="reservation.status === 'ACCEPTED' || reservation.status === 'CREATED'"><button @click="cancelReservation(reservation)">Cancel</button>
+					<td v-if="reservation.status === 'ACCEPTED' || reservation.status === 'CREATED'"><button class="button-primary" @click="cancelReservation(reservation)">Cancel</button>
+					<td v-else><button disabled>Cancel</button>
 				</tr>
 				<tr>
 					{{successMsg}}
