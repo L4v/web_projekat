@@ -79,8 +79,8 @@
             },
             {
                 path: "/hosts_guests",
-                name: "ShowGuests",
-                component: httpVueLoader("components/ShowGuests.vue"),
+                name: "HostGuests",
+                component: httpVueLoader("components/HostGuests.vue"),
                 meta:
                 {
                     requiresAuth: true,
@@ -118,6 +118,11 @@
                         name: "Reservations",
                         component: httpVueLoader("components/AdminReservations.vue"),
                     },
+                    {
+                        path: "apartments",
+                        name: "AdminApartments",
+                        component: httpVueLoader("components/AdminApartments.vue"),
+                    },
                 ],
             },
             {
@@ -139,6 +144,11 @@
                         path: "apartments",
                         name: "HostApartments",
                         component: httpVueLoader("components/HostApartments.vue"),
+                    },
+                    {
+                        path: "guests",
+                        name: "HostGuests",
+                        component: httpVueLoader("components/HostGuests.vue"),
                     },
                 ],
             },

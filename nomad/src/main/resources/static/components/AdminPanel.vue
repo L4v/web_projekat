@@ -6,7 +6,7 @@
             <li><router-link to="/admin/amenities">Amenities</router-link></li>
             <li><router-link to="/admin/all_users">All users</router-link></li>
             <li><router-link to="/admin/reservations">Reservations</router-link></li>
-            <li><router-link to="#">Placeholder 3</router-link></li>
+            <li><router-link to="/admin/apartments">Apartments</router-link></li>
         </sidebar>
 
         <div id="main-content">

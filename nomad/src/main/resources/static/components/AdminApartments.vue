@@ -5,17 +5,13 @@
 			<table>
 				 <tr v-for="apartment in apartments">
 					<td>{{apartment.type}}</td>
-					<td>{{reservation.location}}</td>
-					<td>{{reservation.price}}</td>
-				</tr>
-				<tr>
-					<td><button v-on:click="removaAll()">Remove all</button></td>
+					<td>{{apartment.status}}</td>
+					<td>{{apartment.price}}</td>
 				</tr>
 			</table>
+			<button @click="removeAll()">Remove all</button>
 		</div>
 	</div>
-
-
 </template>
 
 <script>
@@ -34,8 +30,11 @@
 	    	
 	    	if(jwt)
 			{
-		    	axios.get("rest/admin_view_apartments",{headers:{"Authorization": "Bearer " + localStorage.jwt}})
-			        .then(response => (this.apartments = response.data))
+		    	axios.get("rest/admin_view_apartments", {headers:{"Authorization": "Bearer " + localStorage.jwt}})
+			        .then(response => 
+			       	{
+			       		this.apartments = response.data;
+			       	})
 		    		.catch(response => 
 	    			{
 	    				//TODO(Kristian): handle 404
@@ -48,7 +47,7 @@
 	    {
 			removeAll: function()
 	     	{
-	     		axios.post("rest/admin_remove_apartments")
+	     		axios.post("rest/admin_remove_apartments", {headers:{"Authorization": "Bearer " + localStorage.jwt}})
 		        .then(response =>
 		            {
 		                this.successMsg = "Apartments successfully removed.";
@@ -57,5 +56,6 @@
 		        		this.successMsg = "Failed removing apartments";
 		        });
 	     	}   
-	    }
+	    },
+    }
 </script>
