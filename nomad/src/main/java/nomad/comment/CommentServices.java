@@ -106,6 +106,42 @@ public class CommentServices
 		}
 	};
 	
+	public static Route guestViewApartmentsComments = (Request request, Response response) ->
+	{
+		response.type("application/json");
+		String jws = parseJws(request);
+		if(jws == null)
+		{
+			return notFound("Invalid login", response);
+		}
+		
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			
+			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
+			if(guest == null)
+			{
+				response.status(404);
+				return response;
+			}
+			
+			String json = request.body();
+			Apartment apartment = gson.fromJson(json, Apartment.class);
+			
+			response.type("application/json");
+			response.status(200);
+			ArrayList<Comment> comments = (ArrayList<Comment>) apartment.getComments();
+			response.body(gson.toJson(comments));
+			return response;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return notFound("Server error: " + e.getMessage(), response);
+		}
+	};
+	
 	public static Route addComment = (Request request, Response response) ->
 	{
 		response.type("application/json");
