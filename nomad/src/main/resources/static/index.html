@@ -71,7 +71,7 @@
             {
                 path: "/amenities",
                 name: "Amenities",
-                component: httpVueLoader("components/Amenities.vue"),
+                component: httpVueLoader("components/AdminAmenities.vue"),
                 meta:
                 {
                     requiresAuth: true,
@@ -106,7 +106,7 @@
                    	{
                     	path: "amenities",
                     	name: "AdminAmenities",
-                    	component: httpVueLoader("components/Amenities.vue"),
+                    	component: httpVueLoader("components/AdminAmenities.vue"),
                    	},
                     {
                         path: "all_users",
@@ -122,6 +122,16 @@
                         path: "apartments",
                         name: "AdminApartments",
                         component: httpVueLoader("components/AdminApartments.vue"),
+                    },
+                    {
+                        path: "comments",
+                        name: "Comments",
+                        component: httpVueLoader("components/AdminComments.vue"),
+                    },
+                    {
+                        path: "personal_data",
+                        name: "PersonalData",
+                        component: httpVueLoader("components/PersonalData.vue"),
                     },
                 ],
             },
@@ -149,6 +159,11 @@
                         path: "guests",
                         name: "HostGuests",
                         component: httpVueLoader("components/HostGuests.vue"),
+                    },
+                    {
+                        path: "personal_data",
+                        name: "PersonalData",
+                        component: httpVueLoader("components/PersonalData.vue"),
                     },
                 ],
             },

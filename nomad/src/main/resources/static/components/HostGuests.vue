@@ -71,12 +71,13 @@
 	            	return;
 	            }
 	            
-	            let searchParameter = 
+	            let parameter = 
 	            {
-	            	
+	            	username: this.guest_username,
+	            	sex: this.guest_sex,
 	            };
 	            
-	            axios.post("rest/host_search_guests", this.guest_username, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
+	            axios.post("rest/host_search_guests", parameter, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
 		             .then(response =>
 		             {
 		                 this.guests = response.data;

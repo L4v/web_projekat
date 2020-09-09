@@ -2,6 +2,7 @@ package nomad.comment;
 
 
 import static nomad.utils.Responses.notFound;
+import static nomad.utils.Responses.serverError;
 import static nomad.Application.parseJws;
 import static nomad.Application.key;
 import static nomad.Application.gson;
@@ -138,7 +139,7 @@ public class CommentServices
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 	
@@ -176,7 +177,7 @@ public class CommentServices
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 	
