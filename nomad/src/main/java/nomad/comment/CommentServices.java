@@ -37,7 +37,7 @@ public class CommentServices
 	{
 		ArrayList<Comment> comments = new ArrayList<Comment>();
 		
-		for(Apartment apartment : host.getApartments())
+		for(Apartment apartment : apartmentDAO.getByIds(host.getApartments()))
 		{
 			if(apartment.getHostId().equals(host.getUsername()))
 			{
@@ -189,15 +189,7 @@ public class CommentServices
 		UserGuest guest = guestDAO.get(comment.getGuestId());
 		if(apartment.getReservations() != null)
 		{
-			ArrayList<Reservation> reservations = new ArrayList<Reservation>();
-			for(Reservation r : reservationDAO.getAll())
-			{
-				if(r.getApartment().getId().equals(apartment.getId()))
-				{
-					reservations.add(r);
-				}
-			}
-			for(Reservation reservation : reservations)
+			for(Reservation reservation : reservationDAO.getForApartment(apartment.getId()))
 			{
 				if(reservation.getStatus() == ReservationStatus.CANCELLED || reservation.getStatus() == ReservationStatus.REJECTED)
 				{

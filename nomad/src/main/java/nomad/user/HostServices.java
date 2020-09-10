@@ -5,6 +5,8 @@ import static nomad.utils.Responses.forbidden;
 import static nomad.utils.Responses.ok;
 import static nomad.utils.Responses.serverError;
 import static nomad.Application.guestDAO;
+import static nomad.Application.apartmentDAO;
+import static nomad.Application.reservationDAO;
 import static nomad.Application.hostDAO;
 import static nomad.Application.parseJws;
 import static nomad.Application.gson;
@@ -33,9 +35,10 @@ public class HostServices
 		{
 			if(userGuest.getReservations() != null) 
 			{
-				for (Reservation reservation : userGuest.getReservations())
+				for (Reservation reservation : reservationDAO.getForGuest(userGuest.getUsername()))
 				{
-					if(reservation.getApartment().getHostId().equals(username))
+					Apartment apartment = apartmentDAO.get(reservation.getApartmentId());
+					if(apartment.getHostId().equals(username))
 					{
 						users.add(userGuest);
 						break;
@@ -84,7 +87,7 @@ public class HostServices
 		{
 			return new ArrayList<Apartment>();
 		}
-		return new ArrayList<Apartment>(host.getApartments());
+		return new ArrayList<Apartment>(apartmentDAO.getByIds(host.getApartments()));
 	}
 
 	public static Route allApartments = (Request request, Response response) ->

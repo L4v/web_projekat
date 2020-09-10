@@ -100,12 +100,45 @@ public class ReservationDAO
 		ArrayList<Reservation> forApartment = new ArrayList<Reservation>();
 		for(Reservation r : reservations)
 		{
-			if(r.getApartment().getId().equals(apartmentId))
+			if(r.getApartmentId().equals(apartmentId))
 			{
 				forApartment.add(r);
 			}
 		}
 		return forApartment;
+	}
+
+	public Collection<Reservation> getForGuest(String username)
+	{
+		ArrayList<Reservation> reservations = (ArrayList<Reservation>) this.getAll();
+		
+		ArrayList<Reservation> forGuest = new ArrayList<Reservation>();
+		for(Reservation r : reservations)
+		{
+			if(r.getGuestId().equals(username))
+			{
+				reservations.add(r);
+			}
+		}
+		return forGuest;
+	}
+
+	public Collection<Reservation> getByIds(Collection<String> ids)
+	{
+		ArrayList<Reservation> reservations = (ArrayList<Reservation>) this.getAll();
+		
+		ArrayList<Reservation> byIds = new ArrayList<Reservation>();
+		for(String id : ids)
+		{
+			for(Reservation a : reservations)
+			{
+				if(a.getId().equals(id))
+				{
+					byIds.add(a);
+				}
+			}
+		}
+		return byIds;
 	}
 
 	public Collection<Reservation> getAll()

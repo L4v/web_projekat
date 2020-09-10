@@ -11,6 +11,8 @@ import java.util.Collection;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
+import nomad.reservation.Reservation;
+
 import java.io.IOException;
 import java.lang.reflect.Type;
 
@@ -93,6 +95,24 @@ public class ApartmentDAO
 	{
 		ArrayList<Apartment> apartments = (ArrayList<Apartment>) this.getAll();
 		return apartments.stream().filter(a -> a.getId().equals(id)).findAny().orElse(null);
+	}
+
+	public Collection<Apartment> getByIds(Collection<String> ids)
+	{
+		ArrayList<Apartment> apartments = (ArrayList<Apartment>) this.getAll();
+		
+		ArrayList<Apartment> byIds = new ArrayList<Apartment>();
+		for(String id : ids)
+		{
+			for(Apartment a : apartments)
+			{
+				if(a.getId().equals(id))
+				{
+					byIds.add(a);
+				}
+			}
+		}
+		return byIds;
 	}
 
 	public Collection<Apartment> getAll()

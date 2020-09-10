@@ -30,7 +30,7 @@ public class ReservationServices
 	private static Collection<Reservation> getHostReservations(UserHost host)
 	{
 		ArrayList<Reservation> hostsReservations = new ArrayList<Reservation>();
-		for (Apartment apartment : host.getApartments())
+		for (Apartment apartment : apartmentDAO.getByIds(host.getApartments()))
 		{
 			hostsReservations.addAll(reservationDAO.getForApartment(apartment.getId()));
 		}
@@ -42,7 +42,7 @@ public class ReservationServices
 	{
 
 		// NOTE(Jovan): Check if apartment exists
-		Apartment apartment = apartmentDAO.get(reservation.getApartment().getId());
+		Apartment apartment = apartmentDAO.get(reservation.getApartmentId());
 		if (apartment == null)
 		{
 			return false;
@@ -108,7 +108,7 @@ public class ReservationServices
 			{
 				return notFound("Not a guest", response);
 			}
-			ArrayList<Reservation> reservations = guest.getReservations();
+			ArrayList<Reservation> reservations = (ArrayList<Reservation>)reservationDAO.getByIds(guest.getReservations());
 			response.status(200);
 			response.body(gson.toJson(reservations));
 			return response;
@@ -163,7 +163,7 @@ public class ReservationServices
 			return notFound("Invalid reservation", response);
 		}
 
-		Apartment apartment = reservation.getApartment();
+		Apartment apartment = apartmentDAO.get(reservation.getApartmentId());
 		apartment.addReservation(reservation.getId());
 		apartmentDAO.update(apartment);
 		
@@ -197,11 +197,12 @@ public class ReservationServices
 			Reservation reservation = gson.fromJson(json, Reservation.class);
 			if(reservation.getStatus() == ReservationStatus.ACCEPTED || reservation.getStatus() == ReservationStatus.CREATED)
 			{
-				if(reservationDAO.update(reservation) && apartmentDAO.update(reservation.getApartment()) && guestDAO.update(reservation.getGuest()))
+				// NOTE(Jovan): Removed guest and apartment updates
+				if(reservationDAO.update(reservation))
 				{
 					reservation.setStatus(ReservationStatus.CANCELLED);
 					response.status(200);
-					ArrayList<Reservation> reservations = guest.getReservations();
+					ArrayList<Reservation> reservations = (ArrayList<Reservation>) reservationDAO.getByIds(guest.getReservations());
 					return gson.toJson(reservations);
 				}
 				return notFound("Failed cancelling reservation", response);

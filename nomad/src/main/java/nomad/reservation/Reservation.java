@@ -11,47 +11,47 @@ public class Reservation implements Serializable
 {
 	// TODO(Jovan): Keep ID's instead of objects
 	private static final long serialVersionUID = 1318727009852237993L;
-	private Apartment apartment;
+	private String apartmentId;
 	private Date startDate;
 	private int noDays;
 	private double totalPrice;
 	private String reservationMessage;
-	private UserGuest guest;
+	private String guestId;
 	private ReservationStatus status;
 	private String id;
 
-	private Reservation(String id, Apartment apartment, Date startDate, int noDays, double totalPrice,
-			String reservationMessage, UserGuest guest, ReservationStatus status)
+	private Reservation(String id, String apartmentId, Date startDate, int noDays, double totalPrice,
+			String reservationMessage, String guestId, ReservationStatus status)
 	{
-		this.apartment = apartment;
+		this.apartmentId = apartmentId;
 		this.startDate = startDate;
 		this.noDays = noDays;
 		this.totalPrice = totalPrice;
 		this.reservationMessage = reservationMessage;
-		this.guest = guest;
+		this.guestId = guestId;
 		this.status = status;
 	}
 
-	private Reservation(String id, Apartment apartment, Date startDate, double totalPrice, String reservationMessage,
-			UserGuest guest, ReservationStatus status)
+	private Reservation(String id, String apartmentId, Date startDate, double totalPrice, String reservationMessage,
+			String guestId, ReservationStatus status)
 	{
-		this.apartment = apartment;
+		this.apartmentId = apartmentId;
 		this.startDate = startDate;
 		this.noDays = 1;
 		this.totalPrice = totalPrice;
 		this.reservationMessage = reservationMessage;
-		this.guest = guest;
+		this.guestId = guestId;
 		this.status = status;
 	}
 
-	public Apartment getApartment()
+	public String getApartmentId()
 	{
-		return apartment;
+		return apartmentId;
 	}
 
-	public void setApartment(Apartment apartment)
+	public void setApartmentId(String apartmentId)
 	{
-		this.apartment = apartment;
+		this.apartmentId = apartmentId;
 	}
 
 	public Date getStartDate()
@@ -94,14 +94,14 @@ public class Reservation implements Serializable
 		this.reservationMessage = reservationMessage;
 	}
 
-	public UserGuest getGuest()
+	public String getGuestId()
 	{
-		return guest;
+		return guestId;
 	}
 
-	public void setGuest(UserGuest guest)
+	public void setGuestId(String guestId)
 	{
-		this.guest = guest;
+		this.guestId = guestId;
 	}
 
 	public ReservationStatus getStatus()

@@ -52,7 +52,7 @@ public class ApartmentServices
 			if (apartmentDAO.add(apartment) == true)
 			{
 				// TODO(jovan): Temporary
-				host.addApartment(apartment);
+				host.addApartment(apartment.getId());
 				hostDAO.update(host);
 				return ok("Apartment added", response);
 			}

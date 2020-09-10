@@ -10,34 +10,33 @@ import nomad.reservation.Reservation;
 public class UserGuest extends UserBase implements Serializable
 {
 	private static final long serialVersionUID = -168036936931749782L;
-	private HashMap<String, Apartment> rented;
-	private ArrayList<Reservation> reservations;
+	private ArrayList<String> rented;
+	private ArrayList<String> reservations;
 
 	public UserGuest(String username, String password, String name, String surname, Sex sex)
 	{
 		super(username, password, name, surname, sex, UserType.GUEST);
 	}
 
-	public HashMap<String, Apartment> getRented()
+	public ArrayList<String> getRented()
 	{
 		return rented;
 	}
 
-	public void setRented(HashMap<String, Apartment> rented)
+	public void setRented(ArrayList<String> rented)
 	{
 		this.rented = rented;
 	}
 
-	public ArrayList<Reservation> getReservations()
+	public ArrayList<String> getReservations()
 	{
 		return reservations;
 	}
 
-	public void setReservations(ArrayList<Reservation> reservations)
+	public void setReservations(ArrayList<String> reservations)
 	{
 		this.reservations = reservations;
 	}
 
-	// TODO(Jovan): Get i set za rented mapa ili lista?
-	// TODO(Jovan): Get i set sa reservations
+	// TODO(Jovan): Getter and setters for lists?
 }
