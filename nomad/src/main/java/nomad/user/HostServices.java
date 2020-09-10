@@ -1,6 +1,9 @@
 package nomad.user;
 
 import static nomad.utils.Responses.notFound;
+import static nomad.utils.Responses.forbidden;
+import static nomad.utils.Responses.ok;
+import static nomad.utils.Responses.serverError;
 import static nomad.Application.guestDAO;
 import static nomad.Application.hostDAO;
 import static nomad.Application.parseJws;
@@ -32,7 +35,7 @@ public class HostServices
 			{
 				for (Reservation reservation : userGuest.getReservations())
 				{
-					if(reservation.getApartment().getHost().getUsername().equals(username))
+					if(reservation.getApartment().getHostId().equals(username))
 					{
 						users.add(userGuest);
 						break;
@@ -87,23 +90,22 @@ public class HostServices
 
 	public static Route allApartments = (Request request, Response response) ->
 	{
-		response.type("application/json");
 		String jws = parseJws(request);
 
 		if (jws == null)
 		{
-			response.status(404);
-			return response;
+			forbidden("Not host", response);
 		}
 		Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
 		UserHost host = hostDAO.get(claims.getBody().getSubject());
 		if (host == null)
 		{
-			response.status(404);
-			return response;
+			forbidden("Not host", response);
 		}
 		ArrayList<Apartment> apartments = (ArrayList<Apartment>) getApartments(host.getUsername());
-		return gson.toJson(apartments);
+		String json = gson.toJson(apartments);
+		response.type("application/json");
+		return ok(json, response);
 	};
 	
 	public static Route hostSearchGuests = (Request request, Response response) ->

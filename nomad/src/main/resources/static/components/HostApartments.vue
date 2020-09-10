@@ -115,7 +115,8 @@
                                     },
                             },
                         rentDates: [],
-                        availableDates: [this.availableDates],
+                        // TODO(Jovan): add dates
+                        availableDates: [],
                         host: "",
                         comments: [],
                         images: [],

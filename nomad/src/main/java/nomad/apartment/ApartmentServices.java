@@ -51,6 +51,9 @@ public class ApartmentServices
 			// TODO(Jovan): Set id
 			if (apartmentDAO.add(apartment) == true)
 			{
+				// TODO(jovan): Temporary
+				host.addApartment(apartment);
+				hostDAO.update(host);
 				return ok("Apartment added", response);
 			}
 			return badRequest("Something failed while adding apartment. Not added", response);
