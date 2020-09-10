@@ -56,9 +56,10 @@
 	    {
 	     	cancelReservation: function(reservation)
 	     	{
-	     		axios.post("rest/guest_cancel_reservation", reservation)
+	     		axios.post("rest/guest_cancel_reservation", reservation, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
 		        .then(response =>
 		            {
+		            	this.reservations = response.data;
 		                this.successMsg = "Reservation successfully cancelled.";
 		            })
 		        .catch(response => {

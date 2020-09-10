@@ -111,7 +111,6 @@ public class AdminServices
 				response.status(404);
 				return response;
 			}
-			response.status(200);
 			ArrayList<Apartment> apartments = (ArrayList<Apartment>) apartmentDAO.getAll();
 			response.status(200);
 			return gson.toJson(apartments);
@@ -139,7 +138,7 @@ public class AdminServices
 			{
 				return notFound("Not admin", response);
 			}
-			response.status(200);
+
 			ArrayList<Amenity> amenities = (ArrayList<Amenity>) amenityDAO.getAll();
 			response.status(200);
 			return gson.toJson(amenities);

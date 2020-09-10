@@ -108,8 +108,7 @@ public class ReservationServices
 			{
 				return notFound("Not a guest", response);
 			}
-			//ArrayList<Reservation> reservations = guest.getReservations();
-			ArrayList<Reservation> reservations = (ArrayList<Reservation>) reservationDAO.getAll();
+			ArrayList<Reservation> reservations = guest.getReservations();
 			response.status(200);
 			response.body(gson.toJson(reservations));
 			return response;
@@ -198,12 +197,12 @@ public class ReservationServices
 			Reservation reservation = gson.fromJson(json, Reservation.class);
 			if(reservation.getStatus() == ReservationStatus.ACCEPTED || reservation.getStatus() == ReservationStatus.CREATED)
 			{
-				reservation.setStatus(ReservationStatus.CANCELLED);
 				if(reservationDAO.update(reservation) && apartmentDAO.update(reservation.getApartment()) && guestDAO.update(reservation.getGuest()))
 				{
+					reservation.setStatus(ReservationStatus.CANCELLED);
 					response.status(200);
-					response.body("Reservation cancelled");
-					return response;
+					ArrayList<Reservation> reservations = guest.getReservations();
+					return gson.toJson(reservations);
 				}
 				return notFound("Failed cancelling reservation", response);
 			}

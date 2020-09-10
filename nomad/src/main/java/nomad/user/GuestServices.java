@@ -1,6 +1,7 @@
 package nomad.user;
 
 import static nomad.utils.Responses.notFound;
+import static nomad.utils.Responses.serverError;
 import static nomad.Application.apartmentDAO;
 import static nomad.Application.gson;
 import static nomad.Application.guestDAO;
@@ -64,7 +65,7 @@ public class GuestServices
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 	

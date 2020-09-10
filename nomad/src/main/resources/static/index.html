@@ -72,7 +72,7 @@
             {
                 path: "/amenities",
                 name: "Amenities",
-                component: httpVueLoader("components/Amenities.vue"),
+                component: httpVueLoader("components/AdminAmenities.vue"),
                 meta:
                 {
                     requiresAuth: true,
@@ -80,8 +80,8 @@
             },
             {
                 path: "/hosts_guests",
-                name: "ShowGuests",
-                component: httpVueLoader("components/ShowGuests.vue"),
+                name: "HostGuests",
+                component: httpVueLoader("components/HostGuests.vue"),
                 meta:
                 {
                     requiresAuth: true,
@@ -107,12 +107,32 @@
                    	{
                     	path: "amenities",
                     	name: "AdminAmenities",
-                    	component: httpVueLoader("components/Amenities.vue"),
+                    	component: httpVueLoader("components/AdminAmenities.vue"),
                    	},
                     {
                         path: "all_users",
                         name: "AllUsers",
                         component: httpVueLoader("components/AdminAllUsers.vue"),
+                    },
+                    {
+                        path: "reservations",
+                        name: "Reservations",
+                        component: httpVueLoader("components/AdminReservations.vue"),
+                    },
+                    {
+                        path: "apartments",
+                        name: "AdminApartments",
+                        component: httpVueLoader("components/AdminApartments.vue"),
+                    },
+                    {
+                        path: "comments",
+                        name: "Comments",
+                        component: httpVueLoader("components/AdminComments.vue"),
+                    },
+                    {
+                        path: "personal_data",
+                        name: "PersonalData",
+                        component: httpVueLoader("components/PersonalData.vue"),
                     },
                 ],
             },
@@ -135,6 +155,16 @@
                         path: "apartments",
                         name: "HostApartments",
                         component: httpVueLoader("components/HostApartments.vue"),
+                    },
+                    {
+                        path: "guests",
+                        name: "HostGuests",
+                        component: httpVueLoader("components/HostGuests.vue"),
+                    },
+                    {
+                        path: "personal_data",
+                        name: "PersonalData",
+                        component: httpVueLoader("components/PersonalData.vue"),
                     },
                 ],
             },

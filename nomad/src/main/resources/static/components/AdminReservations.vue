@@ -19,19 +19,20 @@
 		data: function()
 		{
 			return {
-				reservations: {},
-				successMsg: "",
+				reservations: [],
 			}
 		},
 		
 		mounted()
 		{
 	    	var jwt = localStorage.jwt;
-	    	
 	    	if(jwt)
 			{
 		    	axios.get("rest/admin_view_reservations",{headers:{"Authorization": "Bearer " + localStorage.jwt}})
-			        .then(response => (this.reservations = response.data))
+			        .then(response => 
+			        {
+			        	this.reservations = response.data;
+			       	})
 		    		.catch(response => 
 	    			{
 	    				//TODO(Kristian): handle 404
@@ -39,8 +40,5 @@
 	    			});
 			}
 	    },
-	    
-	    methods:
-	    {
-	    }
+	}
 </script>

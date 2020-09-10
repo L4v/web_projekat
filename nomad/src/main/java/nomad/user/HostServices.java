@@ -66,15 +66,14 @@ public class HostServices
 				return notFound("Invalid host", response);
 			}
 			response.status(200);
-			//ArrayList<UserGuest> guests = (ArrayList<UserGuest>) getGuests(host.getUsername());
-			ArrayList<UserGuest> guests = (ArrayList<UserGuest>) guestDAO.getAll();
-			//response.body(gson.toJson(guests));
+			ArrayList<UserGuest> guests = (ArrayList<UserGuest>) getGuests(host.getUsername());
+			//ArrayList<UserGuest> guests = (ArrayList<UserGuest>) guestDAO.getAll();
 			return gson.toJson(guests);
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 
@@ -128,18 +127,41 @@ public class HostServices
 				return notFound("Invalid host", response);
 			}
 			
-			//ArrayList<UserGuest> guests = (ArrayList<UserGuest>) getGuests(host.getUsername());
-			ArrayList<UserGuest> guests = (ArrayList<UserGuest>) guestDAO.getAll();
+			ArrayList<UserGuest> guests = (ArrayList<UserGuest>) getGuests(host.getUsername());
+			//ArrayList<UserGuest> guests = (ArrayList<UserGuest>) guestDAO.getAll();
 			ArrayList<UserGuest> retVal = new ArrayList<UserGuest>();
 
-			String username = request.body();
-			//
+			String json = request.body();
+			ParameterDTO parameter = gson.fromJson(json, ParameterDTO.class);
 			
-			for(UserGuest userGuest : guests)
+			if(parameter.getUsername().equals(""))
 			{
-				if(userGuest.getUsername().equalsIgnoreCase(username))
+				for(UserGuest userGuest : guests)
 				{
-					retVal.add(userGuest);
+					if(userGuest.getSex().equals(parameter.getSex()))
+					{
+						retVal.add(userGuest);
+					}
+				}
+			} 
+			else if(parameter.getSex() == null)
+			{
+				for(UserGuest userGuest : guests)
+				{
+					if(userGuest.getUsername().equalsIgnoreCase(parameter.getUsername()))
+					{
+						retVal.add(userGuest);
+					}
+				}
+			}
+			else 
+			{
+				for(UserGuest userGuest : guests)
+				{
+					if(userGuest.getUsername().equalsIgnoreCase(parameter.getUsername()) && userGuest.getSex() == parameter.getSex())
+					{
+						retVal.add(userGuest);
+					}
 				}
 			}
 			
@@ -149,7 +171,7 @@ public class HostServices
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 
