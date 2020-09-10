@@ -1,6 +1,10 @@
 package nomad.apartment;
 
+import static nomad.utils.Responses.badRequest;
 import static nomad.utils.Responses.notFound;
+import static nomad.utils.Responses.forbidden;
+import static nomad.utils.Responses.ok;
+import static nomad.utils.Responses.serverError;
 import static nomad.Application.apartmentDAO;
 import static nomad.Application.hostDAO;
 import static nomad.Application.adminDAO;
@@ -26,8 +30,7 @@ public class ApartmentServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			response.status(404);
-			return response;
+			return forbidden("Not host", response);
 		}
 		try
 		{
@@ -35,33 +38,28 @@ public class ApartmentServices
 			UserHost host = hostDAO.get(claims.getBody().getSubject());
 			if (host == null)
 			{
-				response.status(404);
-				response.body("Not host!");
-				return response;
+				return forbidden("Not host", response);
 			}
 
 			String json = request.body();
 			Apartment apartment = gson.fromJson(json, Apartment.class);
 			if (apartment == null)
 			{
-				response.status(404);
-				response.body("Invalid apartment object!");
-				return response;
+				return badRequest("Invalid apartment object", response);
 			}
+			apartment.setHostId(host.getUsername());
+			// TODO(Jovan): Set id
 			if (apartmentDAO.add(apartment) == true)
 			{
-				response.status(200);
-				response.body("Apartment added!");
-				return response;
+				// TODO(jovan): Temporary
+				host.addApartment(apartment);
+				hostDAO.update(host);
+				return ok("Apartment added", response);
 			}
-			response.status(404);
-			response.body("Failed adding apartment!");
-			return response;
+			return badRequest("Something failed while adding apartment. Not added", response);
 		} catch (Exception e)
 		{
-			e.printStackTrace();
-			response.status(404);
-			return response;
+			return serverError("Error: " + e.getMessage(), response);
 		}
 	};
 	

@@ -9,7 +9,7 @@
         options:
             placeholder - placeholder text
             name        - defines input name
-            type        - defines input type (password or text)
+            type        - defines input type (password, text, or number)
     -->
             <!-- @input="$emit('input', $event.target.value); isEmpty($event)" -->
     <div class="loginField floating-label" ref="inputdiv">

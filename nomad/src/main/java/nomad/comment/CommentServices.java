@@ -37,7 +37,7 @@ public class CommentServices
 		
 		for(Apartment apartment : host.getApartments())
 		{
-			if(apartment.getHost().getUsername().equals(host.getUsername()))
+			if(apartment.getHostId().equals(host.getUsername()))
 			{
 				comments.addAll((ArrayList<Comment>)apartment.getComments());
 			}

@@ -7,7 +7,7 @@
                 <th>Surname</th>
                 <th>User Type</th>
             </tr>
-            <tr v-for="user in users">
+            <tr v-for="user in users" :key="user">
                 <td>{{user.username}}</td>
                 <td>{{user.name}}</td>
                 <td>{{user.surname}}</td>
@@ -217,6 +217,7 @@
                         surname:      this.surname,
                         sex:          this.sex,
                         userType:     "HOST",
+                        apartments:   [],
                     };
 
                 axios.post("rest/reg_host", host, {headers: {"Authorization": "Bearer " + localStorage.jwt}})
