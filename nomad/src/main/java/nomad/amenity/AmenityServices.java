@@ -1,6 +1,7 @@
 package nomad.amenity;
 
 import static nomad.utils.Responses.notFound;
+import static nomad.utils.Responses.ok;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,14 @@ import spark.Route;
 
 public class AmenityServices {
 
+	public static Route getAmenities = (Request request, Response response) ->
+	{
+		// TODO(Jovan): Validation not required?
+		ArrayList<Amenity> amenities = (ArrayList<Amenity>) amenityDAO.getAll();
+		String json = gson.toJson(amenities);
+		response.type("application/json");
+		return ok(json, response);
+	};
 
 	public static Route updateAmenity = (Request request, Response response) ->
 	{

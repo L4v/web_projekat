@@ -22,10 +22,10 @@ public class Apartment implements Serializable
 	private int noGuests;
 	private Location location;
 	private ArrayList<Date> rentDates;
-	private HashMap<Date, Boolean> availableDates;
-	private UserHost host;
+	private ArrayList<Date> availableDates;
+	private String hostId;
 	// NOTE(Jovan): {username: comment}
-	private HashMap<String, Comment> comments;
+	private ArrayList<Comment> comments;
 	// NOTE(Jovan): Image urls
 	private ArrayList<String> images;
 	private double price;
@@ -35,7 +35,7 @@ public class Apartment implements Serializable
 	private ArrayList<Amenity> amenities;
 	private ArrayList<Reservation> reservations;
 
-	public Apartment(String id, ApartmentType type, int noRooms, int noGuests, Location location, UserHost host,
+	public Apartment(String id, ApartmentType type, int noRooms, int noGuests, Location location, String hostId,
 			double price, LocalTime checkinTime, LocalTime checkoutTime)
 	{
 		this.id = id;
@@ -43,13 +43,13 @@ public class Apartment implements Serializable
 		this.noRooms = noRooms;
 		this.noGuests = noGuests;
 		this.location = location;
-		this.host = host;
+		this.hostId = hostId;
 		this.price = price;
 		this.checkinTime = checkinTime;
 		this.checkoutTime = checkoutTime;
 	}
 
-	public Apartment(String id, ApartmentType type, int noRooms, int noGuests, Location location, UserHost host,
+	public Apartment(String id, ApartmentType type, int noRooms, int noGuests, Location location, String hostId,
 			double price)
 	{
 		this.id = id;
@@ -57,7 +57,7 @@ public class Apartment implements Serializable
 		this.noRooms = noRooms;
 		this.noGuests = noGuests;
 		this.location = location;
-		this.host = host;
+		this.hostId = hostId;
 		this.price = price;
 		this.checkinTime = LocalTime.of(14, 0);
 		this.checkoutTime = LocalTime.of(22, 0);
@@ -123,39 +123,39 @@ public class Apartment implements Serializable
 		this.rentDates = rentDates;
 	}
 
-	public HashMap<Date, Boolean> getAvailableDates()
+	public ArrayList<Date> getAvailableDates()
 	{
 		return availableDates;
 	}
 
-	public void setAvailableDates(HashMap<Date, Boolean> availableDates)
+	public void setAvailableDates(ArrayList<Date> availableDates)
 	{
 		this.availableDates = availableDates;
 	}
 
-	public UserHost getHost()
+	public String getHostId()
 	{
-		return host;
+		return hostId;
 	}
 
-	public void setHost(UserHost host)
+	public void setHostId(String hostId)
 	{
-		this.host = host;
+		this.hostId = hostId;
 	}
 
 	public Collection<Comment> getComments()
 	{
-		return comments.values();
+		return comments;
 	}
 
-	public void setComments(HashMap<String, Comment> comments)
+	public void setComments(ArrayList<Comment> comments)
 	{
 		this.comments = comments;
 	}
 	
 	public void addComment(String username, Comment comment)
 	{
-		this.comments.put(username, comment);
+		this.comments.add(comment);
 	}
 
 	public ArrayList<String> getImages()
