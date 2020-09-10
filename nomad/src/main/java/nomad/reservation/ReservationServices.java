@@ -32,7 +32,7 @@ public class ReservationServices
 		ArrayList<Reservation> hostsReservations = new ArrayList<Reservation>();
 		for (Apartment apartment : host.getApartments())
 		{
-			hostsReservations.addAll(apartment.getReservations());
+			hostsReservations.addAll(reservationDAO.getForApartment(apartment.getId()));
 		}
 
 		return hostsReservations;
@@ -49,7 +49,7 @@ public class ReservationServices
 		}
 
 		// NOTE(Jovan): Check if reservation already exists
-		if (apartment.getReservations().stream().filter(r -> r.getId().equals(reservation.getId())).findAny()
+		if (reservationDAO.getForApartment(apartment.getId()).stream().filter(r -> r.getId().equals(reservation.getId())).findAny()
 				.orElse(null) != null)
 		{
 			return false;
@@ -164,7 +164,7 @@ public class ReservationServices
 		}
 
 		Apartment apartment = reservation.getApartment();
-		apartment.addReservation(reservation);
+		apartment.addReservation(reservation.getId());
 		apartmentDAO.update(apartment);
 		
 		reservationDAO.add(reservation);

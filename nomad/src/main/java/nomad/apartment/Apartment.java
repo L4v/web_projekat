@@ -33,7 +33,7 @@ public class Apartment implements Serializable
 	private LocalTime checkoutTime;
 	private ApartmentStatus status;
 	private ArrayList<Amenity> amenities;
-	private ArrayList<Reservation> reservations;
+	private ArrayList<String> reservations;
 
 	public Apartment(String id, ApartmentType type, int noRooms, int noGuests, Location location, String hostId,
 			double price, LocalTime checkinTime, LocalTime checkoutTime)
@@ -218,19 +218,19 @@ public class Apartment implements Serializable
 		this.amenities = amenities;
 	}
 
-	public ArrayList<Reservation> getReservations()
+	public ArrayList<String> getReservations()
 	{
 		return reservations;
 	}
 
-	public void setReservations(ArrayList<Reservation> reservations)
+	public void setReservations(ArrayList<String> reservations)
 	{
 		this.reservations = reservations;
 	}
 	
-	public void addReservation(Reservation reservation)
+	public void addReservation(String reservationId)
 	{
-		this.reservations.add(reservation);
+		this.reservations.add(reservationId);
 	}
 
 }

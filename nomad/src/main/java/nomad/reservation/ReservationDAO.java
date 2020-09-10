@@ -92,6 +92,21 @@ public class ReservationDAO
 		ArrayList<Reservation> reservations = (ArrayList<Reservation>) this.getAll();
 		return reservations.stream().filter(r -> r.getId().equals(id)).findAny().orElse(null);
 	}
+	
+	public Collection<Reservation> getForApartment(String apartmentId)
+	{
+		ArrayList<Reservation> reservations = (ArrayList<Reservation>) this.getAll();
+		
+		ArrayList<Reservation> forApartment = new ArrayList<Reservation>();
+		for(Reservation r : reservations)
+		{
+			if(r.getApartment().getId().equals(apartmentId))
+			{
+				forApartment.add(r);
+			}
+		}
+		return forApartment;
+	}
 
 	public Collection<Reservation> getAll()
 	{

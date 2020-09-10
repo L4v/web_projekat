@@ -2,6 +2,7 @@ package nomad.comment;
 
 
 import static nomad.utils.Responses.notFound;
+
 import static nomad.utils.Responses.serverError;
 import static nomad.Application.parseJws;
 import static nomad.Application.key;
@@ -11,6 +12,7 @@ import static nomad.Application.commentDAO;
 import static nomad.Application.adminDAO;
 import static nomad.Application.guestDAO;
 import static nomad.Application.apartmentDAO;
+import static nomad.Application.reservationDAO;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -183,11 +185,19 @@ public class CommentServices
 	
 	private static boolean addCommentToApartment(Comment comment) 
 	{
-		Apartment apartment = comment.getApartment();
-		UserGuest guest = comment.getGuest();
+		Apartment apartment = apartmentDAO.get(comment.getApartmentId());
+		UserGuest guest = guestDAO.get(comment.getGuestId());
 		if(apartment.getReservations() != null)
 		{
-			for(Reservation reservation : apartment.getReservations())
+			ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+			for(Reservation r : reservationDAO.getAll())
+			{
+				if(r.getApartment().getId().equals(apartment.getId()))
+				{
+					reservations.add(r);
+				}
+			}
+			for(Reservation reservation : reservations)
 			{
 				if(reservation.getStatus() == ReservationStatus.CANCELLED || reservation.getStatus() == ReservationStatus.REJECTED)
 				{

@@ -9,16 +9,16 @@ public class Comment implements Serializable
 {
 	private static final long serialVersionUID = 2251140122076809587L;
 	private String id;
-	private UserGuest guest;
-	private Apartment apartment;
+	private String guestId;
+	private String apartmentId;
 	private String text;
 	private int rating;
 
-	public Comment(String id, UserGuest guest, Apartment apartment, String text, int rating)
+	public Comment(String id, String guestId, String apartmentId, String text, int rating)
 	{
 		this.id = id;
-		this.guest = guest;
-		this.apartment = apartment;
+		this.guestId = guestId;
+		this.apartmentId = apartmentId;
 		this.text = text;
 		this.rating = rating;
 	}
@@ -33,24 +33,24 @@ public class Comment implements Serializable
 		this.id = id;
 	}
 
-	public UserGuest getGuest()
+	public String getGuestId()
 	{
-		return guest;
+		return guestId;
 	}
 
-	public void setGuest(UserGuest guest)
+	public void setGuestId(String guestId)
 	{
-		this.guest = guest;
+		this.guestId = guestId;
 	}
 
-	public Apartment getApartment()
+	public String getApartmentId()
 	{
-		return apartment;
+		return apartmentId;
 	}
 
-	public void setApartment(Apartment apartment)
+	public void setApartmentId(String apartmentId)
 	{
-		this.apartment = apartment;
+		this.apartmentId = apartmentId;
 	}
 
 	public String getText()
