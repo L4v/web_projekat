@@ -3,10 +3,30 @@
 		<div id="apartments">
 			<h1>Apartments</h1>
 			<table>
+				<tr>
+					<th>Type</th>
+					<th>Status</th>
+					<th>Price</th>
+					<th>Comment</th>
+					<th>Rating</th>
+					<th>Submit</th>
+				</tr>
 				 <tr v-for="apartment in apartments">
 					<td>{{apartment.type}}</td>
 					<td>{{apartment.status}}</td>
 					<td>{{apartment.price}}</td>
+					<td><input v-model="commentText" type="text"></floating label></td>
+					<td><select name="rating" v-model="rating" required>
+                    	<option value="" disabled>Rating</option>
+                    	<option value="1">1</option>
+                    	<option value="2">2</option>
+                    	<option value="3">3</option>
+                    	<option value="4">4</option>
+                    	<option value="5">5</option>
+               		</select></td>
+					<td v-if="apartment.reservation.status === 'REJECTED' || apartment.reservation.status === 'FINISHED'"><button class="button-primary" @click="addComment(apartment)">Comment</button></td>
+					<td v-else><button>Comment</button>
+					
 				</tr>
 			</table>
 		</div>
@@ -20,6 +40,8 @@
 			return {
 				apartments: {},
 				successMsg: "",
+				commentText: "",
+				rating: "",
 			}
 		},
 		

@@ -88,6 +88,15 @@
                 },
             },
             {
+                path: "/guest_apartments",
+                name: "GuestApartments",
+                component: httpVueLoader("components/GuestApartments.vue"),
+                meta:
+                {
+                    requiresAuth: true,
+                },
+            },
+            {
                 path: "/admin",
                 name: "Admin",
                 component: httpVueLoader("components/AdminPanel.vue"),
