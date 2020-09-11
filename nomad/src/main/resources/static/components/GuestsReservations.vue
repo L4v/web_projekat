@@ -2,6 +2,15 @@
 	<div class="container">
 		<div id="reservations">
 			<h1>Reservations</h1>
+			<div id="sorting">
+				Sort by price:
+				<select name="sort" v-model="sort" required>
+	            	<option value="" disabled>Sort</option>
+	            	<option value="ASCENDING">Ascending</option>
+	            	<option value="DESCENDING">Descending</option>
+	       		</select>
+	       		<button class="button-primary" @click=sortReservations()>Sort</button>
+	       	</div>
 			<table>
 				<tr>
 					<th>Start date</th>
@@ -32,6 +41,7 @@
 		{
 			return {
 				reservations: {},
+				sort: "",
 				successMsg: "",
 			}
 		},
@@ -54,6 +64,16 @@
 	    
 	    methods:
 	    {
+	    	sortReservations: function()
+	    	{
+	    		if(!this.sort)
+	    		{
+	    			this.successMsg = "Sort parameter must not be empty.";
+	    			return;
+	    		}
+	    		
+	    	},
+	    
 	     	cancelReservation: function(reservation)
 	     	{
 	     		axios.post("rest/guest_cancel_reservation", reservation, {headers:{"Authorization": "Bearer " + localStorage.jwt}})

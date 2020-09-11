@@ -2,6 +2,15 @@
 	<div class="container">
 		<div id="apartments">
 			<h1>Apartments</h1>
+			<div id="sorting">
+				Sort by price:
+				<select name="sort" v-model="sort" required>
+	            	<option value="" disabled>Sort</option>
+	            	<option value="ASCENDING">Ascending</option>
+	            	<option value="DESCENDING">Descending</option>
+	       		</select>
+	       		<button class="button-primary" @click=sortApartmentsByPrice()>Sort</button>
+	       	</div>
 			<table>
 				 <tr v-for="apartment in apartments">
 					<td>{{apartment.type}}</td>
@@ -21,6 +30,7 @@
 			return {
 				apartments: {},
 				successMsg: "",
+				sort: "",
 			}
 		},
 		
@@ -55,7 +65,16 @@
 		        .catch(response => {
 		        		this.successMsg = "Failed removing apartments";
 		        });
-	     	}   
+	     	},
+	     	
+	     	sortApartmentsByPrice: function()
+	     	{
+	     		if(!this.sort)
+	     		{
+	     			this.successMsg = "Sort parameter must not be empty.";
+	     			return;
+	     		}
+	     	},   
 	    },
     }
 </script>
