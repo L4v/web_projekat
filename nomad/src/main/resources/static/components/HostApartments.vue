@@ -9,7 +9,7 @@
             <!-- TODO(Jovan): Dropdown for each apartment or view separate page -->
             <tr v-for="apartment in apartments" :key="apartment">
                 <td>{{apartment.id}}</td>
-                <td>{{apartment.location.address}}</td>
+                <td>{{apartment.location.address.street}} {{apartment.location.address.streetNo}} {{apartment.location.address.area}}</td>
             </tr>
         </table>
         <form @submit.prevent="addApartment" id="apartment-form">
