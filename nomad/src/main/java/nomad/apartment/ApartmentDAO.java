@@ -41,6 +41,34 @@ public class ApartmentDAO
 			this.saveAll(new ArrayList<Apartment>());
 		}
 	}
+	
+	private String getNextId()
+	{
+		ArrayList<Apartment> apartments = (ArrayList<Apartment>) this.getAll();
+		// TODO(Jovan): Add prefix?
+		if(apartments.size() == 0)
+		{
+			return "0";
+		}
+		try
+		{
+			int maxId = Integer.parseInt(apartments.get(0).getId());
+			for(Apartment a : apartments)
+			{
+				int currId = Integer.parseInt(a.getId());
+				if(currId > maxId)
+				{
+					maxId = currId;
+				}
+			}
+			return String.valueOf(maxId + 1);
+		}
+		catch(NumberFormatException e)
+		{
+			e.printStackTrace();
+			return String.valueOf(-1);
+		}
+	}
 
 	private void saveAll(ArrayList<Apartment> apartments)
 	{
@@ -69,6 +97,8 @@ public class ApartmentDAO
 		ArrayList<Apartment> apartments = (ArrayList<Apartment>) this.getAll();
 		if (apartments.stream().filter(a -> a.getId().equals(apartment.getId())).findAny().orElse(null) == null)
 		{
+			// TODO(Jovan): Use generators?
+			apartment.setId(getNextId());
 			apartments.add(apartment);
 			this.saveAll(apartments);
 			return true;
