@@ -2,13 +2,14 @@
 	<div class="container">
 		<div id="apartments">
 			<h1>Apartments</h1>
-			<label>Sort by price:</label>
-			<select name="sort" v-model="sort" required>
-            	<option value="" disabled>Sort</option>
-            	<option value="ASCENDING">Ascending</option>
-            	<option value="DESCENDING">Descending</option>
-       		</select>
-       		
+			<div id="sort">
+				Sort by price:
+				<select name="sort" v-model="sort" required>
+	            	<option value="" disabled>Sort</option>
+	            	<option value="ASCENDING">Ascending</option>
+	            	<option value="DESCENDING">Descending</option>
+	       		</select>
+       		</div>
 			<table>
 				<tr>
 					<th>Type</th>
@@ -31,8 +32,7 @@
                     	<option value="4">4</option>
                     	<option value="5">5</option>
                		</select></td>
-					<!--<td v-if="apartment.reservation.status === 'REJECTED' || apartment.reservation.status === 'FINISHED'"><button class="button-primary" @click="addComment(apartment)">Comment</button></td>
-					<td v-else><button>Comment</button>-->
+					<td><button class="button-primary" @click="addComment(apartment)">Comment</button></td>
 					
 				</tr>
 			</table>

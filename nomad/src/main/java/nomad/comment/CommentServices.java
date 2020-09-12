@@ -166,7 +166,8 @@ public class CommentServices
 			
 			String json = request.body();
 			Comment comment = gson.fromJson(json, Comment.class);
-
+			comment.setGuestId(guest.getUsername());
+			
 			if(!addCommentToApartment(comment))
 			{
 				return notFound("Don't have a rejected or cancelled reservation!", response);
@@ -186,14 +187,15 @@ public class CommentServices
 	private static boolean addCommentToApartment(Comment comment) 
 	{
 		Apartment apartment = apartmentDAO.get(comment.getApartmentId());
-		UserGuest guest = guestDAO.get(comment.getGuestId());
+		ArrayList<Reservation> reservations = (ArrayList<Reservation>) reservationDAO.getForApartment(apartment.getId());
+		
 		if(apartment.getReservations() != null)
 		{
-			for(Reservation reservation : reservationDAO.getForApartment(apartment.getId()))
+			for(Reservation reservation : reservations)
 			{
 				if(reservation.getStatus() == ReservationStatus.CANCELLED || reservation.getStatus() == ReservationStatus.REJECTED)
 				{
-					apartment.addComment(guest.getUsername(), comment);
+					apartment.getComments().add(comment);
 					apartmentDAO.update(apartment);
 					return true;
 				}

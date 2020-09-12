@@ -152,11 +152,6 @@ public class Apartment implements Serializable
 	{
 		this.comments = comments;
 	}
-	
-	public void addComment(String username, Comment comment)
-	{
-		this.comments.add(comment);
-	}
 
 	public ArrayList<String> getImages()
 	{
