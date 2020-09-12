@@ -144,6 +144,21 @@ public class ApartmentDAO
 		}
 		return byIds;
 	}
+	
+	public Collection<Apartment> getHostsApartments(String username)
+	{
+		ArrayList<Apartment> apartments = (ArrayList<Apartment>) this.getAll();
+		
+		ArrayList<Apartment> hostsApartments = new ArrayList<Apartment>();
+		for(Apartment apartment : apartments)
+		{
+			if(apartment.getHostId().equals(username))
+			{
+				apartments.add(apartment);
+			}
+		}
+		return hostsApartments;
+	}
 
 	public Collection<Apartment> getAll()
 	{

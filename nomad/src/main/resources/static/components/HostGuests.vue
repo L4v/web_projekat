@@ -76,7 +76,7 @@
 	            	username: this.guest_username,
 	            	sex: this.guest_sex,
 	            };
-	            
+	            /*
 	            axios.post("rest/host_search_guests", parameter, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
 		             .then(response =>
 		             {
@@ -86,7 +86,18 @@
 		             {
 		                 this.message = "No results";
 		             });
-
+		             */
+		             
+		        var result = [];
+		        
+		        for(guest of this.guests)
+		        {
+		        	if(guest.sex == this.guest_sex)
+		        	{
+		        		result.push(guest);
+		        	}
+		        }
+				this.guests = result;
 	        }
 	    }
 	}
