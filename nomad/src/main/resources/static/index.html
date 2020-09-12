@@ -5,7 +5,7 @@
 
 <link rel="stylesheet" type="text/css" href="css/normalize.css">
 <link rel="stylesheet" type="text/css" href="css/skeleton.css">
-<link rel="stylesheet" type="text/css" href="css/index.css">
+<link rel="stylesheet" type="text/css" href="css/index.css"> 
 
 <link href='https://fonts.googleapis.com/css?family=Roboto'
 	rel='stylesheet'>
@@ -13,6 +13,9 @@
 	href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;800&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet" href="fontawesome/css/font-awesome.min.css">
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' >
 
 <title>Nomad</title>
 </head>
@@ -23,6 +26,14 @@
         <router-link to="/host">Host panel</router-link>
     </div>
 
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+    <link
+        rel="stylesheet"
+        href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"
+        type="text/css"
+    />
+    <script src='https://tiles.locationiq.com/v2/js/liq-styles-ctrl-gl.js?v=0.1.6'></script>
+    <link href='https://tiles.locationiq.com/v2/css/liq-styles-ctrl-gl.css?v=0.1.6' rel='stylesheet' >
     <script src="js/vue.js"></script>
     <script src="js/vue-router.js"></script>
     <script src="js/axios.min.js"></script>
@@ -41,6 +52,7 @@
             {
                 props: ["title", "user",],
             });
+        Vue.component("map-small", httpVueLoader("components/MapSmall.vue"));
 
         // NOTE(Jovan): Route registration
         const routes =
@@ -224,6 +236,8 @@
             }
         });
 
+        mapboxgl.accessToken = "pk.eyJ1IjoibDR2IiwiYSI6ImNrZXp5Zm85bjBqcTcyeG8wdXZrbjB2bjMifQ.WQo_EHD8XFLWrynKtXjbUA";
+        locationiq.key = "8d176a2a842649";
         new Vue
         ({
             el: "#app",

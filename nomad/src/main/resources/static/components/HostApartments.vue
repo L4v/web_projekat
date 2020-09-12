@@ -7,12 +7,14 @@
                 <th>Address</th>
             </tr>
             <!-- TODO(Jovan): Dropdown for each apartment or view separate page -->
-            <tr v-for="apartment in apartments" :key="apartment">
+            <tr v-for="apartment in apartments">
                 <td>{{apartment.id}}</td>
                 <td>{{apartment.location.address.street}} {{apartment.location.address.streetNo}} {{apartment.location.address.area}}</td>
             </tr>
         </table>
-        <form @submit.prevent="addApartment" id="apartment-form">
+
+        <button v-if="!showForm" @click="showForm = !showForm">+</button>
+        <form v-if="showForm" @submit.prevent="addApartment" id="apartment-form">
             <select name="apartmentType" v-model="apartmentType" required>
                 <option value="" disabled>Type</option>
                 <option value="whole">Whole</option>
@@ -20,10 +22,14 @@
             </select>
             <floating-label name="noRooms" placeholder="Number of rooms" type="number" :inputdata.sync="noRooms"></floating-label>
             <floating-label name="noGuests" placeholder="Number of guests" type="number" :inputdata.sync="noGuests"></floating-label>
+            <!--
             <floating-label name="street" placeholder="Street" type="text" :inputdata.sync="street"></floating-label>
             <floating-label name="streetNo" placeholder="Street number" type="text" :inputdata.sync="streetNo"></floating-label>
             <floating-label name="area" placeholder="Area" type="text" :inputdata.sync="area"></floating-label>
             <floating-label name="areaCode" placeholder="Area code" type="text" :inputdata.sync="areaCode"></floating-label>
+            -->
+            <!--<map-small></map-small>-->
+            <h2>Result: {{searchRes[0].display_name}}</h2>
             <!-- TODO(Jovan): Lon & lat -->
             <!-- TODO(Jovan): adding multiple dates -->
             <v-date-picker mode="range" v-model="availableDates" :input-props="{placeholder: 'Available dates'}"></v-date-picker>
@@ -32,7 +38,7 @@
             <!-- TODO(Jovan): Hidden, dropdown amenities with dual multiselect listbox -->
             <div id="amenities">
                 <select name="allAmenities"  multiple>
-                    <option v-for="amenity in allAmenities" :key="amenity">{{amenity.name}}</option>
+                    <option v-for="amenity in allAmenities">{{amenity.name}}</option>
                 </select>
                 <div id="amenity-buttons">
                     <button>&laquo;</button>
@@ -41,7 +47,7 @@
                     <button>Add all</button>
                 </div>
                 <select name="selectedAmenities" multiple>
-                    <option v-for="amenity in selectedAmenities" :key="amenity">{{amenity.name}}</option>
+                    <option v-for="amenity in selectedAmenities">{{amenity.name}}</option>
                 </select>
             </div>
             <button @click="addApartment">Add apartment</button>
@@ -67,12 +73,29 @@
                 price:             "",
                 allAmenities:      [],
                 selectedAmenities: [],
-
+                showForm: false,
+                searchRes: "",
             }
         },
 
         methods:
         {
+            searchLocation: function()
+            {
+                axios.get("https://eu1.locationiq.com/v1/search.php", 
+                    {
+                        params: 
+                        {
+                            key: locationiq.key,
+                            q: "Balzakova 69",
+                            format: "json",
+                        }
+                    })
+                    .then(response => 
+                    {
+                        this.searchRes = response.data;
+                    });
+            },
             getApartments: function()
             {
                 axios.get("rest/host_all_apartments", {headers: {"Authorization": "Bearer " + localStorage.jwt}})
@@ -148,6 +171,7 @@
         {
             this.getApartments();
             this.getAmenities();
+            this.searchLocation();
         },
     }
 </script>
