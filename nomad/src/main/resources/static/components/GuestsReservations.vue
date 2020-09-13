@@ -69,9 +69,15 @@
 	    		if(!this.sort)
 	    		{
 	    			this.successMsg = "Sort parameter must not be empty.";
-	    			return;
+	    		} 
+	    		else if(this.sort == 'DESCENDING')
+	    		{
+	    			this.reservations.sort((a, b) => (a.totalPrice > b.totalPrice) ? 1 : -1);
 	    		}
-	    		
+	    		else
+	    		{
+	    			this.reservations.sort((a, b) => (a.totalPrice < b.totalPrice) ? 1 : -1);
+	    		}	    		
 	    	},
 	    
 	     	cancelReservation: function(reservation)

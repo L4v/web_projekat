@@ -15,6 +15,7 @@
 	       		Filter by status:
 	       		<select name="filter" v-model="filter" required>
 	            	<option value="" disabled>Filter</option>
+	            	<option value="ALL">ALL</option>
 	            	<option value="CREATED">CREATED</option>
 	            	<option value="REJECTED">REJECTED</option>
 	            	<option value="CANCELLED">CANCELLED</option>
@@ -37,6 +38,7 @@
 					<td>{{reservation.status}}</td>
 				</tr>
 			</table>
+			{{successMsg}}
 		</div>
 	</div>
 </template>
@@ -47,6 +49,7 @@
 		{
 			return {
 				reservations: [],
+				reservations_copy: [],
 				sort: "",
 				filter: "",
 				successMsg: "",
@@ -62,6 +65,7 @@
 			        .then(response => 
 			        {
 			        	this.reservations = response.data;
+			        	this.reservations_copy = response.data;
 			       	})
 		    		.catch(response => 
 	    			{
@@ -78,8 +82,15 @@
 	    		if(!this.sort)
 	    		{
 	    			this.successMsg = "Sort parameter must not be empty.";
-	    			return;
+	    		} 
+	    		else if(this.sort == 'DESCENDING')
+	    		{
+	    			this.reservations.sort((a, b) => (a.totalPrice > b.totalPrice) ? 1 : -1);
 	    		}
+	    		else
+	    		{
+	    			this.reservations.sort((a, b) => (a.totalPrice < b.totalPrice) ? 1 : -1);
+	    		}	
 	    	},
 	    	
 	    	filterReservations: function()
@@ -87,7 +98,22 @@
 	    		if(!this.filter)
 	    		{
 	    			this.successMsg = "Filter parameter must not be empty.";
-	    			return;
+	    		} 
+	    		else if(this.filter == 'ALL')
+	    		{
+	    			this.reservations = this.reservations_copy;
+	    		}
+	    		else
+	    		{
+		    		var retVal = [];
+		    		for(reservation of this.reservations_copy)
+		    		{
+		    			if(reservation.status == this.filter)
+		    			{
+		    				retVal.push(reservation);
+		    			}
+		    		}
+		    		this.reservations = retVal;
 	    		}
 	    	},
 	    },
