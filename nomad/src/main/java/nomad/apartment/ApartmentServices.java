@@ -5,6 +5,9 @@ import static nomad.utils.Responses.notFound;
 import static nomad.utils.Responses.forbidden;
 import static nomad.utils.Responses.ok;
 import static nomad.utils.Responses.serverError;
+
+import java.util.ArrayList;
+
 import static nomad.Application.apartmentDAO;
 import static nomad.Application.hostDAO;
 import static nomad.Application.adminDAO;
@@ -67,9 +70,10 @@ public class ApartmentServices
 	{
 		response.type("application/json");
 		String jws = parseJws(request);
+		System.out.println(jws);
 		if (jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("Invalid login", response);
 		}
 		try
 		{
@@ -77,20 +81,21 @@ public class ApartmentServices
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if (admin == null)
 			{
-				return notFound("Not admin", response);
+				return forbidden("Not admin", response);
 			}
 
 			if(apartmentDAO.removeAll()) 
 			{
 				response.status(200);
-				response.body("Removed all apartments");
-				return response;
+				response.body("Apartments successfully removed.");
+				ArrayList<Apartment> retVal = (ArrayList<Apartment>) apartmentDAO.getAll();
+				return gson.toJson(retVal);
 			}
-			return notFound("Failed removing all apartments", response);
+			return badRequest("Failed removing all apartments", response);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 	
