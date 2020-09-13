@@ -5,12 +5,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 
 import nomad.amenity.Amenity;
 import nomad.comment.Comment;
-import nomad.reservation.Reservation;
-import nomad.user.UserHost;
+import nomad.utils.DateRange;
 
 public class Apartment implements Serializable
 {
@@ -21,8 +19,8 @@ public class Apartment implements Serializable
 	private int noRooms;
 	private int noGuests;
 	private Location location;
-	private ArrayList<Date> rentDates;
-	private ArrayList<Date> availableDates;
+	private ArrayList<DateRange> rentDates;
+	private ArrayList<DateRange> availableDates;
 	private String hostId;
 	// NOTE(Jovan): {username: comment}
 	private ArrayList<Comment> comments;
@@ -113,22 +111,22 @@ public class Apartment implements Serializable
 		this.location = location;
 	}
 
-	public ArrayList<Date> getRentDates()
+	public ArrayList<DateRange> getRentDates()
 	{
 		return rentDates;
 	}
 
-	public void setRentDates(ArrayList<Date> rentDates)
+	public void setRentDates(ArrayList<DateRange> rentDates)
 	{
 		this.rentDates = rentDates;
 	}
 
-	public ArrayList<Date> getAvailableDates()
+	public ArrayList<DateRange> getAvailableDates()
 	{
 		return availableDates;
 	}
 
-	public void setAvailableDates(ArrayList<Date> availableDates)
+	public void setAvailableDates(ArrayList<DateRange> availableDates)
 	{
 		this.availableDates = availableDates;
 	}

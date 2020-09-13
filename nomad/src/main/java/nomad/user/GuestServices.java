@@ -25,20 +25,32 @@ import spark.Route;
 public class GuestServices
 {
 	
-	private static Collection<Apartment> getActiveApartments()
+	public static Route allApartments = (Request request, Response response) ->
 	{
-		ArrayList<Apartment> activeApartments = new ArrayList<Apartment>();
+		String jws = parseJws(request);
 		
-		ArrayList<Apartment> apartments = (ArrayList<Apartment>) apartmentDAO.getAll();
-		for (Apartment apartment : apartments) 
+		if(jws == null)
 		{
-			if(apartment.getStatus() == ApartmentStatus.ACTIVE)
-			{
-				activeApartments.add(apartment);
-			}
+			return forbidden("User not authorized as guest", response);
 		}
-		return activeApartments;
-	}
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
+			if(guest == null)
+			{
+				return forbidden("User not authorized as guest", response);
+			}
+			ArrayList<Apartment> activeApartments = (ArrayList<Apartment>) apartmentDAO.getActive();
+			String json = gson.toJson(activeApartments);
+			response.type("application/json");
+			return ok(json, response);
+		}
+		catch(Exception e)
+		{
+			return serverError("Server error: " + e.getMessage(), response);
+		}
+	};
 	
 	public static Route checkIfGuest = (Request request, Response response) ->
 	{
@@ -63,7 +75,7 @@ public class GuestServices
 		}
 	};
 	
-	public static Route allApartments = (Request request, Response response) ->
+	public static Route reservedApartments = (Request request, Response response) ->
 	{
 		response.type("application/json");
 		String jws = parseJws(request);
@@ -83,7 +95,7 @@ public class GuestServices
 			}
 			response.type("application/json");
 			response.status(200);
-			ArrayList<Apartment> apartments = (ArrayList<Apartment>) getActiveApartments();
+			ArrayList<Apartment> apartments = (ArrayList<Apartment>) apartmentDAO.getActive();
 			response.status(200);
 			return gson.toJson(apartments);
 		}

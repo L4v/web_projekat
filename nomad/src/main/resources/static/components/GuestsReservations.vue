@@ -32,6 +32,16 @@
 				</tr>
 			</table>
 		</div>
+		<button v-if="!showForm" type="button" @click="showForm = !showForm">+</button>
+		<div v-if="showForm" id="add-reservation-form">
+			<select name="apartment" v-model="selectedApartment" required>
+				<option value="" disabled>Select apartment</option>
+				<option v-for="apartment in apartments" :value="apartment">{{apartment.location.address.street}} {{apartment.location.address.streetNumber}} {{apartment.location.address.area}}</option>
+			</select>
+			<div v-if="selectedApartment" id="apartment-info">
+				<h2>{{selectedApartment.location.address.street}}</h2>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -43,56 +53,85 @@
 				reservations: {},
 				sort: "",
 				successMsg: "",
+				showForm: false,
+				apartments: [],
+				selectedApartment: null,
 			}
 		},
 		
 		mounted()
 		{
-	    	var jwt = localStorage.jwt;
-
-	    	if(jwt)
+			var jwt = localStorage.jwt;
+			if(!jwt)
 			{
-		    	axios.get("rest/guest_view_reservations",{headers:{"Authorization": "Bearer " + localStorage.jwt}})
-			        .then(response => (this.reservations = response.data))
-		    		.catch(response => 
-	    			{
-	    				//TODO(Kristian): handle 404
-	    				alert("Please log in");
-	    			});
+				alert("Please log in");
+				return;
 			}
-	    },
-	    
-	    methods:
-	    {
-	    	sortReservations: function()
-	    	{
-	    		if(!this.sort)
-	    		{
-	    			this.successMsg = "Sort parameter must not be empty.";
-	    		} 
-	    		else if(this.sort == 'DESCENDING')
-	    		{
-	    			this.reservations.sort((a, b) => (a.totalPrice > b.totalPrice) ? 1 : -1);
-	    		}
-	    		else
-	    		{
-	    			this.reservations.sort((a, b) => (a.totalPrice < b.totalPrice) ? 1 : -1);
-	    		}	    		
-	    	},
-	    
-	     	cancelReservation: function(reservation)
-	     	{
-	     		axios.post("rest/guest_cancel_reservation", reservation, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
-		        .then(response =>
-		            {
-		            	this.reservations = response.data;
-		                this.successMsg = "Reservation successfully cancelled.";
-		            })
-		        .catch(response => {
-		        		this.successMsg = "Failed canceling reservation";
-		        });
-	     	}
-	    }
-	}
+			if(jwt)
+			{
+				axios.get("rest/guest_view_reservations",{headers:{"Authorization": "Bearer " + localStorage.jwt}})
+					.then(response => (this.reservations = response.data))
+					.catch(response => 
+					{
+						//TODO(Kristian): handle 404
+					});
+			}
+			this.getApartments();
+		},
+		
+		methods:
+		{
+			// NOTE(Jovan): Gets all available apartments
+			getApartments: function()
+			{
+				console.log("Getting apartments");
+				let jwt = localStorage.jwt;
+				if(!jwt)
+				{
+					// TODO(Jovan): Handle?
+					console.log("No jwt");
+					return;
+				}
+				axios.get("rest/guest_all_apartments", {headers: {"Authorization": "Bearer " + jwt}})
+					.then(response =>
+					{
+						this.apartments = response.data;
+					})
+					.catch(response =>
+					{
+						// TODO(Jovan): Handle;
+					});
+			},
+
+			sortReservations: function()
+			{
+				if(!this.sort)
+				{
+					this.successMsg = "Sort parameter must not be empty.";
+				} 
+				else if(this.sort == 'DESCENDING')
+				{
+					this.reservations.sort((a, b) => (a.totalPrice > b.totalPrice) ? 1 : -1);
+				}
+				else
+				{
+					this.reservations.sort((a, b) => (a.totalPrice < b.totalPrice) ? 1 : -1);
+				}	    		
+			},
+		
+			cancelReservation: function(reservation)
+			{
+				axios.post("rest/guest_cancel_reservation", reservation, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
+				.then(response =>
+					{
+						this.reservations = response.data;
+						this.successMsg = "Reservation successfully cancelled.";
+					})
+				.catch(response => {
+						this.successMsg = "Failed canceling reservation";
+				});
+			}
+		}
+}
 
 </script>

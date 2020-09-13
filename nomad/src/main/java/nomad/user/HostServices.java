@@ -1,6 +1,7 @@
 package nomad.user;
 
 import static nomad.utils.Responses.notFound;
+import static nomad.utils.Responses.badRequest;
 import static nomad.utils.Responses.forbidden;
 import static nomad.utils.Responses.ok;
 import static nomad.utils.Responses.serverError;
@@ -19,6 +20,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import nomad.apartment.Apartment;
+import nomad.apartment.ApartmentStatus;
 import nomad.reservation.Reservation;
 import spark.Request;
 import spark.Response;
@@ -44,6 +46,39 @@ public class HostServices
 		}
 		return users;
 	}
+	
+	public static Route enableApartment = (Request request, Response response) ->
+	{
+		String jws = parseJws(request);
+		if(jws == null)
+		{
+			return forbidden("User not authorized as host", response);
+		}
+		
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserHost host = hostDAO.get(claims.getBody().getSubject());
+			if(host == null)
+			{
+				return forbidden("User not authorized as host", response);
+			}
+			
+			String apartmentId = request.body();
+			Apartment apartment = apartmentDAO.get(apartmentId);
+			if(apartment == null)
+			{
+				return badRequest("Apartment with id " + apartmentId + " does not exist", response);
+			}
+			apartment.setStatus(ApartmentStatus.ACTIVE);
+			apartmentDAO.update(apartment);
+			return ok("Apartment enabled", response);
+		}
+		catch(Exception e)
+		{
+			return serverError("Server error " + e.getMessage(), response);
+		}
+	};
 	
 	public static Route checkIfHost = (Request request, Response response) ->
 	{

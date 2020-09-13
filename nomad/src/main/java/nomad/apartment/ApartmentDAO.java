@@ -163,6 +163,20 @@ public class ApartmentDAO
 		}
 		return hostsApartments;
 	}
+	
+	public Collection<Apartment> getActive()
+	{
+		ArrayList<Apartment> apartments = (ArrayList<Apartment>) this.getAll();
+		ArrayList<Apartment> active = new ArrayList<Apartment>();
+		for(Apartment a : apartments)
+		{
+			if(a.getStatus() == ApartmentStatus.ACTIVE)
+			{
+				active.add(a);
+			}
+		}
+		return active;
+	}
 
 	public Collection<Apartment> getAll()
 	{

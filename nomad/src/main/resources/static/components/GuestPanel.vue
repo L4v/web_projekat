@@ -1,7 +1,7 @@
 <template>
     <div>
         <sidebar :user="user">
-            <li><router-link to="">Overview</router-link></li>
+            <li><router-link to="/guest">Overview</router-link></li>
             <li><router-link to="/guest/reservations">Reservations</router-link></li>
         </sidebar>
         <div id="main-content">

@@ -60,7 +60,7 @@
 	    	
 	    	if(jwt)
 			{
-		    	axios.get("rest/guest_all_apartments", {headers:{"Authorization": "Bearer " + localStorage.jwt}})
+		    	axios.get("rest/guest_reserved_apartments", {headers:{"Authorization": "Bearer " + localStorage.jwt}})
 			        .then(response => 
 			       	{
 			       		this.apartments = response.data;

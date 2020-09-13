@@ -147,6 +147,7 @@ public class Application
 		post(Path.Rest.UPDATE_AMENITY, AmenityServices.updateAmenity);
 		post(Path.Rest.ADMIN_REMOVE_APARTMENTS, ApartmentServices.adminDeleteApartments);
 		post(Path.Rest.HOST_SEARCH_GUESTS, HostServices.hostSearchGuests);
+		post(Path.Rest.HOST_ENABLE_APARTMENT, HostServices.enableApartment);
 		
 		get("rest/test", LoginServices.verifyLogin);
 		get(Path.Rest.GET_USER, UserServices.getUser);
@@ -164,6 +165,7 @@ public class Application
 		get(Path.Rest.HOST_ALL_RESERVATIONS, ReservationServices.hostViewReservations);
 		get(Path.Rest.HOST_ALL_GUESTS, HostServices.getMyGuests);
 		get(Path.Rest.HOST_ALL_COMMENTS, CommentServices.hostViewComments);
+		get(Path.Rest.GUEST_RESERVED_APARTMENTS, GuestServices.reservedApartments);
 		get(Path.Rest.GUEST_ALL_APARTMENTS, GuestServices.allApartments);
 		get(Path.Rest.GUEST_ALL_RESERVATIONS, ReservationServices.guestViewReservations);
 		

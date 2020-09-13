@@ -8,6 +8,7 @@
                     <th>Address</th>
                     <th>Type</th>
                     <th>Price</th>
+                    <th>Status</th>
                 </tr>
                 <!-- TODO(Jovan): Dropdown for each apartment or view separate page -->
                 <tr v-for="apartment in apartments">
@@ -15,6 +16,10 @@
                     <td>{{apartment.location.address.street}} {{apartment.location.address.streetNo}} {{apartment.location.address.area}}</td>
                     <td>{{apartment.type}}</td>
                     <td>{{apartment.price}}</td>
+                    <td>
+                        <span v-if="apartment.status === 'ACTIVE'" class="apartment-active">{{apartment.status}}</span>
+                        <button v-else type="button" @click="enableApartment(apartment.id)">ENABLE</button>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -24,11 +29,12 @@
                 <h2>Apartment info</h2>
                 <div id="apartment-info-container">
                     <div id="general-info">
+                        <!-- TODO(Jovan): When room selected disable room input? -->
                         <small class="error">{{errors.apartmentType}}</small>
-                        <select name="apartmentType" v-model="apartmentType">
+                        <select name="apartmentType" v-model="apartmentType" required>
                             <option value="" disabled>Type</option>
-                            <option value="whole">Whole</option>
-                            <option value="room">Room</option>
+                            <option value="WHOLE">Whole</option>
+                            <option value="ROOM">Room</option>
                         </select>
                         <small class="error">{{errors.noRooms}}</small>
                         <floating-label name="noRooms" placeholder="Number of rooms" type="number" :inputdata.sync="noRooms"></floating-label>
@@ -130,6 +136,26 @@
 
         methods:
         {
+            enableApartment: function(id)
+            {
+                let jwt = localStorage.jwt;
+                if(!jwt)
+                {
+                    // TODO(Jovan): Handle?
+                    return;
+                }
+                axios.post("rest/host_enable_apartment", id, {headers: {"Authorization": "Bearer " + jwt}})
+                    .then(response => 
+                    {
+                        // TODO(Jovan): Refresh?
+                        this.$router.go();
+                    })
+                    .catch(response =>
+                    {
+                        // TODO(Jovan): Handle;
+                    });
+            },
+
             validateApartmentType: function()
             {
                 if(!this.apartmentType)
@@ -340,7 +366,7 @@
                             },
                         rentDates: [],
                         // TODO(Jovan): add dates
-                        availableDates: [],
+                        availableDates: this.availableDates,
                         host: "",
                         comments: [],
                         images: [],
