@@ -174,7 +174,6 @@ public class ReservationServices
 		return response;
 	};
 	
-	//TODO: da li je dovoljno ovo ili mora i kod apartmana i kod gosta da update-ujemo??
 	public static Route guestCancelReservation = (Request request, Response response) ->
 	{
 		response.type("application/json");
@@ -197,10 +196,9 @@ public class ReservationServices
 			Reservation reservation = gson.fromJson(json, Reservation.class);
 			if(reservation.getStatus() == ReservationStatus.ACCEPTED || reservation.getStatus() == ReservationStatus.CREATED)
 			{
-				// NOTE(Jovan): Removed guest and apartment updates
+				reservation.setStatus(ReservationStatus.CANCELLED);
 				if(reservationDAO.update(reservation))
 				{
-					reservation.setStatus(ReservationStatus.CANCELLED);
 					response.status(200);
 					ArrayList<Reservation> reservations = (ArrayList<Reservation>) reservationDAO.getByIds(guest.getReservations());
 					return gson.toJson(reservations);

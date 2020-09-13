@@ -29,24 +29,32 @@ public class HostServices
 
 	private static Collection<UserGuest> getGuests(String username)
 	{
-		Collection<UserGuest> users = new ArrayList<UserGuest>();
-
-		for (UserGuest userGuest : guestDAO.getAll())
+		ArrayList<UserGuest> users = new ArrayList<UserGuest>();
+		ArrayList<Reservation> reservations = (ArrayList<Reservation>) reservationDAO.getAll();
+		
+		for(Reservation reservation : reservations)
 		{
-			if(userGuest.getReservations() != null) 
+			if(apartmentDAO.get(reservation.getApartmentId()).getHostId().equals(username))
 			{
-				for (Reservation reservation : reservationDAO.getForGuest(userGuest.getUsername()))
+				if(!containsUserGuest(users, reservation.getGuestId()))
 				{
-					Apartment apartment = apartmentDAO.get(reservation.getApartmentId());
-					if(apartment.getHostId().equals(username))
-					{
-						users.add(userGuest);
-						break;
-					}
+					users.add(guestDAO.get(reservation.getGuestId()));
 				}
 			}
 		}
 		return users;
+	}
+	
+	private static boolean containsUserGuest(Collection<UserGuest> userGuests, String username)
+	{
+		for(UserGuest userGuest : userGuests)
+		{
+			if(userGuest.getUsername().equals(username))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public static Route getMyGuests = (Request request, Response response) ->
