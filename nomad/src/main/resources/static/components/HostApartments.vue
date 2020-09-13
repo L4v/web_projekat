@@ -1,32 +1,61 @@
 <template>
     <div class="container">
-        <h1>Apartments</h1>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Address</th>
-            </tr>
-            <!-- TODO(Jovan): Dropdown for each apartment or view separate page -->
-            <tr v-for="apartment in apartments">
-                <td>{{apartment.id}}</td>
-                <td>{{apartment.location.address.street}} {{apartment.location.address.streetNo}} {{apartment.location.address.area}}</td>
-            </tr>
-        </table>
-
+        <div id="all-apartments">
+            <h1>Apartments</h1>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Address</th>
+                    <th>Type</th>
+                    <th>Price</th>
+                </tr>
+                <!-- TODO(Jovan): Dropdown for each apartment or view separate page -->
+                <tr v-for="apartment in apartments">
+                    <td>{{apartment.id}}</td>
+                    <td>{{apartment.location.address.street}} {{apartment.location.address.streetNo}} {{apartment.location.address.area}}</td>
+                    <td>{{apartment.type}}</td>
+                    <td>{{apartment.price}}</td>
+                </tr>
+            </table>
+        </div>
         <button v-if="!showForm" @click="showForm = !showForm">+</button>
-        <form v-if="showForm" @submit.prevent="addApartment" id="apartment-form">
+        <div v-if="showForm" id="apartment-form">
             <div id="apartment-info">
                 <h2>Apartment info</h2>
-                <select name="apartmentType" v-model="apartmentType">
-                    <option value="" disabled>Type</option>
-                    <option value="whole">Whole</option>
-                    <option value="room">Room</option>
-                </select>
-                <floating-label name="noRooms" placeholder="Number of rooms" type="number" :inputdata.sync="noRooms"></floating-label>
-                <floating-label name="noGuests" placeholder="Number of guests" type="number" :inputdata.sync="noGuests"></floating-label>
+                <div id="apartment-info-container">
+                    <div id="general-info">
+                        <small class="error">{{errors.apartmentType}}</small>
+                        <select name="apartmentType" v-model="apartmentType">
+                            <option value="" disabled>Type</option>
+                            <option value="whole">Whole</option>
+                            <option value="room">Room</option>
+                        </select>
+                        <small class="error">{{errors.noRooms}}</small>
+                        <floating-label name="noRooms" placeholder="Number of rooms" type="number" :inputdata.sync="noRooms"></floating-label>
+                        <small class="error">{{errors.noGuests}}</small>
+                        <floating-label name="noGuests" placeholder="Number of guests" type="number" :inputdata.sync="noGuests"></floating-label>
+                        <small class="error">{{errors.price}}</small>
+                        <floating-label name="price" placeholder="Price" type="number" :inputdata.sync="price"></floating-label>
+                    </div>
+                    <div id="amenities">
+                        <select id="leftSelect" name="allAmenities" v-model="leftSelected"  multiple>
+                            <option v-for="amenity in allAmenities" :value="amenity">{{amenity.name}}</option>
+                        </select>
+                        <div id="amenity-buttons">
+                            <button type="button" @click="addAmenity">&rsaquo;</button>
+                            <button type="button" @click="removeAmenity">&lsaquo;</button>
+                            <button type="button" @click="clearAmenities">Clear all</button>
+                            <button type="button" @click="addAllAmenities">Add all</button>
+                        </div>
+                        <select id="rightSelect" name="selectedAmenities"  v-model="rightSelected" multiple>
+                            <option v-for="amenity in selectedAmenities" :value="amenity">{{amenity.name}}</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div id="location-info">
                 <h3>Location info</h3>
+                <small class="error">{{errors.location}}</small>
                 <div id="location-info-container">
                     <map-small class="map" v-on:search="parseResult"></map-small>
                     <div id="location-forms">
@@ -37,7 +66,6 @@
                     </div>
                 </div>
             </div>
-            <!-- TODO(Jovan): adding multiple dates -->
             <div id="available-dates" ref="dates">
                 <h2>Available dates</h2>
                 <div id="available-dates-container">
@@ -54,24 +82,12 @@
                 </div>
             </div>
             <!-- TODO(Jovan): Images -->
-            <floating-label name="price" placeholder="Price" type="number" :inputdata.sync="price"></floating-label>
             <!-- TODO(Jovan): Hidden, dropdown amenities with dual multiselect listbox -->
-            <div id="amenities">
-                <select id="leftSelect" name="allAmenities" v-model="leftSelected"  multiple>
-                    <option v-for="amenity in allAmenities" :value="amenity">{{amenity.name}}</option>
-                </select>
-                <div id="amenity-buttons">
-                    <button type="button" @click="addAmenity">&rsaquo;</button>
-                    <button type="button" @click="removeAmenity">&lsaquo;</button>
-                    <button type="button" @click="clearAmenities">Clear all</button>
-                    <button type="button" @click="addAllAmenities">Add all</button>
-                </div>
-                <select id="rightSelect" name="selectedAmenities"  v-model="rightSelected" multiple>
-                    <option v-for="amenity in selectedAmenities" :value="amenity">{{amenity.name}}</option>
-                </select>
-            </div>
-            <button type="submit" class="button-primary" @click="addApartment">Add apartment</button>
-        </form>
+            
+            <b class="error">{{submitMsg}}</b>
+            <button type="button" class="button-primary" @click="addApartment">Add apartment</button>
+            <button type="button" @click="showForm = !showForm">Cancel</button>
+        </div>
     </div>
 </template>
 
@@ -99,11 +115,100 @@
                 selectedDate:      null,
                 leftSelected:      [],
                 rightSelected:     [],
+                errors:
+                {
+                    apartmentType: "",
+                    noRooms:       "",
+                    noGuests:      "",
+                    location:      "",
+                    price:         "",
+
+                },
+                submitMsg:         "",
             }
         },
 
         methods:
         {
+            validateApartmentType: function()
+            {
+                if(!this.apartmentType)
+                {
+                    this.errors.apartmentType = "Select a type";
+                    return false;
+                }
+                return true;
+            },
+
+            validateNoRooms: function()
+            {
+                if(!this.noRooms  || this.noRooms <= 0)
+                {
+                    this.errors.noRooms = "Must be a positive integer";
+                    return false;
+                }
+                return true;
+            },
+
+            validateNoGuests: function()
+            {
+                if(!this.noGuests || this.noGuests <= 0)
+                {
+                    this.errors.noGuests = "Must be a positive integer";
+                    return false;
+                }
+                return true;
+            },
+
+            validateLocation: function()
+            {
+                if(!this.area)
+                {
+                    this.errors.location = "Please choose a location";
+                    return false;
+                }
+                return true;
+            },
+
+            validatePrice: function()
+            {
+                if(!this.price)
+                {
+                    this.errors.price = "Please add a price";
+                    return false;
+                }
+
+                if(this.price <= 0)
+                {
+                    this.errors.price = "Must be a positive integer";
+                    return false;
+                }
+
+                return true;
+            },
+
+            validateInputs: function()
+            {
+                this.errors =
+                {
+                    apartmentType: "",
+                    noRooms:       "",
+                    noGuests:      "",
+                    location:      "",
+                    price:         "",
+
+                };
+
+                let apartmentTypeValid = this.validateApartmentType();
+                let noGuestsValid = this.validateNoGuests();
+                let noRoomsValid = this.validateNoRooms();
+                let locationValid = this.validateLocation();
+                let priceValid = this.validatePrice();
+
+                return apartmentTypeValid && noGuestsValid && noRoomsValid
+                    && locationValid && priceValid;
+            },
+
             // NOTE(Jovan): Adds selected available date range to list
             addDate: function()
             {
@@ -183,8 +288,8 @@
                 this.streetNo = value.address.house_number;
                 this.area = value.address.city;
                 this.areaCode = value.address.postcode;
-                this.lat = value.address.latlng.lat;
-                this.lon = value.address.latlng.lng;
+                this.lat = value.lat;
+                this.lon = value.lon;
             },
             getApartments: function()
             {
@@ -209,6 +314,12 @@
             // TODO(Jovan): Validation
             addApartment: function()
             {
+                console.log("Adding apartment call");
+                if(!this.validateInputs())
+                {
+                    console.log("Invalid inputs");
+                    return;
+                }
                 let apartment =
                     {
                         id: "",
@@ -243,16 +354,21 @@
                 let jwt = localStorage.jwt;
                 if(!jwt)
                 {
+                    // TODO(Jovan): Ask for login?
+                    console.log("No jwt");
                     return;
                 }
                 axios.post("rest/host_add_apartment", apartment, {headers: {"Authorization": "Bearer " + jwt}})
                     .then(response => 
                     {
                         // TODO(Jovan): Handle
+                        this.submitMsg = "Apartment added";
+                        this.$router.go();
                     })
                     .catch(response =>
                     {
                         // TODO(jovan): Handle
+                        this.submitMsg = "Failed adding apartment";
                     })
             }
         },
@@ -266,6 +382,17 @@
 </script>
 
 <style scoped>
+    #apartment-info-container
+    {
+        display: flex;
+        flex-direction: row;
+    }
+
+    #general-info
+    {
+        display: flex;
+        flex-direction: column;
+    }
     #amenities
     {
         display: flex;
@@ -310,5 +437,12 @@
     {
         max-width: 400px;
         max-height: 400px;
+    }
+
+    .error
+    {
+        font-weight: 500;
+        color: #f00;
+        padding-bottom: 8px;
     }
 </style>

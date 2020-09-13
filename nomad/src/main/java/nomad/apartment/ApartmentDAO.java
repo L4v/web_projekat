@@ -42,11 +42,11 @@ public class ApartmentDAO
 		}
 	}
 	
-	private String getNextId()
+	private String getNextId(int curr)
 	{
-		ArrayList<Apartment> apartments = (ArrayList<Apartment>) this.getAll();
+		//ArrayList<Apartment> apartments = (ArrayList<Apartment>) this.getAll();
 		// TODO(Jovan): Add prefix?
-		if(apartments.size() == 0)
+		/*if(apartments.size() == 0)
 		{
 			return "0";
 		}
@@ -67,7 +67,8 @@ public class ApartmentDAO
 		{
 			e.printStackTrace();
 			return String.valueOf(-1);
-		}
+		}*/
+		return String.valueOf(curr++);
 	}
 
 	private void saveAll(ArrayList<Apartment> apartments)
@@ -95,15 +96,18 @@ public class ApartmentDAO
 	public boolean add(Apartment apartment)
 	{
 		ArrayList<Apartment> apartments = (ArrayList<Apartment>) this.getAll();
-		if (apartments.stream().filter(a -> a.getId().equals(apartment.getId())).findAny().orElse(null) == null)
+		apartment.setId(apartment.getLocation().getLon() + apartment.getLocation().getLat());
+		for(Apartment a : apartments)
 		{
-			// TODO(Jovan): Use generators?
-			apartment.setId(getNextId());
-			apartments.add(apartment);
-			this.saveAll(apartments);
-			return true;
+			if(a.getId().equals(apartment.getId()))
+			{
+				return false;
+			}
 		}
-		return false;
+		apartments.add(apartment);
+		this.saveAll(apartments);
+		return true;
+		
 	}
 
 	public boolean update(Apartment apartment)
