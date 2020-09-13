@@ -23,6 +23,7 @@
             @focus="addFocus($event)"
             v-model="inputdata"
             @input="$emit('update:inputdata', inputdata)"
+            @keypress="isNumber"
             />
     </div>
 </template>
@@ -63,6 +64,14 @@
                 {
                     this.$refs["inputdiv"].classList.add("focused");
                 }
+            },
+            isNumber(event) 
+            {
+                if(this.type !== "number")
+                {
+                    return;
+                }
+                if (!/\d/.test(event.key) && event.key !== '.') return event.preventDefault();
             }
         },
         mounted()
