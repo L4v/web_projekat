@@ -40,7 +40,7 @@
 	    	
 	    	if(jwt)
 			{
-		    	axios.get("rest/admin_view_apartments", {headers:{"Authorization": "Bearer " + localStorage.jwt}})
+		    	axios.get("rest/admin_all_apartments", {headers:{"Authorization": "Bearer " + localStorage.jwt}})
 			        .then(response => 
 			       	{
 			       		this.apartments = response.data;
@@ -57,11 +57,12 @@
 	    {
 			removeAll: function()
 	     	{
-	     		axios.post("rest/admin_remove_apartments", {headers:{"Authorization": "Bearer " + localStorage.jwt}})
+	     		axios.post("rest/admin_remove_apartments",{headers:{"Authorization": "Bearer " + localStorage.jwt}})
 		        .then(response =>
-		            {
-		                this.successMsg = "Apartments successfully removed.";
-		            })
+	            {
+	            	this.apartments = response.data;
+	                this.successMsg = "Apartments successfully removed.";
+	            })
 		        .catch(response => {
 		        		this.successMsg = "Failed removing apartments";
 		        });
