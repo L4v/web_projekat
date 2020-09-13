@@ -16,7 +16,7 @@
                     </small>
                 </div>
                 <div id="user-controls">
-                    <a href="#" class="user-field"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+                    <a @click="logout" href="#" class="user-field"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
                 </div>
             </div>
         </div>
@@ -27,6 +27,14 @@
     module.exports = 
     {
         props: ["title", "user"],
+        methods:
+        {
+            logout: function()
+            {
+                localStorage.removeItem("jwt");
+                this.$router.go();
+            }
+        },
     }
 </script>
 

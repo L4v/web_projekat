@@ -1,6 +1,8 @@
 package nomad.user;
 
 import static nomad.utils.Responses.notFound;
+import static nomad.utils.Responses.ok;
+import static nomad.utils.Responses.forbidden;
 import static nomad.utils.Responses.serverError;
 import static nomad.Application.apartmentDAO;
 import static nomad.Application.gson;
@@ -37,6 +39,29 @@ public class GuestServices
 		}
 		return activeApartments;
 	}
+	
+	public static Route checkIfGuest = (Request request, Response response) ->
+	{
+		String jws = parseJws(request);
+		if(jws == null)
+		{
+			return forbidden("User not authorized as guest", response);
+		}
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
+			if(guest == null)
+			{
+				return forbidden("User not authorized as guest", response);
+			}
+			return ok("Access granted, user is guest", response);
+		}
+		catch(Exception e)
+		{
+			return serverError("Server error: " + e.getMessage(), response);
+		}
+	};
 	
 	public static Route allApartments = (Request request, Response response) ->
 	{

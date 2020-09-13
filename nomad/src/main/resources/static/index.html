@@ -25,8 +25,6 @@
 <body>
 	<div id="app" class="content">
         <router-view></router-view>
-        <router-link to="/admin">Test</router-link>
-        <router-link to="/host">Host panel</router-link>
     </div>
 
     <script src='js/liq-styles-ctrl-gl.js'></script>
@@ -40,7 +38,10 @@
     	Vue.use(httpVueLoader);
 
         // NOTE(Jovan): Component registration
-    	Vue.component("main-navigation", httpVueLoader("components/MainNavigation.vue"));
+    	Vue.component("main-navigation", httpVueLoader("components/MainNavigation.vue"),
+            {
+                props: ["user",],
+            });
     	Vue.component("floating-label", httpVueLoader("components/FloatingLabel.vue"),
             {
                props: ["placeholder", "name", "type", "inputdata", "readonly",],
@@ -119,7 +120,7 @@
                 [
                     {
                         path: "",
-                        name: "Overview",
+                        name: "AdminOverview",
                         component: httpVueLoader("components/AdminOverview.vue"),
                     },
                    	{
@@ -129,12 +130,12 @@
                    	},
                     {
                         path: "all_users",
-                        name: "AllUsers",
+                        name: "AdminAllUsers",
                         component: httpVueLoader("components/AdminAllUsers.vue"),
                     },
                     {
                         path: "reservations",
-                        name: "Reservations",
+                        name: "AdminReservations",
                         component: httpVueLoader("components/AdminReservations.vue"),
                     },
                     {
@@ -144,7 +145,7 @@
                     },
                     {
                         path: "comments",
-                        name: "Comments",
+                        name: "AdminComments",
                         component: httpVueLoader("components/AdminComments.vue"),
                     },
                     {
@@ -155,9 +156,27 @@
                 ],
             },
             {
-                path: "/guests_reservations",
-                name: "GuestsReservations",
-                component: httpVueLoader("components/GuestsReservations.vue")
+                path: "/guest",
+                name: "Guest",
+                component: httpVueLoader("components/GuestPanel.vue"),
+                meta:
+                {
+                    requiresGuest: true,
+                    // requiresAuth: true,
+                },
+                children:
+                [
+                    {
+                        path: "",
+                        name: "GuestOverview",
+                        component: httpVueLoader("components/GuestOverview.vue"),
+                    },
+                    {
+                        path: "reservations",
+                        name: "GuestReservations",
+                        component: httpVueLoader("components/GuestsReservations.vue"),
+                    },
+                ],
             },
             {
                 path: "/host",
@@ -165,10 +184,16 @@
                 component: httpVueLoader("components/HostPanel.vue"),
                 meta:
                 {
-                    requiresAuth: true,
+                    requiresHost: true,
+                    // requiresAuth: true,
                 },
                 children:
                 [
+                    {
+                        path: "",
+                        name: "HostOverview",
+                        component: httpVueLoader("components/HostOverview.vue"),
+                    },
                     {
                         path: "apartments",
                         name: "HostApartments",
@@ -226,6 +251,36 @@
                         next({name: "Login"});
                     });
             }
+            else if(to.matched.some(record => record.meta.requiresHost))
+            {
+                axios.get("rest/check_if_host", {headers: {"Authorization": "Bearer " + localStorage.jwt}})
+                    .then(response =>
+                    {
+                        // NOTE(Jovan): User is host -> proceed
+                        next();
+                    })
+                    .catch(response =>
+                    {
+                        // NOTE(Jovan): User not host -> go to login page
+                        // TODO(Jovan): Display message about needing host rights?
+                        next({name: "Login"});
+                    });
+            }
+            else if(to.matched.some(record => record.meta.requiresGuest))
+            {
+                axios.get("rest/check_if_guest", {headers: {"Authorization": "Bearer " + localStorage.jwt}})
+                    .then(response =>
+                    {
+                        // NOTE(Jovan): User is guest -> proceed
+                        next();
+                    })
+                    .catch(response => 
+                    {
+                        // NOTE(Jovan): User is not guest -> go to login page
+                        // TODO(Jovan): Display message about needing guest rights?
+                        next({name: "Login"});
+                    });
+            }
             else
             {
                 // NOTE(Jovan): Page does not require authentication -> proceed
@@ -241,50 +296,17 @@
             router: router,
             data:
             {
-                modal_active: false,
             },
             components:
            	{
            	},
             methods:
             {
-                
-                logout: function()
-                {
-                    let jwt = localStorage.jwt;
-                    if(jwt){
-                        localStorage.removeItem("jwt");
-                        alert("You have successfully logged out");
-                    } else {
-                        alert("You are not logged in");
-                    }
-                },
-                verify: function()
-                {
-                    var jwt = localStorage.jwt;
-                    if(!jwt)
-                    {
-                        // NOTE(Jovan): Ako ne postoji jwt, ne pokusavaj login
-                        return;
-                    }
-                    axios.get("rest/test", {headers:{"Authorization": "Bearer " + jwt}})
-                        .then(response =>
-                        {
-                            this.loggedIn = true;
-                        })
-                        .catch(response =>
-                        {
-                            this.loggedIn = false;
-                        });
-                },
             },
-            computed:
+            mounted()
             {
-                verifyLogin: function()
-                {
-                    return this.verify();
-                }
-            },
+
+            }
         }).$mount("#app");
     </script>
 

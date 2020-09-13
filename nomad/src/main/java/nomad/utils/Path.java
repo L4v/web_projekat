@@ -26,12 +26,14 @@ public class Path
 		public static final String HOST_ALL_COMMENTS = "/rest/host_view_comments";
 		public static final String HOST_ADD_APARTMENT = "/rest/host_add_apartment";
 		public static final String HOST_SEARCH_GUESTS = "/rest/host_search_guests";
+		public static final String CHECK_IF_HOST = "/rest/check_if_host";
 		
 		public static final String GUEST_ALL_APARTMENTS = "/rest/guest_all_apartments";
 		public static final String GUEST_ALL_RESERVATIONS = "/rest/guest_view_reservations";
 		public static final String GUEST_ADD_COMMENT = "/rest/guest_add_comment";
 		public static final String GUEST_GET_USERNAME = "/rest/guest_get_username";
 		public static final String GUEST_CANCEL_RESERVATION = "/rest/guest_cancel_reservation";
+		public static final String CHECK_IF_GUEST = "/rest/check_if_guest";
 		
 		public static final String REG_GUEST = "/rest/reg_guest";
 		public static final String REG_HOST = "/rest/reg_host";

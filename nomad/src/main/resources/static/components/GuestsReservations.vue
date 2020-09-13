@@ -9,7 +9,7 @@
 	            	<option value="ASCENDING">Ascending</option>
 	            	<option value="DESCENDING">Descending</option>
 	       		</select>
-	       		<button class="button-primary" @click=sortReservations()>Sort</button>
+	       		<button class="button-primary" @click="sortReservations()">Sort</button>
 	       	</div>
 			<table>
 				<tr>

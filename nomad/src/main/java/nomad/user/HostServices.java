@@ -45,6 +45,30 @@ public class HostServices
 		return users;
 	}
 	
+	public static Route checkIfHost = (Request request, Response response) ->
+	{
+		String jws = parseJws(request);
+		if(jws == null)
+		{
+			return forbidden("User not authorized as host", response);
+		}
+		
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserHost host = hostDAO.get(claims.getBody().getSubject());
+			if(host == null)
+			{
+				return forbidden("User not authorized as host", response);
+			}
+			return ok("Access granted, user is host", response);
+		}
+		catch(Exception e)
+		{
+			return serverError("Server error: " + e.getMessage(), response);
+		}
+	};
+	
 	private static boolean containsUserGuest(Collection<UserGuest> userGuests, String username)
 	{
 		for(UserGuest userGuest : userGuests)

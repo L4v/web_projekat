@@ -3,12 +3,10 @@
 	<!-- NOTE(Jovan): Navigation bar -->
 	<div class="content">
 
-        <main-navigation></main-navigation>
+        <main-navigation :user="user"></main-navigation>
 		<!-- NOTE(Jovan): Main content -->
 		<!-- NOTE(Jovan): Header -->
 		<section class="header">
-
-
 			<div class="header-content row">
 				<!-- TODO(Jovan): Bolji slogan? Mozda generator? -->
 				<div class="one column">&nbsp;</div>
@@ -33,6 +31,44 @@
         </section>
 	</div>
 </template>
+<script>
+    module.exports =
+    {
+        data: function()
+        {
+            return{
+                user: null,
+            }
+        },
+        methods:
+        {
+            getUser: function()
+            {
+                let jwt = localStorage.jwt;
+                if(!jwt)
+                {
+                    // TODO(Jovan): handle?
+                    return;
+                }
+
+                axios.get("rest/get_user", {headers: {"Authorization": "Bearer " + jwt}})
+                    .then(response => 
+                    {
+                        this.user = response.data;
+                    })
+                    .catch(response =>
+                    {
+                        // TODO(Jovan): Handle?
+                    });
+            },
+        },
+        mounted()
+        {
+            console.log("Mounted home");
+            this.getUser();
+        },
+    }
+</script>
 <style scoped>
     .content
     {

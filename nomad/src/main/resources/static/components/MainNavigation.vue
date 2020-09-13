@@ -50,10 +50,10 @@
 						</button>
 						<!-- TODO(Jovan): Make Log and Sign into dropdown like menus -->
 						<ul class="navbar-list">
-                            <li v-if="loggedIn" class="username">{{user.username}}</li>
+                            <li v-if="loggedIn" class="username"><router-link :to="getUserPage">{{user.username}}</router-link></li>
                             <hr v-if="loggedIn" />
                             <li><router-link to="/login">Log in</router-link></li>
-                            <li><router-link to="/registration">Sign up</router-link></li>
+                            <li v-if="!loggedIn"><router-link to="/registration">Sign up</router-link></li>
                             <li><router-link to="/personal_data">Personal data</router-link></li>
                             <li><router-link to="/amenities">Amenities</router-link></li>
                             <li><router-link to="/guests_reservations">Reservations</router-link></li>
@@ -69,15 +69,14 @@
 	</div>
 </template>
 <script>
-	module.exports = {
+	module.exports = 
+	{
+		props: ["user"],
 		data: function() 
 		{
 			return{
-                // NOTE(JOvan): TESTT
-                user: {},
 				active: false,
 				daterange: null,
-                loggedIn: false,
 			}
 			
 		},
@@ -105,34 +104,47 @@
 	                return "search-collapse";
 	            }
 	        },
-            verifyLogin()
-            {
-                var jwt = localStorage.jwt;
-
-                if(!jwt) return false;
-                this.getUser();
-                return true;
-            },
             logout()
             {
                 localStorage.removeItem("jwt");
                 window.location.reload(true);
             },
-            getUser()
-            {
-                var jwt = localStorage.jwt;
-                axios.get("/rest/get_user", {headers: {"Authorization": "Bearer " + jwt}})
-                    .then(response => 
-                        {
-                            this.user = response.data;
-                        })
-                    // TODO(Jovan): Handle exception?
-                    .catch(response => {});
-            },
+		},
+		computed:
+		{
+			getUserPage: function()
+			{
+				if(!this.user)
+				{
+					return "";
+				}
+				if(this.user.userType === "ADMIN")
+				{
+					return "/admin";
+				}
+				if(this.user.userType === "HOST")
+				{
+					return "/host";
+				}
+				if(this.user.userType === "GUEST")
+				{
+					return "/guest";
+				}
+			},
+			
+			loggedIn: function()
+			{
+				if(!this.user)
+				{
+					return false;
+				}
+				return true;
+			}
 		},
         mounted()
         {
-            this.loggedIn = this.verifyLogin();
+			console.log(this.user);
+            this.loggedIn = this.user ? true : false;
             window.document.onscroll = () =>
             {
                 let searchbar = document.getElementById("searchbar");
