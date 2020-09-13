@@ -8,47 +8,15 @@
     {
         mounted()
         {
-            var map = new mapboxgl.Map
-            ({
-                container: 'map-container',
-                attributionControl: false,
-                center: [-74.5, 40], // starting position [lng, lat]
-                zoom: 9 // starting zoom
-            });
-
-            let layerStyles =
+            var map = L.map('map-container').setView([40.7259, -73.9805], 12);
+            L.tileLayer('https://{s}-tiles.locationiq.com/v2/obk/r/{z}/{x}/{y}.png?key=' + locationiq.key).addTo(map);
+            var geocoder = L.control.geocoder(locationiq.key);
+            geocoder.addTo(map);
+            geocoder.on("select", e => 
             {
-                "Streets": "streets/vector",
-            };
-            /*map.addControl(
-                new mapboxgl.GeolocateControl
-                ({
-                    positionOptions:
-                    {
-                        enableHighAccuracy: true
-                    },
-                    trackUserLocation: true
-                })
-            );*/
-            map.addControl(
-                new locationiqLayerControl({
-                    key: locationiq.key,
-                    layerStyles: layerStyles
-                }), "top-left"
-            );
-            let geocoder = new MapboxGeocoder(
-                {
-                    accessToken: mapboxgl.accessToken,
-                    mapboxgl: mapboxgl,
-                });
-
-            geocoder.on("results", results =>
-            {
-                console.log("search result: " + results);
-                this.$emit("search", results);
+                // console.log("RESULTS " + JSON.stringify(e.feature.feature));
+                this.$emit("search", e.feature.feature);
             });
-            map.addControl(geocoder);
-            
         }
     }
 </script>

@@ -64,6 +64,5 @@
     {
         margin-left: 15vw;
         background-color: #fafafa;
-        height: 100vh;
     }
 </style>
