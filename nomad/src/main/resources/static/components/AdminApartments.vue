@@ -71,10 +71,17 @@
 	     	sortApartmentsByPrice: function()
 	     	{
 	     		if(!this.sort)
-	     		{
-	     			this.successMsg = "Sort parameter must not be empty.";
-	     			return;
-	     		}
+	    		{
+	    			this.successMsg = "Sort parameter must not be empty.";
+	    		} 
+	    		else if(this.sort == 'DESCENDING')
+	    		{
+	    			this.reservations.sort((a, b) => (a.price > b.price) ? 1 : -1);
+	    		}
+	    		else
+	    		{
+	    			this.reservations.sort((a, b) => (a.price < b.price) ? 1 : -1);
+	    		}	
 	     	},   
 	    },
     }
