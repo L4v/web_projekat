@@ -110,6 +110,15 @@
                 },
             },
             {
+                path: "/apartment/:id",
+                name: "ShowApartment",
+                component: httpVueLoader("components/ShowApartment.vue"),
+                meta:
+                {
+                    requiresAuth: true,
+                },
+            },
+            {
                 path: "/admin",
                 name: "Admin",
                 component: httpVueLoader("components/AdminPanel.vue"),
