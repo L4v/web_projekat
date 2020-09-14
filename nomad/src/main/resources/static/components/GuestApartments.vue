@@ -34,7 +34,7 @@
                     	<option value="5">5</option>
                		</select></td>
 					<td><button class="button-primary" @click="addComment(apartment)">Comment</button></td>
-					<td><router-link :to="{ name: 'ShowApartment', params: { id: apartment.id } }">More</router-link></td>
+					<td><router-link to="/showApartment">More</router-link></td>
 				</tr>
 			</table>
 		</div>

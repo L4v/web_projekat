@@ -42,6 +42,10 @@
             {
                 props: ["user",],
             });
+    	Vue.component("show-apartment", httpVueLoader("components/ShowApartment.vue"),
+                {
+                    props: ["apartment",],
+                });
     	Vue.component("floating-label", httpVueLoader("components/FloatingLabel.vue"),
             {
                props: ["placeholder", "name", "type", "inputdata", "readonly",],
@@ -110,7 +114,7 @@
                 },
             },
             {
-                path: "/apartment/:id",
+                path: "/show_apartment",
                 name: "ShowApartment",
                 component: httpVueLoader("components/ShowApartment.vue"),
                 meta:

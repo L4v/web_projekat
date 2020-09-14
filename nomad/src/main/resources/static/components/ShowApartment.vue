@@ -1,20 +1,20 @@
 <template>
-	<label>Type: {{apartment.type}}</label>
-	<label>Number of rooms: {{apartment.noRooms}}</label>
-	<label>Number of guests: {{apartment.noRooms}}</label>
-	<label>Price: {{apartment.price}}</label>
-	
-	<label><input v-model="commentText" type="text"></label>
-	<label><select name="rating" v-model="rating" required>
-            	<option value="" disabled>Rating</option>
-            	<option value="1">1</option>
-            	<option value="2">2</option>
-            	<option value="3">3</option>
-            	<option value="4">4</option>
-            	<option value="5">5</option>
-            </select>
-     </label>
-     <button class="button-primary" @click="addComment()">Comment</button>
+	<form id="apartment">
+		<textarea v-model="commentText" rows="6" cols="30" placeholder="Comment..."></textarea>
+		<select name="rating" v-model="rating" required>
+	    	<option value="" disabled>Rating</option>
+	    	<option value="1">1</option>
+	    	<option value="2">2</option>
+	    	<option value="3">3</option>
+	    	<option value="4">4</option>
+	    	<option value="5">5</option>
+	     </select>
+	     <button class="button-primary" @click="addComment()">Comment</button>
+		Type: {{apartment.type}}
+		Number of rooms: {{apartment.noRooms}}
+		Number of guests: {{apartment.noRooms}}
+		Price: {{apartment.price}}
+	</form>
 </template>
 
 <script>
@@ -29,11 +29,7 @@
 				id: "",
 			}
 		},
-		
-		created() {
-            this.id = this.$route.params.id;
-        },
-		
+
 		mounted()
 		{
 	    	/*var jwt = localStorage.jwt;
