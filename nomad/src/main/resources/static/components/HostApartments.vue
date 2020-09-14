@@ -242,7 +242,9 @@
                 {
                     // TODO(Jovan): Display error
                 }
-                this.availableDates.push(this.selectedDate);
+                let startDate = new Date(this.selectedDate.start);
+                let endDate = new Date(this.selectedDate.end);
+                this.availableDates.push({start: startDate, end: endDate});
 
                 // NOTE(Jovan): Clear selection
                 this.selectedDate = null;
