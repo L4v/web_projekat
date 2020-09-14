@@ -50,7 +50,10 @@
             {
                 props: ["title", "user",],
             });
-        Vue.component("map-small", httpVueLoader("components/MapSmall.vue"));
+        Vue.component("map-small", httpVueLoader("components/MapSmall.vue"),
+            {
+                props: ["lat", "lon", "zoom", "setmarker", ],
+            });
 
         // NOTE(Jovan): Route registration
         const routes =

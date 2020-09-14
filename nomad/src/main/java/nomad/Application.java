@@ -1,6 +1,7 @@
 package nomad;
 
 import static spark.Spark.after;
+
 import static spark.Spark.before;
 import static spark.Spark.get;
 import static spark.Spark.options;
@@ -9,8 +10,11 @@ import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
 import java.security.Key;
+import java.util.Date;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import nomad.utils.DateTypeAdapter;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -113,7 +117,7 @@ public class Application
 
 	public static void main(String args[])
 	{
-		gson = new Gson();
+		gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").create();//registerTypeAdapter(Date.class, new DateTypeAdapter()).create();
 
 		adminDAO = new UserAdminDAO("admins.json");
 		guestDAO = new UserGuestDAO("guests.json");

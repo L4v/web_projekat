@@ -34,12 +34,22 @@
 		</div>
 		<button v-if="!showForm" type="button" @click="showForm = !showForm">+</button>
 		<div v-if="showForm" id="add-reservation-form">
-			<select name="apartment" v-model="selectedApartment" required>
+			<select id="selected-apartment" name="apartment" v-model="selectedApartment" required>
 				<option value="" disabled>Select apartment</option>
 				<option v-for="apartment in apartments" :value="apartment">{{apartment.location.address.street}} {{apartment.location.address.streetNumber}} {{apartment.location.address.area}}</option>
 			</select>
 			<div v-if="selectedApartment" id="apartment-info">
-				<h2>{{selectedApartment.location.address.street}}</h2>
+				<div id="apartment-info-text">
+					<floating-label :inputdata.sync="selectedApartment.location.address.street" placeholder="Street" type="text" name="street"></floating-label>
+					<floating-label :inputdata.sync="selectedApartment.location.address.streetNumber" placeholder="Street No." type="text" name="streetNo"></floating-label>
+					<floating-label :inputdata.sync="selectedApartment.location.address.area" placeholder="Area" type="text" name="area"></floating-label>
+					<floating-label :inputdata.sync="selectedApartment.location.address.areaCode" placeholder="Area Code" type="text" name="areaCode"></floating-label>
+				</div>
+				<map-small :lat="selectedApartment.location.lat" :lon="selectedApartment.location.lon" :zoom="18" :setmarker="true"></map-small>
+				<!-- TODO(Jovan):  NOT WORKING, FIX? -->
+				<v-date-picker is-inline mode="range" v-model="reservationDate" :disabled-dates="selectedApartment.availableDates"></v-date-picker>
+
+				<button type="button" class="button-primary">Add reservation</button>
 			</div>
 		</div>
 	</div>
@@ -55,7 +65,8 @@
 				successMsg: "",
 				showForm: false,
 				apartments: [],
-				selectedApartment: null,
+				selectedApartment: "",
+				reservationDate: null,
 			}
 		},
 		
@@ -96,11 +107,13 @@
 					.then(response =>
 					{
 						this.apartments = response.data;
+						console.log("Available dates: " + JSON.stringify(this.apartments[0].availableDates));
 					})
 					.catch(response =>
 					{
 						// TODO(Jovan): Handle;
 					});
+
 			},
 
 			sortReservations: function()
@@ -132,6 +145,24 @@
 				});
 			}
 		}
-}
-
+	}
 </script>
+
+<style scoped>
+	#selected-apartment
+	{
+		width: 100%;
+	}
+
+	#apartment-info
+	{
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+	#apartment-info-text
+	{
+		display: grid;
+		grid-template-columns: auto auto;
+	}
+</style>
