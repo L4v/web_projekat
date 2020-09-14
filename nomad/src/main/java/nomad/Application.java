@@ -9,11 +9,17 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
+import java.lang.reflect.Type;
 import java.security.Key;
 import java.util.Date;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+
 import nomad.utils.DateTypeAdapter;
 
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -117,8 +123,17 @@ public class Application
 
 	public static void main(String args[])
 	{
-		gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").create();//registerTypeAdapter(Date.class, new DateTypeAdapter()).create();
-
+		/*GsonBuilder builder = new GsonBuilder();//.setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").create();//registerTypeAdapter(Date.class, new DateTypeAdapter()).create();
+		builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() 
+		{
+			public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
+			{
+				return new Date(json.getAsJsonPrimitive().getAsLong());
+			}
+		});
+		gson = builder.create();*/
+		gson = new Gson();
+		
 		adminDAO = new UserAdminDAO("admins.json");
 		guestDAO = new UserGuestDAO("guests.json");
 		hostDAO = new UserHostDAO("hosts.json");

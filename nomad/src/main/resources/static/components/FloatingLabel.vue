@@ -25,6 +25,7 @@
             @input="$emit('update:inputdata', inputdata)"
             @keypress="isNumber"
             />
+            <!-- TODO(Jovan): Safe to emit input and update at same time? -->
     </div>
 </template>
 <script>

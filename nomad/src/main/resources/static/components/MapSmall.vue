@@ -25,12 +25,29 @@
                 default: false,
             },
         },
+        data: function()
+        {
+            return {
+                map: {},
+            }
+        },
+        watch:
+        {
+            lat: function(value)
+            {
+                this.map.setView([value, this.lon]);
+            },
+            lon: function(value)
+            {
+                this.map.setView([this.lat, value]);
+            },
+        },
         mounted()
         {
-            var map = L.map('map-container').setView([this.lat, this.lon], this.zoom);
-            L.tileLayer('https://{s}-tiles.locationiq.com/v2/obk/r/{z}/{x}/{y}.png?key=' + locationiq.key).addTo(map);
+            this.map = L.map('map-container').setView([this.lat, this.lon], this.zoom);
+            L.tileLayer('https://{s}-tiles.locationiq.com/v2/obk/r/{z}/{x}/{y}.png?key=' + locationiq.key).addTo(this.map);
             var geocoder = L.control.geocoder(locationiq.key);
-            geocoder.addTo(map);
+            geocoder.addTo(this.map);
             geocoder.on("select", e => 
             {
                 // console.log("RESULTS " + JSON.stringify(e.feature.feature));
@@ -40,7 +57,7 @@
             if(this.marker)
             {
                 // TODO(Jovan): Fix not working
-                L.marker([this.lat, this.lon]).addTo(map);
+                L.marker([this.lat, this.lon]).addTo(this.map);
             }
         }
     }

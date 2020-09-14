@@ -40,15 +40,25 @@
 			</select>
 			<div v-if="selectedApartment" id="apartment-info">
 				<div id="apartment-info-text">
-					<floating-label :inputdata.sync="selectedApartment.location.address.street" placeholder="Street" type="text" name="street"></floating-label>
-					<floating-label :inputdata.sync="selectedApartment.location.address.streetNumber" placeholder="Street No." type="text" name="streetNo"></floating-label>
-					<floating-label :inputdata.sync="selectedApartment.location.address.area" placeholder="Area" type="text" name="area"></floating-label>
-					<floating-label :inputdata.sync="selectedApartment.location.address.areaCode" placeholder="Area Code" type="text" name="areaCode"></floating-label>
+					<h2>Apartment location</h2>
+					<div id="apartment-info-text-container">
+						<floating-label :inputdata.sync="selectedApartment.location.address.street" placeholder="Street" type="text" name="street"></floating-label>
+						<floating-label :inputdata.sync="selectedApartment.location.address.streetNumber" placeholder="Street No." type="text" name="streetNo"></floating-label>
+						<floating-label :inputdata.sync="selectedApartment.location.address.area" placeholder="Area" type="text" name="area"></floating-label>
+						<floating-label :inputdata.sync="selectedApartment.location.address.areaCode" placeholder="Area Code" type="text" name="areaCode"></floating-label>
+					</div>
 				</div>
 				<map-small :lat="selectedApartment.location.lat" :lon="selectedApartment.location.lon" :zoom="18" :setmarker="true"></map-small>
-				<!-- TODO(Jovan):  NOT WORKING, FIX? -->
-				<v-date-picker is-inline mode="range" v-model="reservationDate" :disabled-dates="selectedApartment.availableDates"></v-date-picker>
-
+				<div id="apartment-info-date">
+					<h2>Reservation dates</h2>
+					<div id="apartment-info-date-container">
+						<!-- TODO(Jovan): More practical to use date range instead of typing number of days? -->
+						<!-- <v-date-picker is-inline mode="range" v-model="reservationDate" :available-dates="selectedApartment.availableDates"></v-date-picker> -->
+						<v-date-picker is-inline v-model="reservationDate" :available-dates="selectedApartment.availableDates"></v-date-picker>
+						<!-- TODO(Jovan): Validate on input update? -->
+						<floating-label v-if="reservationDate" type="number" name="noDays" placeholder="Reservation length" :inputdata.sync="noDays"></floating-label>
+					</div>
+				</div>
 				<button type="button" class="button-primary">Add reservation</button>
 			</div>
 		</div>
@@ -67,6 +77,7 @@
 				apartments: [],
 				selectedApartment: "",
 				reservationDate: null,
+				noDays: 0,
 			}
 		},
 		
@@ -107,7 +118,20 @@
 					.then(response =>
 					{
 						this.apartments = response.data;
-						console.log("Available dates: " + JSON.stringify(this.apartments[0].availableDates));
+						/* NOTE(Jovan):
+						*	Dates are acting weird, parsing them from java to js
+						*	messes them up. This is the only fix that works for some reason
+						*/
+						this.apartments.forEach(a => 
+						{
+							let datesClone = [];
+							a.availableDates.forEach(date =>
+							{
+								datesClone.push({start: new Date(date.start), end: new Date(date.end)});
+							});
+							a.availableDates = [];
+							a.availableDates = [...datesClone];
+						});
 					})
 					.catch(response =>
 					{
@@ -160,9 +184,22 @@
 		flex-direction: column;
 		justify-content: space-between;
 	}
+
 	#apartment-info-text
+	{
+		display: flex;
+		flex-direction: column;
+	}
+
+	#apartment-info-text-container
 	{
 		display: grid;
 		grid-template-columns: auto auto;
+	}
+
+	#apartment-info-date
+	{
+		display: flex;
+		flex-direction: column;
 	}
 </style>
