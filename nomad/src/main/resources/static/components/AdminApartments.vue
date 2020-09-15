@@ -76,11 +76,11 @@
 	    		} 
 	    		else if(this.sort == 'DESCENDING')
 	    		{
-	    			this.reservations.sort((a, b) => (a.price > b.price) ? 1 : -1);
+	    			this.apartments.sort((a, b) => (a.price > b.price) ? 1 : -1);
 	    		}
 	    		else
 	    		{
-	    			this.reservations.sort((a, b) => (a.price < b.price) ? 1 : -1);
+	    			this.apartments.sort((a, b) => (a.price < b.price) ? 1 : -1);
 	    		}	
 	     	},   
 	    },
