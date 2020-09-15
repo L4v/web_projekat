@@ -24,17 +24,7 @@
 					<td>{{apartment.type}}</td>
 					<td>{{apartment.status}}</td>
 					<td>{{apartment.price}}</td>
-					<td><input v-model="commentText" type="text"></floating label></td>
-					<td><select name="rating" v-model="rating" required>
-                    	<option value="" disabled>Rating</option>
-                    	<option value="1">1</option>
-                    	<option value="2">2</option>
-                    	<option value="3">3</option>
-                    	<option value="4">4</option>
-                    	<option value="5">5</option>
-               		</select></td>
-					<td><button class="button-primary" @click="addComment(apartment)">Comment</button></td>
-					<td><router-link :to="{ name: 'ShowApartment', params: { id: apartment.id } }">More</router-link></td>
+					<td><router-link :to="{ name: 'ShowApartment', params: { apartment } }">More</router-link></td>
 				</tr>
 			</table>
 		</div>
@@ -48,8 +38,6 @@
 			return {
 				apartments: {},
 				successMsg: "",
-				commentText: "",
-				rating: "",
 				sort: "",
 			}
 		},
@@ -91,27 +79,6 @@
 	    			this.reservations.sort((a, b) => (a.price < b.price) ? 1 : -1);
 	    		}	
 	    	},
-	    
-			addComment: function(apartment)
-			{
-				let comment = 
-				{
-					id: Math.random(),
-					text: this.commentText,
-					rating: this.rating,
-					apartmentId: apartment.id,
-					guestId: "",
-				};
-				
-				axios.post("rest/guest_add_comment", comment, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
-		        .then(response =>
-		            {
-		                this.successMsg = "Comment successfully added.";
-		            })
-		        .catch(response => {
-		        		this.successMsg = "Failed adding comment";
-		        });
-			}		
 	    },
     }
 </script>

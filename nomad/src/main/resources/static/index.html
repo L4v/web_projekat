@@ -110,9 +110,10 @@
                 },
             },
             {
-                path: "/apartment/:id",
+                path: "/show_apartment",
                 name: "ShowApartment",
                 component: httpVueLoader("components/ShowApartment.vue"),
+                props: true,
                 meta:
                 {
                     requiresAuth: true,
