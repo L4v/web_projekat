@@ -24,8 +24,8 @@
 					<td>{{reservation.noDays}}</td>
 					<td>{{reservation.totalPrice}}</td>
 					<td>{{reservation.status}}</td>
-					<td v-if="reservation.status === 'ACCEPTED' || reservation.status === 'CREATED'"><button class="button-primary" @click="cancelReservation(reservation)">Cancel</button>
-					<td v-else><button disabled>Cancel</button>
+					<td v-if="reservation.status === 'ACCEPTED' || reservation.status === 'CREATED'"><button class="button-primary" @click="cancelReservation(reservation)">Cancel</button></td>
+					<td v-else><b class="error">Cancelled</b></td>
 				</tr>
 				<tr>
 					{{successMsg}}
@@ -42,29 +42,43 @@
 				<div id="apartment-info-text">
 					<h2>Apartment location</h2>
 					<div id="apartment-info-text-container">
-						<floating-label :inputdata.sync="selectedApartment.location.address.street" placeholder="Street" type="text" name="street"></floating-label>
-						<floating-label :inputdata.sync="selectedApartment.location.address.streetNumber" placeholder="Street No." type="text" name="streetNo"></floating-label>
-						<floating-label :inputdata.sync="selectedApartment.location.address.area" placeholder="Area" type="text" name="area"></floating-label>
-						<floating-label :inputdata.sync="selectedApartment.location.address.areaCode" placeholder="Area Code" type="text" name="areaCode"></floating-label>
+						<floating-label readonly :inputdata.sync="selectedApartment.location.address.street" placeholder="Street" type="text" name="street"></floating-label>
+						<floating-label readonly :inputdata.sync="selectedApartment.location.address.streetNumber" placeholder="Street No." type="text" name="streetNo"></floating-label>
+						<floating-label readonly :inputdata.sync="selectedApartment.location.address.area" placeholder="Area" type="text" name="area"></floating-label>
+						<floating-label readonly :inputdata.sync="selectedApartment.location.address.areaCode" placeholder="Area Code" type="text" name="areaCode"></floating-label>
 					</div>
 				</div>
 				<map-small :lat="selectedApartment.location.lat" :lon="selectedApartment.location.lon" :zoom="18" :setmarker="true"></map-small>
-				<div id="apartment-info-date">
-					<h2>Reservation dates</h2>
-					<div id="apartment-info-date-container">
-						<!-- TODO(Jovan): More practical to use date range instead of typing number of days? -->
-						<!-- <v-date-picker is-inline mode="range" v-model="reservationDate" :available-dates="selectedApartment.availableDates"></v-date-picker> -->
-						<small class="error">{{errors.reservationDate}}</small>
-						<v-date-picker is-inline v-model="reservationDate" :available-dates="selectedApartment.availableDates"></v-date-picker>
-						<!-- TODO(Jovan): Validate on input update? -->
-						<small class="error">{{errors.noDays}}</small>
-						<floating-label v-if="reservationDate" type="number" name="noDays" placeholder="Reservation length" :inputdata.sync="noDays"></floating-label>
+				<div id="apartment-info-date-amenities">
+					<div id="apartment-info-date">
+						<h2>Reservation dates</h2>
+						<div id="apartment-info-date-container">
+							<!-- TODO(Jovan): More practical to use date range instead of typing number of days? -->
+							<!-- <v-date-picker is-inline mode="range" v-model="reservationDate" :available-dates="selectedApartment.availableDates"></v-date-picker> -->
+								<small class="error">{{errors.reservationDate}}</small>
+								<v-date-picker is-inline v-model="reservationDate" :available-dates="selectedApartment.availableDates"></v-date-picker>
+								<!-- TODO(Jovan): Validate on input update? -->
+								<small class="error">{{errors.noDays}}</small>
+								<floating-label v-if="reservationDate" type="number" name="noDays" placeholder="Reservation length" :inputdata.sync="noDays"></floating-label>
+						</div>
+					</div>
+					<div id="apartment-info-amenities">
+						<h2>Amenities</h2>
+						<div id="apartment-info-amenities-container">
+							<table>
+								<tr v-for="amenity in selectedApartment.amenities">
+									<td>{{amenity.name}}</td>
+									<td><i class="fa fa-check" aria-hidden="true"></i></td>
+								</tr>
+							</table>
+						</div>
 					</div>
 				</div>
 				<small class="error">{{errors.reservationMessage}}</small>
 				<textarea name="reservationMessage" id="reservation-message" placeholder="Write your message to the host" cols="100" rows="16" v-model="reservationMessage"></textarea>
 				<b class="error">{{addingReservationMsg}}</b>
 				<button type="button" class="button-primary" @click="addReservation">Add reservation</button>
+
 			</div>
 		</div>
 	</div>
@@ -198,7 +212,6 @@
 					.then(response => 
 					{
 						this.addingReservationMsg = "Reservation added";
-						// TODO(Jovan): Go to preview
 					})
 					.catch(response =>
 					{
@@ -296,6 +309,10 @@
 </script>
 
 <style scoped>
+	h2
+	{
+		font-size: 2rem;
+	}
 	#selected-apartment
 	{
 		width: 100%;
@@ -318,11 +335,53 @@
 	{
 		display: grid;
 		grid-template-columns: auto auto;
+		padding: 20px;
 	}
 
 	#apartment-info-date
 	{
 		display: flex;
 		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	#apartment-info-date-container
+	{
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	#apartment-info-date-amenities
+	{
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		padding: 20px;
+	}
+
+	#apartment-info-amenities
+	{
+		text-align: center;
+	}
+
+	#apartment-info-amenities-container
+	{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.error
+	{
+		color: #f00;
+		padding-bottom: 8px;
+		font-weight: 500;
+	}
+
+	.fa-check
+	{
+		color: #0f0;
 	}
 </style>

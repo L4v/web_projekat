@@ -1,23 +1,24 @@
 package nomad.user;
 
 import static nomad.utils.Responses.notFound;
+import static nomad.utils.Responses.badRequest;
 import static nomad.utils.Responses.ok;
 import static nomad.utils.Responses.forbidden;
 import static nomad.utils.Responses.serverError;
 import static nomad.Application.apartmentDAO;
+import static nomad.Application.reservationDAO;
 import static nomad.Application.gson;
 import static nomad.Application.guestDAO;
 import static nomad.Application.key;
 import static nomad.Application.parseJws;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import nomad.apartment.Apartment;
-import nomad.apartment.ApartmentStatus;
+import nomad.reservation.Reservation;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -42,6 +43,18 @@ public class GuestServices
 				return forbidden("User not authorized as guest", response);
 			}
 			ArrayList<Apartment> activeApartments = (ArrayList<Apartment>) apartmentDAO.getActive();
+			
+			// NOTE(Jovan): Remove already reserved for that guest
+			ArrayList<String> guestReservations = guest.getReservations();
+			for(String res : guestReservations)
+			{
+				Reservation reservation = reservationDAO.get(res);
+				if(reservation == null)
+				{
+					return badRequest("Bad reservations", response);
+				}
+				activeApartments.removeIf(a -> reservation.getApartmentId().equals(a.getId()));
+			}
 			String json = gson.toJson(activeApartments);
 			response.type("application/json");
 			return ok(json, response);
