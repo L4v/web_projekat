@@ -48,6 +48,7 @@ public class Path
 		public static final String REMOVE_AMENITY = "/rest/remove_amenity";
 		public static final String UPDATE_AMENITY = "/rest/update_amenity";
 		public static final String GET_AMENITIES = "/rest/get_amenities";
+		public static final String CHECK_IF_HAS_RESERVATION = "/rest/check_if_has_reservation";
 	}
 
 }
