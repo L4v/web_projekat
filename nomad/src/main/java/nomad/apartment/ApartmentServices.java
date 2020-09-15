@@ -82,15 +82,10 @@ public class ApartmentServices
 			{
 				return forbidden("Not admin", response);
 			}
-
-			if(apartmentDAO.removeAll()) 
-			{
-				response.status(200);
-				response.body("Apartments successfully removed.");
-				ArrayList<Apartment> retVal = (ArrayList<Apartment>) apartmentDAO.getAll();
-				return gson.toJson(retVal);
-			}
-			return badRequest("Failed removing all apartments", response);
+			apartmentDAO.removeAll();
+			response.status(200);
+			ArrayList<Apartment> retVal = (ArrayList<Apartment>) apartmentDAO.getAll();
+			return gson.toJson(retVal);
 		} catch (Exception e)
 		{
 			e.printStackTrace();

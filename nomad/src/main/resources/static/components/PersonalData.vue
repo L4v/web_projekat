@@ -2,6 +2,7 @@
 	<div class="container">
 		<div id="personalData">
 			<h1>Personal data</h1>
+			<br>
 			<table id="tabela">
 				<tr>
 					<floating-label readonly :inputdata.sync="guest.username" placeholder="Username" type="text" class="no-focus" disabled="disabled" readonly="readonly" tabindex="-1"></floating-label>

@@ -2,6 +2,7 @@
 	<div class="container">
 		<div id="apartmentInfo">
 			<h1>Apartment info</h1>
+			<br>
 			<div id="apartment">
 				<label>Type:  {{apartment.type}}</label>
 				<label>Number of rooms:  {{apartment.noRooms}}</label>
@@ -94,7 +95,7 @@
 				{
 					let comment = 
 					{
-						id: Math.random(),
+						id: "",
 						text: this.commentText,
 						rating: this.rating,
 						apartmentId: this.apartment.id,

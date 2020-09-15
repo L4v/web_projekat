@@ -2,6 +2,7 @@
 	<div class="container">
 		<div id="apartments">
 			<h1>Apartments</h1>
+			<br>
 			<div id="sort">
 				Sort by price:
 				<select name="sort" v-model="sort" required>
@@ -11,6 +12,7 @@
 	       		</select>
 	       		<button class="button-primary" @click=sortApartmentsByPrice()>Sort</button>
        		</div>
+       		<br>
 			<table>
 				<tr>
 					<th>Type</th>

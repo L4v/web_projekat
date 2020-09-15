@@ -64,6 +64,7 @@ public class AmenityDAO
 	public boolean add(Amenity amenity)
 	{
 		ArrayList<Amenity> amenities = (ArrayList<Amenity>) this.getAll();
+		amenity.setId(Math.random() + amenity.getName() + Math.random());
 		if (amenities.stream().filter(a -> a.getId().equals(amenity.getId())).findAny().orElse(null) == null)
 		{
 			amenities.add(amenity);

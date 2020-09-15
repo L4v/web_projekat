@@ -195,9 +195,10 @@ public class ApartmentDAO
 		return apartments == null ? new ArrayList<Apartment>() : apartments;
 	}
 	
-	public boolean removeAll() {
+	public void removeAll() {
 		ArrayList<Apartment> apartments = (ArrayList<Apartment>) this.getAll();
-		return apartments.removeAll(apartments);
+		apartments.clear();
+		this.saveAll(apartments);
 	}
 
 }

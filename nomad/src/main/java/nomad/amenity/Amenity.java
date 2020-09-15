@@ -18,6 +18,11 @@ public class Amenity implements Serializable
 	{
 		return this.id;
 	}
+	
+	public void setId(String id)
+	{
+		this.id = id;
+	}
 
 	public String getName()
 	{
