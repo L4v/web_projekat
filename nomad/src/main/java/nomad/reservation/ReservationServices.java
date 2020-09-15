@@ -1,6 +1,8 @@
 package nomad.reservation;
 
 import static nomad.utils.Responses.notFound;
+import static nomad.utils.Responses.ok;
+import static nomad.utils.Responses.forbidden;
 import static nomad.Application.gson;
 import static nomad.Application.guestDAO;
 import static nomad.Application.hostDAO;
@@ -212,5 +214,49 @@ public class ReservationServices
 			return notFound("Server error: " + e.getMessage(), response);
 		}
 	};
+	
+	public static Route checkIfHasReservation = (Request request, Response response) ->
+	{
+		response.type("application/json");
+		String jws = parseJws(request);
+		if (jws == null)
+		{
+			return notFound("Invalid login", response);
+		}
+
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
+			if (guest == null)
+			{
+				return notFound("Not guest", response);
+			}
+
+			String json = request.body();
+			Apartment apartment = gson.fromJson(json, Apartment.class);
+			
+			ArrayList<Reservation> reservations = (ArrayList<Reservation>) reservationDAO.getForApartment(apartment.getId());
+			if(isAllowed(reservations, guest.getUsername()))
+			{
+				return ok("Allowed", response);
+			}
+			return forbidden("Not allowed", response);
+		} catch (Exception e)
+		{
+			return notFound("Server error: " + e.getMessage(), response);
+		}
+	};
+	
+	private static boolean isAllowed(ArrayList<Reservation> reservations, String username) {
+		for(Reservation reservation : reservations)
+		{
+			if(reservation.getGuestId().equals(username))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 	
 }

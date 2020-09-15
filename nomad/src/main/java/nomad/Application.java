@@ -1,5 +1,6 @@
 package nomad;
 
+import static nomad.Application.gson;
 import static spark.Spark.after;
 
 import static spark.Spark.before;
@@ -187,6 +188,7 @@ public class Application
 		get(Path.Rest.GUEST_RESERVED_APARTMENTS, GuestServices.reservedApartments);
 		get(Path.Rest.GUEST_ALL_APARTMENTS, GuestServices.allApartments);
 		get(Path.Rest.GUEST_ALL_RESERVATIONS, ReservationServices.guestViewReservations);
+		get(Path.Rest.CHECK_IF_HAS_RESERVATION, ReservationServices.checkIfHasReservation);
 		
 		// TODO(Jovan): Catch all for vue router, not necessary?
 		/*before((request, response) ->
