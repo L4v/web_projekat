@@ -1,6 +1,8 @@
 package nomad.reservation;
 
 import static nomad.Application.gson;
+import static nomad.Application.guestDAO;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -11,6 +13,8 @@ import java.util.Collection;
 
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+
+import nomad.user.UserGuest;
 
 public class ReservationDAO
 {
@@ -63,13 +67,26 @@ public class ReservationDAO
 	public boolean add(Reservation reservation)
 	{
 		ArrayList<Reservation> reservations = (ArrayList<Reservation>) this.getAll();
-		if (reservations.stream().filter(r -> r.getId().equals(reservation.getId())).findAny().orElse(null) == null)
+		String id = reservation.getApartmentId() + reservation.getGuestId();
+		reservation.setId(id);
+		
+		for(Reservation r : reservations)
 		{
-			reservations.add(reservation);
-			this.saveAll(reservations);
-			return true;
+			if(r.getId().equals(reservation.getId()))
+			{
+				return false;
+			}
 		}
-		return false;
+		UserGuest guest = guestDAO.get(reservation.getGuestId());
+		if(guest == null)
+		{
+			return false;
+		}
+		guest.addReservation(reservation.getId());
+		guestDAO.update(guest);
+		reservations.add(reservation);
+		this.saveAll(reservations);
+		return true;
 	}
 
 	public boolean update(Reservation reservation)

@@ -2,10 +2,6 @@ package nomad.user;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import nomad.apartment.Apartment;
-import nomad.reservation.Reservation;
 
 public class UserGuest extends UserBase implements Serializable
 {
@@ -36,6 +32,16 @@ public class UserGuest extends UserBase implements Serializable
 	public void setReservations(ArrayList<String> reservations)
 	{
 		this.reservations = reservations;
+	}
+	
+	public void addReservation(String reservationId)
+	{
+		this.reservations.add(reservationId);
+	}
+	
+	public void removeReservation(String reservationId)
+	{
+		this.reservations.remove(reservationId);
 	}
 
 	// TODO(Jovan): Getter and setters for lists?
