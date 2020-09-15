@@ -54,12 +54,17 @@
 					<div id="apartment-info-date-container">
 						<!-- TODO(Jovan): More practical to use date range instead of typing number of days? -->
 						<!-- <v-date-picker is-inline mode="range" v-model="reservationDate" :available-dates="selectedApartment.availableDates"></v-date-picker> -->
+						<small class="error">{{errors.reservationDate}}</small>
 						<v-date-picker is-inline v-model="reservationDate" :available-dates="selectedApartment.availableDates"></v-date-picker>
 						<!-- TODO(Jovan): Validate on input update? -->
+						<small class="error">{{errors.noDays}}</small>
 						<floating-label v-if="reservationDate" type="number" name="noDays" placeholder="Reservation length" :inputdata.sync="noDays"></floating-label>
 					</div>
 				</div>
-				<button type="button" class="button-primary">Add reservation</button>
+				<small class="error">{{errors.reservationMessage}}</small>
+				<textarea name="reservationMessage" id="reservation-message" placeholder="Write your message to the host" cols="100" rows="16" v-model="reservationMessage"></textarea>
+				<b class="error">{{addingReservationMsg}}</b>
+				<button type="button" class="button-primary" @click="addReservation">Add reservation</button>
 			</div>
 		</div>
 	</div>
@@ -73,36 +78,134 @@
 				reservations: {},
 				sort: "",
 				successMsg: "",
+				addingReservationMsg: "",
 				showForm: false,
 				apartments: [],
 				selectedApartment: "",
+				apartmentId: "",
 				reservationDate: null,
 				noDays: 0,
+				reservationMessage: "",
+				errors:
+				{
+					reservationDate:    "",
+					noDays:             "",
+					reservationMessage: "",
+				},
+
 			}
-		},
-		
-		mounted()
-		{
-			var jwt = localStorage.jwt;
-			if(!jwt)
-			{
-				alert("Please log in");
-				return;
-			}
-			if(jwt)
-			{
-				axios.get("rest/guest_view_reservations",{headers:{"Authorization": "Bearer " + localStorage.jwt}})
-					.then(response => (this.reservations = response.data))
-					.catch(response => 
-					{
-						//TODO(Kristian): handle 404
-					});
-			}
-			this.getApartments();
 		},
 		
 		methods:
 		{
+			validateReservationDate: function()
+			{
+				if(!this.reservationDate)
+				{
+					this.errors.reservationDate = "Please choose a reservation date";
+					return false;
+				}
+				return true;
+			},
+
+			validateNoDays: function()
+			{
+				if(!this.noDays || this.noDays <= 0)
+				{
+					// TODO(Jovan): Auto fix it?
+					this.errors.noDays = "Must be a positive integer";
+					return false;
+				}
+
+				// NOTE(Jovan): Add potential reservation length to the first day 
+				/*let lastDay = new Date(this.reservationDate.getTime());
+				console.log("Before addition: " + lastDay.getTime());
+				lastDay.setDate(lastDay.getDate() + this.noDays);*/
+
+				let lastDay = new Date(this.reservationDate.getTime());
+				lastDay.setDate(lastDay.getDate() + parseInt(this.noDays));
+
+				// NOTE(Jovan): Find in which interval of available dates it belongs to
+				for(let range of this.selectedApartment.availableDates)
+				{
+					if(lastDay.getTime() >= range.start.getTime() && lastDay.getTime() <= range.end.getTime())
+					{
+						// NOTE(Jovan): Number of days added to the first day
+						// fits inside an interval -> valid noDays
+						return true;
+					}
+				}
+
+				this.errors.noDays = "Reservation length is too long";
+				return false;
+			},
+
+			validateReservationMesssage: function()
+			{
+				if(!this.reservationMessage)
+				{
+					this.errors.reservationMessage = "Must not be empty";
+					return false;
+				}
+
+				return true;
+			},
+
+			validateAllInputs: function()
+			{
+				this.errors =
+				{
+					reservationDate:    "",
+					noDays:             "",
+					reservationMessage: "",
+				};
+
+				let reservationDateValid = this.validateReservationDate();
+				let noDaysValid = this.validateNoDays();
+				let reservationMessageValid = this.validateReservationMesssage();
+
+				return reservationDateValid && noDaysValid && reservationMessageValid;
+			},
+
+			addReservation: function()
+			{
+				if(!this.validateAllInputs())
+				{
+					console.log("Invalid inputs");
+					return;
+				}
+
+				let reservation = 
+				{
+					apartmentId: 		this.selectedApartment.id,
+					startDate:   		this.reservationDate,
+					noDays:      		this.noDays,
+					totalPrice:  		0,
+					reservationMessage: this.reservationMessage,
+					guestId:            "",
+					status:             "",
+					id:					"",
+				};
+
+				let jwt = localStorage.jwt;
+				if(!jwt)
+				{
+					this.$router.go();
+					return;
+				}
+
+				axios.post("rest/create_reservation", reservation, {headers: {"Authorization": "Bearer " + jwt}})
+					.then(response => 
+					{
+						this.addingReservationMsg = "Reservation added";
+						// TODO(Jovan): Go to preview
+					})
+					.catch(response =>
+					{
+						this.addingReservationMsg = "Failed to add reservation";
+					});
+			},
+
 			// NOTE(Jovan): Gets all available apartments
 			getApartments: function()
 			{
@@ -168,7 +271,27 @@
 						this.successMsg = "Failed canceling reservation";
 				});
 			}
-		}
+		},
+
+		mounted()
+		{
+			var jwt = localStorage.jwt;
+			if(!jwt)
+			{
+				alert("Please log in");
+				return;
+			}
+			if(jwt)
+			{
+				axios.get("rest/guest_view_reservations",{headers:{"Authorization": "Bearer " + localStorage.jwt}})
+					.then(response => (this.reservations = response.data))
+					.catch(response => 
+					{
+						//TODO(Kristian): handle 404
+					});
+			}
+			this.getApartments();
+		},
 	}
 </script>
 

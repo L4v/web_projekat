@@ -95,12 +95,14 @@
                 }
                 let guest =
                 {
-                    name:     this.name,
-                    surname:  this.surname,
-                    sex:      this.sex,
-                    username: this.username,
-                    password: this.password,
-                    userType: "GUEST",
+                    name:         this.name,
+                    surname:      this.surname,
+                    sex:          this.sex,
+                    username:     this.username,
+                    password:     this.password,
+                    userType:     "GUEST",
+                    rented:       [],
+                    reservations: [],
                 };
                 const vm = this;
                 axios.post("rest/reg_guest", guest)
