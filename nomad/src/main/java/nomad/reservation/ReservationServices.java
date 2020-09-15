@@ -149,6 +149,7 @@ public class ReservationServices
 				return forbidden("Not a guest", response);
 			}
 			ArrayList<Reservation> reservations = (ArrayList<Reservation>)reservationDAO.getByIds(guest.getReservations());
+			
 			response.type("application/json");
 			String json = gson.toJson(reservations);
 			return ok(json, response);
@@ -232,11 +233,10 @@ public class ReservationServices
 	
 	public static Route guestCancelReservation = (Request request, Response response) ->
 	{
-		response.type("application/json");
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("Invalid login", response);
 		}
 
 		try
@@ -245,7 +245,7 @@ public class ReservationServices
 			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
 			if (guest == null)
 			{
-				return notFound("Not guest", response);
+				return forbidden("Not guest", response);
 			}
 
 			String json = request.body();
@@ -255,17 +255,19 @@ public class ReservationServices
 				reservation.setStatus(ReservationStatus.CANCELLED);
 				if(reservationDAO.update(reservation))
 				{
-					response.status(200);
+					guest.removeReservation(reservation.getId());
+					guestDAO.update(guest);
 					ArrayList<Reservation> reservations = (ArrayList<Reservation>) reservationDAO.getByIds(guest.getReservations());
-					return gson.toJson(reservations);
+					String jsonRes = gson.toJson(reservations);
+					return ok(jsonRes, response);
 				}
-				return notFound("Failed cancelling reservation", response);
+				return badRequest("Failed cancelling reservation", response);
 			}
-			return notFound("Failed cancelling reservation - reservation status is not ACCEPTED or CREATED", response);
+			return badRequest("Failed cancelling reservation - reservation status is not ACCEPTED or CREATED", response);
 			
 		} catch (Exception e)
 		{
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 	

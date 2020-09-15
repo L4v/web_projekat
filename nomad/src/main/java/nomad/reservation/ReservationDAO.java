@@ -67,7 +67,7 @@ public class ReservationDAO
 	public boolean add(Reservation reservation)
 	{
 		ArrayList<Reservation> reservations = (ArrayList<Reservation>) this.getAll();
-		String id = reservation.getApartmentId() + reservation.getGuestId();
+		String id = reservation.getApartmentId() + reservation.getGuestId() + reservation.getStartDate().getTime() + reservation.getStartDate().getTime();
 		reservation.setId(id);
 		
 		for(Reservation r : reservations)
