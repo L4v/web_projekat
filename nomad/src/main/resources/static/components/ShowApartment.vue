@@ -34,6 +34,7 @@
 			     </select>
 			     <button class="button-primary" @click="addComment()">Comment</button>
 			</div>
+			{{successMsg}}
 		</div>
 	</div>
 </template>
@@ -56,6 +57,7 @@
 	    {    
 	    	allowedComment: function()
 	    	{
+	    		
 	    		axios.get("rest/check_if_has_reservation", this.apartment, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
 			        .then(response =>
 			            {
@@ -63,7 +65,7 @@
 			            })
 			        .catch(response => {
 			        		return false;
-			        }); 
+			        });
 	    	},
 	    	
 	    	showComments: function()

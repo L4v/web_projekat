@@ -57,15 +57,15 @@
 	    {
 			removeAll: function()
 	     	{
-	     		axios.post("rest/admin_remove_apartments",{headers:{"Authorization": "Bearer " + localStorage.jwt}})
-		        .then(response =>
-	            {
-	            	this.apartments = response.data;
-	                this.successMsg = "Apartments successfully removed.";
-	            })
-		        .catch(response => {
-		        		this.successMsg = "Failed removing apartments";
-		        });
+	     		axios.post("rest/admin_remove_apartments", {headers:{"Authorization": "Bearer " + localStorage.jwt}})
+			        .then(response =>
+		            {
+		            	this.apartments = response.data;
+		                this.successMsg = "Apartments successfully removed.";
+		            })
+			        .catch(response => {
+			        		this.successMsg = "Failed removing apartments";
+			        });
 	     	},
 	     	
 	     	sortApartmentsByPrice: function()

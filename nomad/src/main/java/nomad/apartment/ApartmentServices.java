@@ -70,7 +70,6 @@ public class ApartmentServices
 	{
 		response.type("application/json");
 		String jws = parseJws(request);
-		System.out.println(jws);
 		if (jws == null)
 		{
 			return forbidden("Invalid login", response);
