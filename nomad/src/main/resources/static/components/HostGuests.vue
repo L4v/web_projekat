@@ -2,8 +2,9 @@
 	<div class="container">
 		<div id="showGuests">
 			<h1>Guests</h1>
+			<br>
 			<div id="search">
-				<floating-label :inputdata.sync="guest_username" placeholder="Type username" type="text"></floating-label>
+				Search:
 				<select id="sex" v-model="guest_sex" required>
 		            <option value="" disabled>Sex</option>
 		            <option value="MALE">Male</option>
@@ -11,8 +12,10 @@
 		            <option value="OTHER">Other</option>
 		            <option value="PRIVATE">Prefer not to say</option>
 		        </select>
+		        <input v-model="guest_username" placeholder="Username..." type="text">
 				<button class="button-primary" @click="searchGuest()">Search</button>
 			</div>
+			<br>
 			<table id="MyGuests">
 				<tr>
 					<th>Username</th>
@@ -38,6 +41,7 @@
 		{
 			return{
 				guests: {},
+				guests_copy: {},
 				guest_username: "",
 				guest_sex: "",
 				message: "",
@@ -52,6 +56,7 @@
 		             .then(response =>
 		             {
 		                 this.guests = response.data;
+		                 this.guests_copy = response.data;
 		             })
 		             .catch(response =>
 		             {
@@ -67,38 +72,26 @@
 	        
 	            if(!this.guest_username && !this.guest_sex)
 	            {
-	            	alert("Search parameter must not be empty.");
-	            	return;
+					this.guests = this.guests_copy;
 	            }
-	            
-	            let parameter = 
+	            else if(!this.guest_username)
 	            {
-	            	username: this.guest_username,
-	            	sex: this.guest_sex,
-	            };
-	            /*
-	            axios.post("rest/host_search_guests", parameter, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
-		             .then(response =>
-		             {
-		                 this.guests = response.data;
-		             })
-		             .catch(response =>
-		             {
-		                 this.message = "No results";
-		             });
-		             */
-		             
-		        var result = [];
-		        
-		        for(guest of this.guests)
-		        {
-		        	if(guest.sex == this.guest_sex)
-		        	{
-		        		result.push(guest);
-		        	}
-		        }
-				this.guests = result;
-	        }
-	    }
+			        var result = [];
+			        for(guest of this.guests_copy)
+			        {
+			        	if(guest.sex == this.guest_sex)
+			        	{
+			        		result.push(guest);
+			        	}
+			        }
+					this.guests = result;
+				}
+				else 
+				{
+					var result = [];
+					//TODO
+				}
+	        },
+	    },
 	}
 </script>

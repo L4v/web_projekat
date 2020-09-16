@@ -74,42 +74,6 @@
                 component: httpVueLoader("components/Registration.vue")
             },
             {
-                path: "/personal_data",
-                name: "PersonalData",
-                component: httpVueLoader("components/PersonalData.vue"),
-                meta:
-                {
-                    requiresAuth: true,
-                },
-            },
-            {
-                path: "/amenities",
-                name: "Amenities",
-                component: httpVueLoader("components/AdminAmenities.vue"),
-                meta:
-                {
-                    requiresAuth: true,
-                },
-            },
-            {
-                path: "/hosts_guests",
-                name: "HostGuests",
-                component: httpVueLoader("components/HostGuests.vue"),
-                meta:
-                {
-                    requiresAuth: true,
-                },
-            },
-            {
-                path: "/guest_apartments",
-                name: "GuestApartments",
-                component: httpVueLoader("components/GuestApartments.vue"),
-                meta:
-                {
-                    requiresAuth: true,
-                },
-            },
-            {
                 path: "/show_apartment",
                 name: "ShowApartment",
                 component: httpVueLoader("components/ShowApartment.vue"),
@@ -188,6 +152,16 @@
                         path: "reservations",
                         name: "GuestReservations",
                         component: httpVueLoader("components/GuestsReservations.vue"),
+                    },
+                    {
+                        path: "apartments",
+                        name: "GuestApartments",
+                        component: httpVueLoader("components/GuestApartments.vue"),
+                    },
+                    {
+                        path: "personal_data",
+                        name: "PersonalData",
+                        component: httpVueLoader("components/PersonalData.vue"),
                     },
                 ],
             },

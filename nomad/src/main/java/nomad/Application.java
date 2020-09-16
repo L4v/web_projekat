@@ -166,7 +166,6 @@ public class Application
 		post(Path.Rest.REMOVE_AMENITY, AmenityServices.removeAmenity);
 		post(Path.Rest.UPDATE_AMENITY, AmenityServices.updateAmenity);
 		post(Path.Rest.ADMIN_REMOVE_APARTMENTS, ApartmentServices.adminDeleteApartments);
-		post(Path.Rest.HOST_SEARCH_GUESTS, HostServices.hostSearchGuests);
 		post(Path.Rest.HOST_ENABLE_APARTMENT, HostServices.enableApartment);
 		
 		get("rest/test", LoginServices.verifyLogin);
