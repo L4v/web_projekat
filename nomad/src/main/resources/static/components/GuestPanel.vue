@@ -55,6 +55,7 @@
     #main-content
     {
         margin-left: 15vw;
+        margin-left: 15vw;
         background-color: #fafafa;
     }
 </style>

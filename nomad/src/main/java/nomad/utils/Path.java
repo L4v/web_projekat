@@ -23,7 +23,7 @@ public class Path
 		public static final String HOST_ALL_APARTMENTS = "/rest/host_all_apartments";
 		public static final String HOST_ALL_GUESTS = "/rest/host_all_guests";
 		public static final String HOST_ALL_RESERVATIONS = "/rest/host_all_reservations";
-		public static final String HOST_ALL_COMMENTS = "/rest/host_view_comments";
+		public static final String HOST_ALL_COMMENTS = "/rest/host_all_comments";
 		public static final String HOST_ADD_APARTMENT = "/rest/host_add_apartment";
 		public static final String HOST_ENABLE_APARTMENT = "/rest/host_enable_apartment";
 		public static final String HOST_REJECT_RESERVATION = "/rest/host_reject_reservation";

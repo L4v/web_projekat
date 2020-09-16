@@ -1,9 +1,11 @@
 package nomad.comment;
 
 
-import static nomad.utils.Responses.ok;
-import static nomad.utils.Responses.serverError;
+
 import static nomad.utils.Responses.forbidden;
+import static nomad.utils.Responses.serverError;
+import static nomad.utils.Responses.ok;
+
 import static nomad.Application.parseJws;
 import static nomad.Application.key;
 import static nomad.Application.gson;
@@ -64,11 +66,11 @@ public class CommentServices
 			{
 				return forbidden("Invalid host", response);
 			}
-			response.type("application/json");
-			response.status(200);
+			
 			ArrayList<Comment> comments = (ArrayList<Comment>) allHostComments(host);
-			response.body(gson.toJson(comments));
-			return response;
+			String json = gson.toJson(comments);
+			response.type("application/json");
+			return ok(json, response);
 		}
 		catch(Exception e)
 		{

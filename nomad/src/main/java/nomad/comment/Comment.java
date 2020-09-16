@@ -2,7 +2,6 @@ package nomad.comment;
 
 import java.io.Serializable;
 
-
 public class Comment implements Serializable
 {
 	private static final long serialVersionUID = 2251140122076809587L;
