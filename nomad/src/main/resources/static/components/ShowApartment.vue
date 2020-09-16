@@ -8,10 +8,12 @@
 			</div>
 			<br>
 			<div id="apartment">
-				<label>Type:  {{apartment.type}}</label>
-				<label>Number of rooms:  {{apartment.noRooms}}</label>
-				<label>Number of guests:  {{apartment.noGuests}}</label>
-				<label>Price:  {{apartment.price}}</label>
+				<label>Type:   {{apartment.type}}</label>
+				<label>Number of rooms:   {{apartment.noRooms}}</label>
+				<label>Number of guests:   {{apartment.noGuests}}</label>
+				<label>Price:   {{apartment.price}}</label>
+				<label>Address:   {{apartment.location.address.street}} {{apartment.location.address.streetNumber}}</label>
+				<label>Area:   {{apartment.location.address.area}}</label>
 				<label>Amenities:</label>
 				<select id="amenities" multiple disabled>
 		        	<option v-for="amenity in apartment.amenities" :value="amenity">{{amenity.name}}</option>
@@ -19,8 +21,10 @@
 		        <button @click=showComments()>Show comments</button>
 		        <table v-if="showComment">
 		        		<tr v-for="comment in apartment.comments">
-		        		<td><b>{{comment.guestId}}</b></td>
-		        		<td>{{comment.text}}<br>Rating: {{comment.rating}}</td>
+			        		<td><b>By: </b>{{comment.guestId}}<br>
+			        		<b>Comment: </b>{{comment.text}}<br>
+			        		<b>Rating: </b>{{comment.rating}}/5<br>
+			        		</td>
 		        		</tr>
 		        </table>
 		    </div>

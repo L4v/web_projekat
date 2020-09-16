@@ -30,16 +30,18 @@
        		<br>
 			<table>
 				<tr>
+					<th>Address</th>
 					<th>Type</th>
-					<th>Status</th>
+					<th>No. of rooms</th>
+					<th>No. of guests</th>
 					<th>Price</th>
-					<th>Comment</th>
-					<th>Rating</th>
-					<th>Submit</th>
+					<th>More information</th>
 				</tr>
 				 <tr v-for="apartment in apartments">
+				 	<td>{{apartment.location.address.street}} {{apartment.location.address.streetNumber}} {{apartment.location.address.area}}</td>
 					<td>{{apartment.type}}</td>
-					<td>{{apartment.status}}</td>
+					<td>{{apartment.noRooms}}</td>
+					<td>{{apartment.noGuests}}</td>
 					<td>{{apartment.price}}</td>
 					<td><router-link :to="{ name: 'ShowApartment', params: { apartment } }">More</router-link></td>
 				</tr>

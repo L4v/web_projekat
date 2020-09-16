@@ -39,20 +39,8 @@
             }
 	    },
 		
-		mounted(){
-	    	 /*var jwt = localStorage.jwt;
-	    	 if(jwt)
-	    	 {
-	         	axios.get("rest/admin_view_comments", {headers:{"Authorization": "Bearer " + jwt}})
-		             .then(response =>
-		             {
-		                 this.comments = response.data;
-		             })
-		             .catch(response =>
-		             {
-		                 
-		             });
-		     }*/
+		mounted()
+		{
 		    this.getCommentsPromise().then(response => 
             {
                 response.forEach(comment => 
