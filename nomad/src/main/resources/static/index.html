@@ -73,7 +73,7 @@
                 name: "Registration",
                 component: httpVueLoader("components/Registration.vue")
             },
-            {
+           {
                 path: "/show_apartment",
                 name: "ShowApartment",
                 component: httpVueLoader("components/ShowApartment.vue"),
@@ -157,6 +157,15 @@
                         path: "apartments",
                         name: "GuestApartments",
                         component: httpVueLoader("components/GuestApartments.vue"),
+                        children:
+                        [
+                        	{
+                                path: "show_apartment",
+                                name: "ShowApartment",
+                                component: httpVueLoader("components/ShowApartment.vue"),
+                                props: true,
+                        	},
+                        ],
                     },
                     {
                         path: "personal_data",

@@ -24,7 +24,7 @@
 		        		</tr>
 		        </table>
 		    </div>
-			<div v-if="allowedComment()">
+			<div v-if="allowedComment">
 				<br>
 				<label>Leave comment</label>
 				<textarea v-model="commentText" rows="6" cols="30" placeholder="Comment..."></textarea>
@@ -57,23 +57,24 @@
 				rating: "",
 				id: "",
 				showComment: false,
+				allowedComment: false,
 			}
 		},
-	    methods:
-	    {    
-	    	allowedComment: function()
-	    	{
-	    		return true;
-	    		/*axios.get("rest/check_if_has_reservation", this.apartment, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
+		
+		mounted()
+		{
+			axios.post("rest/check_if_has_reservation", this.apartment, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
 			        .then(response =>
 			            {
-			                return true;
+			                this.allowedComment = true;
 			            })
 			        .catch(response => {
-			        		return false;
-			        });*/
-	    	},
-	    	
+			        		this.allowedComment = false;
+			        });
+		},
+		
+	    methods:
+	    {    
 	    	showComments: function()
 	    	{
 	    		this.showComment = true;

@@ -33,20 +33,20 @@
 	       	<br>
 			<table>
 				<tr>
-					<th>Guest username</th>
+					<th>Apartment address</th>
 					<th>Start date</th>
 					<th>No of days</th>
 					<th>Total price</th>
 					<th>Status</th>
-					<th>Apartment ID</th>
+					<th>Guest username</th>
 				</tr>
 				 <tr v-for="reservation in reservations">
-				 	<td>{{reservation.guestId}}</td>
-					<td>{{reservation.startDate}}</td>
-					<td>{{reservation.noDays}}</td>
-					<td>{{reservation.totalPrice}}</td>
-					<td>{{reservation.status}}</td>
-					<td>{{reservation.apartmentId}}</td>
+				 	<td>{{reservation.apartment.location.address.street}} {{reservation.apartment.location.address.streetNumber}}  {{reservation.apartment.location.address.area}}</td>
+					<td>{{reservation.reservation.startDate}}</td>
+					<td>{{reservation.reservation.noDays}}</td>
+					<td>{{reservation.reservation.totalPrice}}</td>
+					<td>{{reservation.reservation.status}}</td>
+					<td>{{reservation.reservation.guestId}}</td>
 				</tr>
 			</table>
 			{{successMsg}}
@@ -70,25 +70,58 @@
 		
 		mounted()
 		{
-	    	var jwt = localStorage.jwt;
-	    	if(jwt)
-			{
-		    	axios.get("rest/admin_view_reservations",{headers:{"Authorization": "Bearer " + localStorage.jwt}})
-			        .then(response => 
-			        {
-			        	this.reservations = response.data;
-			        	this.reservations_copy = response.data;
-			       	})
-		    		.catch(response => 
-	    			{
-	    				//TODO(Kristian): handle 404
-	    				alert("Please log in");
-	    			});
-			}
+			 this.getReservationsPromise()
+                .then(response =>
+                {
+                    let apartmentIds = [];
+                    response.forEach(reservation =>
+                    {
+                        this.reservations.push(
+                            {
+                                reservation: reservation,
+                                apartment:   {},
+                            }
+                        );
+                        apartmentIds.push(reservation.apartmentId);
+                    });
+                    axios.get("rest/admin_all_apartments",
+                    {
+                        headers:
+                        {
+                            "Authorization": "Bearer " + localStorage.jwt,
+                        },
+                    }).then(response =>
+                    {
+                        response.data.forEach(apartment =>
+                        {
+                            for(let reservation of this.reservations)
+                            {
+                                if(reservation.reservation.apartmentId === apartment.id)
+                                {
+                                    reservation.apartment = apartment;
+                                }
+                            }
+                        });
+                    });
+                });
 	    },
 	    
 	    methods:
 	    {
+	    	getReservationsPromise: function()
+            {
+                let jwt = localStorage.jwt;
+                if(!jwt)
+                {
+                    this.$router.go();
+                    return;
+                }
+                return axios.get("rest/admin_view_reservations", {headers: {"Authorization": "Bearer " + jwt}})
+                    .then(response => response.data);
+            },
+	    
+	    
+	    
 	    	sortReservations: function()
 	    	{
 	    		if(!this.sort)

@@ -28,10 +28,21 @@
 	       	</div>
 	       	<br>
 			<table>
+				<tr>
+					<th>ID</th>
+					<th>Address</th>
+					<th>Type</th>
+					<th>Price</th>
+					<th>Status</th>
+					<th>Host username</th>
+				</tr>
 				 <tr v-for="apartment in apartments">
+				 	<td>{{apartment.id}}</td>
+				 	<td>{{apartment.location.address.street}} {{apartment.location.address.streetNumber}} {{apartment.location.address.area}}</td>
 					<td>{{apartment.type}}</td>
-					<td>{{apartment.status}}</td>
 					<td>{{apartment.price}}</td>
+					<td>{{apartment.status}}</td>
+					<td>{{apartment.hostId}}</td>
 				</tr>
 			</table>
 			<button @click="removeAll()">Remove all</button>

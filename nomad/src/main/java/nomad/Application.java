@@ -160,6 +160,7 @@ public class Application
 		post(Path.Rest.HOST_ADD_APARTMENT, ApartmentServices.hostAddApartment);
 		post(Path.Rest.HOST_FINISH_RESERVATION, HostServices.finishReservation);
 		post(Path.Rest.REG_HOST, RegistrationServices.registerHost);
+		post(Path.Rest.CHECK_IF_HAS_RESERVATION, ReservationServices.checkIfHasReservation);
 		
 		get("rest/test", LoginServices.verifyLogin);
 		get(Path.Rest.GET_USER, UserServices.getUser);
@@ -180,7 +181,7 @@ public class Application
 		get(Path.Rest.GUEST_RESERVED_APARTMENTS, GuestServices.reservedApartments);
 		get(Path.Rest.GUEST_ALL_APARTMENTS, GuestServices.allApartments);
 		get(Path.Rest.GUEST_ALL_RESERVATIONS, ReservationServices.guestViewReservations);
-		get(Path.Rest.CHECK_IF_HAS_RESERVATION, ReservationServices.checkIfHasReservation);
+		post(Path.Rest.CHECK_IF_HAS_RESERVATION, ReservationServices.checkIfHasReservation);
 		get(Path.Rest.GET_GUESTS, GuestServices.getGuests);
 		get(Path.Rest.GET_APARTMENTS, ApartmentServices.getApartments);
 		
