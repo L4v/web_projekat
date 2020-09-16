@@ -46,6 +46,10 @@
             {
                props: ["placeholder", "name", "type", "inputdata", "readonly",],
             });
+        Vue.component("floating-search", httpVueLoader("components/FloatingSearch.vue"),
+            {
+                props: ["placeholder", "name", "type", "inputdata", "readonly",],
+            })
         Vue.component("sidebar", httpVueLoader("components/Sidebar.vue"),
             {
                 props: ["title", "user",],
@@ -54,6 +58,10 @@
             {
                 props: ["lat", "lon", "zoom", "setmarker", ],
             });
+        Vue.component("collapsing-search", httpVueLoader("components/CollapsingSearch.vue"),
+        {
+            props: ["collapsed", ],
+        });
 
         // NOTE(Jovan): Route registration
         const routes =
@@ -62,6 +70,16 @@
                 path: "/",
                 name: "Home",
                 component: httpVueLoader("components/Home.vue")
+            },
+            {
+                path: "/search_results",
+                name: "SearchResults",
+                component: httpVueLoader("components/SearchResults.vue"),
+                props:
+                {
+                    header: true,
+                    content: true,
+                }
             },
             {
                 path: "/login",
@@ -302,6 +320,7 @@
             router: router,
             data:
             {
+                testData: ""
             },
             components:
            	{

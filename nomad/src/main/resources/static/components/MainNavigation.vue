@@ -10,37 +10,7 @@
 	
 					<!-- NOTE(Jovan): Searchbar -->
 					<transition name="fade"> <!-- NOTE(Jovan): Expanded searchbar -->
-					<div v-if="!active" id="searchbar" :class="toggleSearchClass()">
-						<div class="search-field">
-                            <!-- TODO(Jovan): Add floating label animation -->
-							<label class="search-field-label" for="country">Country</label>
-                            <input class="search-field-input" type="text"
-                                placeholder="Country" name="country" >
-						</div>
-						<div class="search-field">
-							<label>City</label> <input type="text" placeholder="Which city?"
-								name="city">
-						</div>
-						<div class="search-field">
-							<label>Pick dates</label>
-                            <v-date-picker mode="range" v-model="daterange" :input-props="{placeholder: 'Arrival and departure dates'}"/>
-						</div>
-						<div class="search-field search-btn" :class="toggleSearchClass()">
-							<button class="button-primary">
-								<i class="fa fa-search" aria-hidden="true"></i>
-							</button>
-						</div>
-					</div>
-	
-					<!-- NOTE(Jovan): Collapsed, in navbar, searchbar -->
-					<div v-else id="searchbar" :class="toggleSearchClass()">
-						<div class="search-field search-btn" :class="toggleSearchClass()">
-							<input type="text" placeholder="Search for a home">
-							<button class="button-primary">
-								<i class="fa fa-search" aria-hidden="true"></i>
-							</button>
-						</div>
-					</div>
+						<collapsing-search :collapsed="active" @search="emitSearch"></collapsing-search>
 					</transition>
 	
 					<div class="navbar-dropdown">
@@ -52,7 +22,7 @@
 						<ul class="navbar-list">
                             <li v-if="loggedIn" class="username"><router-link :to="getUserPage">{{user.username}}</router-link></li>
                             <hr v-if="loggedIn" />
-                            <li><router-link to="/login">Log in</router-link></li>
+                            <li v-if="!loggedIn"><router-link to="/login">Log in</router-link></li>
                             <li v-if="!loggedIn"><router-link to="/registration">Sign up</router-link></li>
                             <!-- TODO(Jovan): Make computed? -->
                             <li v-if="loggedIn"><a href="#" @click="logout()">Log out</a></li>
@@ -77,6 +47,11 @@
 		},
 		methods:
 		{
+			emitSearch: function(e)
+			{
+				this.$emit("search", e);
+			},
+
 			toggleNavClass()
 	        {
 	            if(this.active == false)
@@ -86,17 +61,6 @@
 	            else
 	            {
 	                return "navbar-sticky";
-	            }
-	        },
-	        toggleSearchClass()
-	        {
-	            if(this.active == false)
-	            {
-	                return "";
-	            }
-	            else
-	            {
-	                return "search-collapse";
 	            }
 	        },
             logout()
@@ -325,43 +289,4 @@
 		font-weight: 600;
 	}
 
-    #searchbar {
-        order: 1;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        min-width: 70vw;
-        margin: auto;
-        background-color: #fff;
-        border-radius: 25px;
-    }
-
-    #searchbar.search-collapse {
-        order: 0;
-        flex-grow: 2;
-    }
-
-    .search-btn {
-        border-radius: 50%;
-    }
-
-    #searchbar button {
-        margin: 0px;
-        border-radius: 50%;
-        padding: 0px;
-        width: 4rem;
-        height: 4rem;
-    }
-
-    #searchbar input {
-        border: none;
-        padding: 0px;
-        margin: 0px;
-        height: 2rem;
-    }
-
-    #searchbar input:focus {
-        border: none;
-    }
 </style>

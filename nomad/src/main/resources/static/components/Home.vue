@@ -3,7 +3,7 @@
 	<!-- NOTE(Jovan): Navigation bar -->
 	<div class="content">
 
-        <main-navigation :user="user"></main-navigation>
+        <main-navigation :user="user" @search="search"></main-navigation>
 		<!-- NOTE(Jovan): Main content -->
 		<!-- NOTE(Jovan): Header -->
 		<section class="header">
@@ -38,10 +38,21 @@
         {
             return{
                 user: null,
+                searchResults: [],
             }
         },
         methods:
         {
+            search: function(e)
+            {
+                e.forEach(a => this.searchResults.push(a.apartment));
+                axios.post("rest/save_search_results", this.searchResults.map(a => a.id))
+                    .then(response =>
+                    {
+                        this.$router.push({name: "SearchResults",});
+                    });
+            },
+
             getUser: function()
             {
                 let jwt = localStorage.jwt;

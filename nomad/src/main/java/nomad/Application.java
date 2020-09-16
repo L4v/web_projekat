@@ -25,6 +25,8 @@ import nomad.login.LoginServices;
 import nomad.registration.RegistrationServices;
 import nomad.reservation.ReservationDAO;
 import nomad.reservation.ReservationServices;
+import nomad.search.SearchDAO;
+import nomad.search.SearchServices;
 import nomad.user.AdminServices;
 import nomad.user.GuestServices;
 import nomad.user.HostServices;
@@ -53,6 +55,7 @@ public class Application
 	public static ReservationDAO reservationDAO;
 	public static CommentDAO commentDAO;
 	public static AmenityDAO amenityDAO;
+	public static SearchDAO searchDAO;
 
 	// TODO(Jovan): Separate into utility classes?
 
@@ -132,6 +135,7 @@ public class Application
 		reservationDAO = new ReservationDAO("reservations.json");
 		commentDAO = new CommentDAO("comments.json");
 		amenityDAO = new AmenityDAO("amenities.json");
+		searchDAO = new SearchDAO("search_results.json");
 
 		port(8080);
 		staticFiles.location("/static");
@@ -160,6 +164,7 @@ public class Application
 		post(Path.Rest.HOST_ADD_APARTMENT, ApartmentServices.hostAddApartment);
 		post(Path.Rest.HOST_FINISH_RESERVATION, HostServices.finishReservation);
 		post(Path.Rest.REG_HOST, RegistrationServices.registerHost);
+		post(Path.Rest.SAVE_SEARCH_RESULTS, SearchServices.saveSearch);
 		post(Path.Rest.CHECK_IF_HAS_RESERVATION, ReservationServices.checkIfHasReservation);
 		
 		get("rest/test", LoginServices.verifyLogin);
@@ -184,6 +189,8 @@ public class Application
 		post(Path.Rest.CHECK_IF_HAS_RESERVATION, ReservationServices.checkIfHasReservation);
 		get(Path.Rest.GET_GUESTS, GuestServices.getGuests);
 		get(Path.Rest.GET_APARTMENTS, ApartmentServices.getApartments);
+		get(Path.Rest.GET_ALL_APARTMENTS, ApartmentServices.getAllApartments);
+		get(Path.Rest.GET_SEARCH_RESULTS, SearchServices.getSearch);
 		
 		// TODO(Jovan): Catch all for vue router, not necessary?
 		/*before((request, response) ->
