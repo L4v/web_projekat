@@ -3,6 +3,10 @@
 		<div id="apartmentInfo">
 			<h1>Apartment info</h1>
 			<br>
+			<div class="slide-container">
+				<img v-for="image in apartment.images" :src="image" />
+			</div>
+			<br>
 			<div id="apartment">
 				<label>Type:  {{apartment.type}}</label>
 				<label>Number of rooms:  {{apartment.noRooms}}</label>
@@ -36,6 +40,7 @@
 			     <button class="button-primary" @click="addComment()">Comment</button>
 			</div>
 			{{successMsg}}
+			<router-link to="/guest/apartments">Back</router-link>
 		</div>
 	</div>
 </template>
@@ -58,15 +63,15 @@
 	    {    
 	    	allowedComment: function()
 	    	{
-	    		
-	    		axios.get("rest/check_if_has_reservation", this.apartment, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
+	    		return true;
+	    		/*axios.get("rest/check_if_has_reservation", this.apartment, {headers:{"Authorization": "Bearer " + localStorage.jwt}})
 			        .then(response =>
 			            {
 			                return true;
 			            })
 			        .catch(response => {
 			        		return false;
-			        });
+			        });*/
 	    	},
 	    	
 	    	showComments: function()
@@ -117,7 +122,10 @@
 </script>
 
 <style scoped>
-		
+	.slide-container {
+	  overflow: auto;
+	  white-space: nowrap;
+	}
 	#amenities
     {
         height: 100%;

@@ -4,16 +4,16 @@
 			<h1>Comments</h1>
 			<table id="Comments">
 				<tr>
-					<th>Apartment</th>
+					<th>Guest username</th>
 					<th>Comment</th>
 					<th>Rating</th>
-					<th>Guest</th>
+					<th>Apartment ID</th>
 				</tr>
 				<tr v-for="comment in comments">
-					<!--<td>{{comment.apartment.name}}</td>-->
+					<td>{{comment.guestId}}</td>
 					<td>{{comment.text}}</td>
 					<td>{{comment.rating}}</td>
-					<!--<td>{{comment.guest.username}}</td>-->
+					<td>{{comment.apartmentId}}</td>
 				</tr>
 			</table>
 		</div>

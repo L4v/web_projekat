@@ -27,22 +27,26 @@
 	       	</div>
 	       	<div id="search">
 	       		Search by username:
-	       		<input v-model="username" type="text">
+	       		<input v-model="username" placeholder="Username..." type="text">
 	       		<button class="button-primary" @click=searchReservation()>Search</button>
 	       	</div>
 	       	<br>
 			<table>
 				<tr>
+					<th>Guest username</th>
 					<th>Start date</th>
 					<th>No of days</th>
 					<th>Total price</th>
 					<th>Status</th>
+					<th>Apartment ID</th>
 				</tr>
 				 <tr v-for="reservation in reservations">
+				 	<td>{{reservation.guestId}}</td>
 					<td>{{reservation.startDate}}</td>
 					<td>{{reservation.noDays}}</td>
 					<td>{{reservation.totalPrice}}</td>
 					<td>{{reservation.status}}</td>
+					<td>{{reservation.apartmentId}}</td>
 				</tr>
 			</table>
 			{{successMsg}}
