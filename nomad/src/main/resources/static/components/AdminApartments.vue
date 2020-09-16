@@ -78,7 +78,14 @@
 	    {
 			removeAll: function()
 	     	{
-	     		axios.post("rest/admin_remove_apartments", {headers:{"Authorization": "Bearer " + localStorage.jwt}})
+				let jwt = localStorage.jwt;
+				if(!jwt)
+				{
+					this.$router.go();
+					return;
+				}
+
+	     		axios.post("rest/admin_remove_apartments", {}, {headers:{"Authorization": "Bearer " + jwt}})
 			        .then(response =>
 		            {
 		            	this.apartments = response.data;
