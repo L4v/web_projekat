@@ -11,7 +11,6 @@ import java.util.Collection;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
-import nomad.reservation.Reservation;
 
 import java.io.IOException;
 import java.lang.reflect.Type;

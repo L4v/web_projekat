@@ -53,6 +53,9 @@ public class Path
 		public static final String UPDATE_AMENITY = "/rest/update_amenity";
 		public static final String GET_AMENITIES = "/rest/get_amenities";
 		public static final String CHECK_IF_HAS_RESERVATION = "/rest/check_if_has_reservation";
+		public static final String GET_ALL_APARTMENTS = "/rest/get_all_apartments";
+		public static final String SAVE_SEARCH_RESULTS = "/rest/save_search_results";
+		public static final String GET_SEARCH_RESULTS = "/rest/get_search_results";
 	}
 
 }

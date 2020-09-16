@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 import nomad.amenity.Amenity;
 import nomad.comment.Comment;

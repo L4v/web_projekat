@@ -5,10 +5,8 @@ import static nomad.utils.Responses.forbidden;
 import static nomad.utils.Responses.ok;
 import static nomad.utils.Responses.serverError;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import com.google.gson.reflect.TypeToken;
 
 import static nomad.Application.apartmentDAO;
 import static nomad.Application.reservationDAO;
@@ -31,6 +29,19 @@ import spark.Route;
 public class ApartmentServices
 {
 
+	public static Route getAllApartments = (Request request, Response response) ->
+	{
+		ArrayList<Apartment> apartments = (ArrayList<Apartment>) apartmentDAO.getAll();
+		if(apartments == null)
+		{
+			return serverError("Failed to get apartments", response);
+		}
+		
+		String json = gson.toJson(apartments);
+		response.type("application/json");
+		return ok(json, response);
+	};
+	
 	public static Route getApartments = (Request request, Response response) ->
 	{
 		String jws = parseJws(request);
