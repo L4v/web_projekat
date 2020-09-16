@@ -1,14 +1,17 @@
 package nomad.apartment;
 
 import static nomad.utils.Responses.badRequest;
-import static nomad.utils.Responses.notFound;
 import static nomad.utils.Responses.forbidden;
 import static nomad.utils.Responses.ok;
 import static nomad.utils.Responses.serverError;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import com.google.gson.reflect.TypeToken;
+
 import static nomad.Application.apartmentDAO;
+import static nomad.Application.reservationDAO;
 import static nomad.Application.hostDAO;
 import static nomad.Application.adminDAO;
 import static nomad.Application.key;
@@ -18,6 +21,7 @@ import static nomad.Application.gson;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import nomad.reservation.Reservation;
 import nomad.user.UserAdmin;
 import nomad.user.UserHost;
 import spark.Request;
@@ -27,6 +31,42 @@ import spark.Route;
 public class ApartmentServices
 {
 
+	public static Route getApartments = (Request request, Response response) ->
+	{
+		String jws = parseJws(request);
+		if (jws == null)
+		{
+			return forbidden("Not logged in", response);
+		}
+		
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserHost host = hostDAO.get(claims.getBody().getSubject());
+			if(host == null)
+			{
+				return forbidden("Not host", response);
+			}
+			
+			ArrayList<Reservation> reservations = (ArrayList<Reservation>)reservationDAO.getForHost(host.getUsername());
+			ArrayList<String> apartmentIds = new ArrayList<String>();
+			for(Reservation reservation : reservations)
+			{
+				if(!apartmentIds.contains(reservation.getApartmentId()))
+				{
+					apartmentIds.add(reservation.getApartmentId());
+				}
+			}
+			ArrayList<Apartment> apartments = (ArrayList<Apartment>) apartmentDAO.getByIds(apartmentIds);
+			String json = gson.toJson(apartments);
+			return ok(json, response);
+		}
+		catch(Exception e)
+		{
+			return serverError("Server error: " + e.getMessage(), response);
+		}
+	};
+	
 	public static Route hostAddApartment = (Request request, Response response) ->
 	{
 		response.type("text/html");

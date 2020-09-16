@@ -1,20 +1,21 @@
 package nomad.user;
 
-import static nomad.utils.Responses.notFound;
+import static nomad.Application.apartmentDAO;
+import static nomad.Application.gson;
+import static nomad.Application.guestDAO;
+import static nomad.Application.hostDAO;
+import static nomad.Application.key;
+import static nomad.Application.parseJws;
+import static nomad.Application.reservationDAO;
 import static nomad.utils.Responses.badRequest;
 import static nomad.utils.Responses.forbidden;
+import static nomad.utils.Responses.notFound;
 import static nomad.utils.Responses.ok;
 import static nomad.utils.Responses.serverError;
-import static nomad.Application.guestDAO;
-import static nomad.Application.apartmentDAO;
-import static nomad.Application.reservationDAO;
-import static nomad.Application.hostDAO;
-import static nomad.Application.parseJws;
-import static nomad.Application.gson;
-import static nomad.Application.key;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -22,6 +23,7 @@ import io.jsonwebtoken.Jwts;
 import nomad.apartment.Apartment;
 import nomad.apartment.ApartmentStatus;
 import nomad.reservation.Reservation;
+import nomad.reservation.ReservationStatus;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -46,6 +48,108 @@ public class HostServices
 		}
 		return users;
 	}
+	
+	public static Route acceptReservation = (Request request, Response response) ->
+	{
+		String jws = parseJws(request);
+		if(jws == null)
+		{
+			return forbidden("User not authorized as host", response);
+		}
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserHost host = hostDAO.get(claims.getBody().getSubject());
+			if(host == null)
+			{
+				return forbidden("User not authorized as host", response);
+			}
+			String reservationId = request.body();
+			Reservation reservation = reservationDAO.get(reservationId);
+			if(reservation == null)
+			{
+				return badRequest("Reservation does not exist", response);
+			}
+			
+			reservation.setStatus(ReservationStatus.ACCEPTED);
+			reservationDAO.update(reservation);
+			
+			return ok("Reservation accepted", response);
+		}
+		catch(Exception e)
+		{
+			return serverError("Server error: " + e.getMessage(), response);
+		}
+	};
+	
+	public static Route rejectReservation = (Request request, Response response) ->
+	{
+		String jws = parseJws(request);
+		if(jws == null)
+		{
+			return forbidden("User not authorized as host", response);
+		}
+		
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserHost host = hostDAO.get(claims.getBody().getSubject());
+			if(host == null)
+			{
+				return forbidden("User not authorized as host", response);
+			}
+			String reservationId = request.body();
+			Reservation reservation = reservationDAO.get(reservationId);
+			if(reservation == null)
+			{
+				return badRequest("Reservation does not exist", response);
+			}
+			reservation.setStatus(ReservationStatus.REJECTED);
+			reservationDAO.update(reservation);
+			return ok("Reservation rejected", response);
+		}
+		catch(Exception e)
+		{
+			return serverError("Server error: " + e.getMessage(), response);
+		}
+	};
+	
+	public static Route finishReservation = (Request request, Response response) ->
+	{
+		String jws = parseJws(request);
+		if(jws == null)
+		{
+			return forbidden("User not authorized as host", response);
+		}
+		
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserHost host = hostDAO.get(claims.getBody().getSubject());
+			if(host == null)
+			{
+				return forbidden("User not authorized as host", response);
+			}
+			String reservationId = request.body();
+			Reservation reservation = reservationDAO.get(reservationId);
+			if(reservation == null)
+			{
+				return badRequest("Reservation does not exist", response);
+			}
+			Date currentDate = new Date();
+			if(currentDate.getTime() >= reservation.getEndDate().getTime())
+			{
+				reservation.setStatus(ReservationStatus.FINISHED);
+				return ok("Reservation finished", response);
+			}
+			
+			return badRequest("Reservation could not be finished", response);
+		}
+		catch(Exception e)
+		{
+			return serverError("Server error: " + e.getMessage(), response);
+		}
+	};
 	
 	public static Route enableApartment = (Request request, Response response) ->
 	{

@@ -214,6 +214,7 @@
 					.then(response => 
 					{
 						this.addingReservationMsg = "Reservation added";
+						this.$router.go();
 					})
 					.catch(response =>
 					{

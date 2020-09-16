@@ -22,10 +22,13 @@ public class Path
 		
 		public static final String HOST_ALL_APARTMENTS = "/rest/host_all_apartments";
 		public static final String HOST_ALL_GUESTS = "/rest/host_all_guests";
-		public static final String HOST_ALL_RESERVATIONS = "/rest/host_view_reservations";
+		public static final String HOST_ALL_RESERVATIONS = "/rest/host_all_reservations";
 		public static final String HOST_ALL_COMMENTS = "/rest/host_view_comments";
 		public static final String HOST_ADD_APARTMENT = "/rest/host_add_apartment";
 		public static final String HOST_ENABLE_APARTMENT = "/rest/host_enable_apartment";
+		public static final String HOST_REJECT_RESERVATION = "/rest/host_reject_reservation";
+		public static final String HOST_ACCEPT_RESERVATION = "/rest/host_accept_reservation";
+		public static final String HOST_FINISH_RESERVATION = "/rest/host_finish_reservation";
 		public static final String CHECK_IF_HOST = "/rest/check_if_host";
 		
 		public static final String GUEST_ALL_APARTMENTS = "/rest/guest_all_apartments";
@@ -35,6 +38,8 @@ public class Path
 		public static final String GUEST_GET_USERNAME = "/rest/guest_get_username";
 		public static final String GUEST_CANCEL_RESERVATION = "/rest/guest_cancel_reservation";
 		public static final String CHECK_IF_GUEST = "/rest/check_if_guest";
+		public static final String GET_GUESTS = "/rest/get_guests";
+		public static final String GET_APARTMENTS = "/rest/get_apartments";
 		
 		public static final String REG_GUEST = "/rest/reg_guest";
 		public static final String REG_HOST = "/rest/reg_host";

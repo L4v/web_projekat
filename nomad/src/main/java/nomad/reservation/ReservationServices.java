@@ -12,9 +12,6 @@ import static nomad.Application.key;
 import static nomad.Application.parseJws;
 import static nomad.Application.reservationDAO;
 import static nomad.utils.Responses.badRequest;
-import static nomad.utils.Responses.forbidden;
-import static nomad.utils.Responses.notFound;
-import static nomad.utils.Responses.ok;
 import static nomad.utils.Responses.serverError;
 
 import java.util.ArrayList;
@@ -109,11 +106,10 @@ public class ReservationServices
 
 	public static Route hostViewReservations = (Request request, Response response) ->
 	{
-		response.type("application/json");
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("Invalid login", response);
 		}
 		try
 		{
@@ -121,17 +117,17 @@ public class ReservationServices
 			UserHost host = hostDAO.get(claims.getBody().getSubject());
 			if (host == null)
 			{
-				return notFound("Not a host", response);
+				return forbidden("Not a host", response);
 			}
 
 			ArrayList<Reservation> reservations = (ArrayList<Reservation>) getHostReservations(host);
 
-			response.status(200);
-			response.body(gson.toJson(reservations));
-			return response;
+			String json = gson.toJson(reservations);
+			response.type("application/json");
+			return ok(json, response);
 		} catch (Exception e)
 		{
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 

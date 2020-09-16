@@ -1,7 +1,6 @@
 package nomad.reservation;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -127,7 +126,7 @@ public class Reservation implements Serializable
 		Date date = new Date(this.startDate.getTime());
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		calendar.add(Calendar.DATE, 1);
+		calendar.add(Calendar.DATE, this.noDays);
 		date = calendar.getTime();
 		return date;
 	}
