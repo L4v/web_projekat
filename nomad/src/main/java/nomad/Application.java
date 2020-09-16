@@ -164,7 +164,6 @@ public class Application
 		post(Path.Rest.GUEST_CANCEL_RESERVATION, ReservationServices.guestCancelReservation);
 		post(Path.Rest.GUEST_ADD_COMMENT, CommentServices.addComment);
 		post(Path.Rest.REG_GUEST, RegistrationServices.registerGuest);
-		post(Path.Rest.HOST_SEARCH_GUESTS, HostServices.hostSearchGuests);
 		post(Path.Rest.HOST_ENABLE_APARTMENT, HostServices.enableApartment);
 		post(Path.Rest.HOST_ACCEPT_RESERVATION, HostServices.acceptReservation);
 		post(Path.Rest.HOST_REJECT_RESERVATION, HostServices.rejectReservation);
