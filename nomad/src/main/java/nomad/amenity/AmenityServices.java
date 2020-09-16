@@ -2,6 +2,9 @@ package nomad.amenity;
 
 import static nomad.utils.Responses.notFound;
 import static nomad.utils.Responses.ok;
+import static nomad.utils.Responses.forbidden;
+import static nomad.utils.Responses.serverError;
+import static nomad.utils.Responses.badRequest;
 
 import java.util.ArrayList;
 
@@ -38,7 +41,7 @@ public class AmenityServices {
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("Invalid login", response);
 		}
 		try
 		{
@@ -46,23 +49,21 @@ public class AmenityServices {
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if (admin == null)
 			{
-				return notFound("Invalid admin", response);
+				return forbidden("Invalid admin", response);
 			}
 
 			String json = request.body();
 			Amenity amenity = gson.fromJson(json, Amenity.class);
 			amenityDAO.update(amenity);
 			
-			response.status(200);
-			/*response.body("Amenity updated!");
-			return response;*/
 			ArrayList<Amenity> retVal = (ArrayList<Amenity>) amenityDAO.getAll();
-			return gson.toJson(retVal);
+			String jsonRet = gson.toJson(retVal);
+			return ok(jsonRet, response);
 			
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 	
@@ -72,7 +73,7 @@ public class AmenityServices {
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("Invalid login", response);
 		}
 		try
 		{
@@ -80,7 +81,7 @@ public class AmenityServices {
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if (admin == null)
 			{
-				return notFound("Invalid admin", response);
+				return forbidden("Invalid admin", response);
 			}
 
 			String json = request.body();
@@ -91,30 +92,24 @@ public class AmenityServices {
 			{
 				if(amenity.getName().equalsIgnoreCase(a.getName()))
 				{
-					response.status(404);
-					response.body("Amenity already exists!");
-					return response;
+					return badRequest("Amenity already exists!", response);
 				}
 			}
 
 			if(amenityDAO.add(amenity)) 
 			{
-				response.status(200);
-				/*response.body("Amenity successfully added!");
-				return response;*/
 				ArrayList<Amenity> retVal = (ArrayList<Amenity>) amenityDAO.getAll();
-				return gson.toJson(retVal);
+				String jsonRet = gson.toJson(retVal);
+				return ok(jsonRet, response);
 			}
 			else
 			{
-				response.status(404);
-				response.body("Failed adding amenity!");
-				return response;
+				return badRequest("Failed adding amenity!", response);
 			}
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 	
@@ -124,7 +119,7 @@ public class AmenityServices {
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("Invalid login", response);
 		}
 		try
 		{
@@ -132,7 +127,7 @@ public class AmenityServices {
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if (admin == null)
 			{
-				return notFound("Invalid admin", response);
+				return forbidden("Invalid admin", response);
 			}
 			
 			String json = request.body();
@@ -153,21 +148,18 @@ public class AmenityServices {
 						}
 					}
 				}
-				response.status(200);
-				/*response.body("Amenity removed!");
-				return response;*/
 				ArrayList<Amenity> retVal = (ArrayList<Amenity>) amenityDAO.getAll();
-				return gson.toJson(retVal);
+				String jsonRet = gson.toJson(retVal);
+				return ok(jsonRet, response);
 			}
 			else
 			{
-				response.status(404);
-				return response;
+				return badRequest("Failed removing amenity!", response);
 			}
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 }
