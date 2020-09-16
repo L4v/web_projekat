@@ -2,8 +2,10 @@ package nomad.comment;
 
 
 import static nomad.utils.Responses.notFound;
-
+import static nomad.utils.Responses.forbidden;
 import static nomad.utils.Responses.serverError;
+import static nomad.utils.Responses.ok;
+
 import static nomad.Application.parseJws;
 import static nomad.Application.key;
 import static nomad.Application.gson;
@@ -52,7 +54,7 @@ public class CommentServices
 		String jws = parseJws(request);
 		if(jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("Invalid login", response);
 		}
 		
 		try
@@ -62,18 +64,18 @@ public class CommentServices
 			UserHost host = hostDAO.get(claims.getBody().getSubject());
 			if(host == null)
 			{
-				return notFound("Invalid host", response);
+				return forbidden("Invalid host", response);
 			}
-			response.type("application/json");
-			response.status(200);
+			
 			ArrayList<Comment> comments = (ArrayList<Comment>) allHostComments(host);
-			response.body(gson.toJson(comments));
-			return response;
+			String json = gson.toJson(comments);
+			response.type("application/json");
+			return ok(json, response);
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 	

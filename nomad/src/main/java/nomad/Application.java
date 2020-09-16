@@ -1,6 +1,5 @@
 package nomad;
 
-import static nomad.Application.gson;
 import static spark.Spark.after;
 
 import static spark.Spark.before;
@@ -10,18 +9,9 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
-import java.lang.reflect.Type;
 import java.security.Key;
-import java.util.Date;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-
-import nomad.utils.DateTypeAdapter;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;

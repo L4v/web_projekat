@@ -63,6 +63,7 @@
     #main-content
     {
         margin-left: 15vw;
+        padding-top: 10vh;
         background-color: #fafafa;
         height: 100vh;
     }

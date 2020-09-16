@@ -1,5 +1,5 @@
 <template>
-    <div id="reservations">
+    <div id="reservations" class="container">
         <h1>Reservations</h1>
         <table>
             <tr>
@@ -192,3 +192,12 @@
         }, 
     }
 </script>
+
+<style>
+    #reservations
+    {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+</style>
