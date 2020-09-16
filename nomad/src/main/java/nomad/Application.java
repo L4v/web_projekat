@@ -154,20 +154,23 @@ public class Application
 
 
 
-		post(Path.Rest.REG_GUEST, RegistrationServices.registerGuest);
-		post(Path.Rest.REG_HOST, RegistrationServices.registerHost);
-		post(Path.Rest.LOGIN, LoginServices.login);
-		post(Path.Rest.PERSONAL_DATA, UserServices.personalData);
-		post(Path.Rest.HOST_ADD_APARTMENT, ApartmentServices.hostAddApartment);
-		post(Path.Rest.CREATE_RESERVATION, ReservationServices.createReservation);
-		post(Path.Rest.GUEST_CANCEL_RESERVATION, ReservationServices.guestCancelReservation);
-		post(Path.Rest.GUEST_ADD_COMMENT, CommentServices.addComment);
 		post(Path.Rest.ADD_AMENITY, AmenityServices.addAmenity);
 		post(Path.Rest.REMOVE_AMENITY, AmenityServices.removeAmenity);
 		post(Path.Rest.UPDATE_AMENITY, AmenityServices.updateAmenity);
+		post(Path.Rest.LOGIN, LoginServices.login);
+		post(Path.Rest.PERSONAL_DATA, UserServices.personalData);
+		post(Path.Rest.CREATE_RESERVATION, ReservationServices.createReservation);
 		post(Path.Rest.ADMIN_REMOVE_APARTMENTS, ApartmentServices.adminDeleteApartments);
+		post(Path.Rest.GUEST_CANCEL_RESERVATION, ReservationServices.guestCancelReservation);
+		post(Path.Rest.GUEST_ADD_COMMENT, CommentServices.addComment);
+		post(Path.Rest.REG_GUEST, RegistrationServices.registerGuest);
 		post(Path.Rest.HOST_SEARCH_GUESTS, HostServices.hostSearchGuests);
 		post(Path.Rest.HOST_ENABLE_APARTMENT, HostServices.enableApartment);
+		post(Path.Rest.HOST_ACCEPT_RESERVATION, HostServices.acceptReservation);
+		post(Path.Rest.HOST_REJECT_RESERVATION, HostServices.rejectReservation);
+		post(Path.Rest.HOST_ADD_APARTMENT, ApartmentServices.hostAddApartment);
+		post(Path.Rest.HOST_FINISH_RESERVATION, HostServices.finishReservation);
+		post(Path.Rest.REG_HOST, RegistrationServices.registerHost);
 		
 		get("rest/test", LoginServices.verifyLogin);
 		get(Path.Rest.GET_USER, UserServices.getUser);
@@ -189,6 +192,8 @@ public class Application
 		get(Path.Rest.GUEST_ALL_APARTMENTS, GuestServices.allApartments);
 		get(Path.Rest.GUEST_ALL_RESERVATIONS, ReservationServices.guestViewReservations);
 		get(Path.Rest.CHECK_IF_HAS_RESERVATION, ReservationServices.checkIfHasReservation);
+		get(Path.Rest.GET_GUESTS, GuestServices.getGuests);
+		get(Path.Rest.GET_APARTMENTS, ApartmentServices.getApartments);
 		
 		// TODO(Jovan): Catch all for vue router, not necessary?
 		/*before((request, response) ->
@@ -201,6 +206,7 @@ public class Application
 		});*/
 		get("*", (request, response) ->
 		{
+			System.out.println("Redirecting...");
 			response.redirect("/");
 			return response;
 		});

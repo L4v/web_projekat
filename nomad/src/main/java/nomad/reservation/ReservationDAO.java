@@ -1,5 +1,7 @@
 package nomad.reservation;
 
+import static nomad.Application.apartmentDAO;
+import static nomad.Application.hostDAO;
 import static nomad.Application.gson;
 import static nomad.Application.guestDAO;
 
@@ -14,7 +16,9 @@ import java.util.Collection;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
+import nomad.apartment.Apartment;
 import nomad.user.UserGuest;
+import nomad.user.UserHost;
 
 public class ReservationDAO
 {
@@ -138,6 +142,18 @@ public class ReservationDAO
 			}
 		}
 		return forGuest;
+	}
+	
+	public Collection<Reservation> getForHost(String username)
+	{
+		ArrayList<Reservation> forHost = new ArrayList<Reservation>();
+		UserHost host = hostDAO.get(username);
+		for (Apartment apartment : apartmentDAO.getByIds(host.getApartments()))
+		{
+			forHost.addAll(this.getForApartment(apartment.getId()));
+		}
+		
+		return forHost;
 	}
 
 	public Collection<Reservation> getByIds(Collection<String> ids)

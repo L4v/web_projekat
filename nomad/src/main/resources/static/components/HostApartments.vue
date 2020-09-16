@@ -76,7 +76,7 @@
                 <h2>Available dates</h2>
                 <div id="available-dates-container">
                     <div id="dates-selection">
-                        <v-date-picker is-inline mode="range" v-model="selectedDate"></v-date-picker>
+                        <v-date-picker is-inline :min-date="new Date()" mode="range" v-model="selectedDate"></v-date-picker>
                         <button type="button" @click="addDate">Add date</button>
                     </div>
                     <div id="selected-dates">
@@ -136,6 +136,7 @@
 
         methods:
         {
+
             enableApartment: function(id)
             {
                 let jwt = localStorage.jwt;

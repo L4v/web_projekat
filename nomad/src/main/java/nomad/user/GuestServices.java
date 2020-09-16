@@ -1,18 +1,22 @@
 package nomad.user;
 
-import static nomad.utils.Responses.notFound;
-import static nomad.utils.Responses.badRequest;
-import static nomad.utils.Responses.ok;
-import static nomad.utils.Responses.forbidden;
-import static nomad.utils.Responses.serverError;
 import static nomad.Application.apartmentDAO;
-import static nomad.Application.reservationDAO;
 import static nomad.Application.gson;
 import static nomad.Application.guestDAO;
 import static nomad.Application.key;
 import static nomad.Application.parseJws;
+import static nomad.Application.reservationDAO;
+import static nomad.Application.hostDAO;
+import static nomad.utils.Responses.badRequest;
+import static nomad.utils.Responses.forbidden;
+import static nomad.utils.Responses.notFound;
+import static nomad.utils.Responses.ok;
+import static nomad.utils.Responses.serverError;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+
+import com.google.gson.reflect.TypeToken;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -25,6 +29,47 @@ import spark.Route;
 
 public class GuestServices
 {
+	
+	public static Route getGuests = (Request request, Response response) ->
+	{
+		String jws = parseJws(request);
+		
+		if(jws == null)
+		{
+			return forbidden("User not authorized as guest", response);
+		}
+		
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserHost host = hostDAO.get(claims.getBody().getSubject());
+			
+			if(host == null)
+			{
+				return forbidden("User not authorized as host", response);
+			}
+
+			ArrayList<Reservation> hostsReservations = new ArrayList<Reservation>();
+			for (Apartment apartment : apartmentDAO.getByIds(host.getApartments()))
+			{
+				hostsReservations.addAll(reservationDAO.getForApartment(apartment.getId()));
+			}
+
+			ArrayList<String> guestIds = new ArrayList<String>();
+			for(Reservation reservation : hostsReservations)
+			{
+				guestIds.add(reservation.getGuestId());
+			}
+			ArrayList<UserGuest> guests = (ArrayList<UserGuest>) guestDAO.getByIds(guestIds);
+			String json = gson.toJson(guests);
+			return ok(json, response);
+			
+		}
+		catch(Exception e)
+		{
+			return serverError("Server error: " + e.getMessage(), response);
+		}
+	};
 	
 	public static Route allApartments = (Request request, Response response) ->
 	{

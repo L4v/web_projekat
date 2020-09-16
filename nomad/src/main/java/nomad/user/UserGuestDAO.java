@@ -99,6 +99,23 @@ public class UserGuestDAO
 		ArrayList<UserGuest> guests = (ArrayList<UserGuest>) this.getAll();
 		return guests.stream().filter(g -> g.getUsername().equals(username)).findFirst().orElse(null);
 	}
+	
+	public Collection<UserGuest> getByIds(Collection<String> ids)
+	{
+		ArrayList<UserGuest> guests = (ArrayList<UserGuest>) this.getAll();
+		ArrayList<UserGuest> byIds = new ArrayList<UserGuest>();
+		for(String id : ids)
+		{
+			for(UserGuest guest: guests)
+			{
+				if(guest.getUsername().equals(id))
+				{
+					byIds.add(guest);
+				}
+			}
+		}
+		return byIds;
+	}
 
 	public Collection<UserGuest> getAll()
 	{
