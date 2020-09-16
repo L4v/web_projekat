@@ -16,6 +16,7 @@ public class Reservation implements Serializable
 	private String guestId;
 	private ReservationStatus status;
 	private String id;
+	private boolean deleted;
 
 	private Reservation(String id, String apartmentId, Date startDate, int noDays, double totalPrice,
 			String reservationMessage, String guestId, ReservationStatus status)
@@ -27,6 +28,7 @@ public class Reservation implements Serializable
 		this.reservationMessage = reservationMessage;
 		this.guestId = guestId;
 		this.status = status;
+		this.deleted = false;
 	}
 
 	private Reservation(String id, String apartmentId, Date startDate, double totalPrice, String reservationMessage,
@@ -39,8 +41,19 @@ public class Reservation implements Serializable
 		this.reservationMessage = reservationMessage;
 		this.guestId = guestId;
 		this.status = status;
+		this.deleted = false;
 	}
-
+	
+	public boolean getDeleted()
+	{
+		return this.deleted;
+	}
+	
+	public void setDeleted(boolean deleted)
+	{
+		this.deleted = deleted;
+	}
+	
 	public String getApartmentId()
 	{
 		return apartmentId;

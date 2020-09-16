@@ -52,19 +52,26 @@ public class UserHostDAO
 	public boolean remove(String username)
 	{
 		ArrayList<UserHost> hosts = (ArrayList<UserHost>) this.getAll();
-		boolean success = hosts.removeIf(h -> h.getUsername().equals(username));
-		if (success == true)
+		for(int i = 0; i < hosts.size(); ++i)
 		{
-			this.saveAll(hosts);
+			UserHost host = hosts.get(i);
+			if(host.getUsername().equals(username) && !host.getDeleted())
+			{
+				host.setDeleted(true);
+				hosts.set(i, host);
+				this.saveAll(hosts);
+				return true;
+			}
 		}
-		return success;
+		return false;
 	}
 
 	public boolean add(UserHost host)
 	{
 		ArrayList<UserHost> hosts = (ArrayList<UserHost>) this.getAll();
-		if (hosts.stream().filter(h -> h.getUsername().equals(host.getUsername())).findAny().orElse(null) == null)
+		if (hosts.stream().filter(h -> h.getUsername().equals(host.getUsername()) && !h.getDeleted()).findAny().orElse(null) == null)
 		{
+			host.setDeleted(false);
 			hosts.add(host);
 			this.saveAll(hosts);
 			return true;
@@ -105,6 +112,10 @@ public class UserHostDAO
 		} catch (IOException e)
 		{
 			e.printStackTrace();
+		}
+		if(hosts != null)
+		{
+			hosts.removeIf(a -> a.getDeleted());
 		}
 		return hosts == null ? new ArrayList<UserHost>() : hosts;
 	}

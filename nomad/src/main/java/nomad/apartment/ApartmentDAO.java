@@ -11,8 +11,6 @@ import java.util.Collection;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
-import nomad.reservation.Reservation;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 
@@ -85,28 +83,32 @@ public class ApartmentDAO
 	public boolean remove(String id)
 	{
 		ArrayList<Apartment> apartments = (ArrayList<Apartment>) this.getAll();
-		boolean success = apartments.removeIf(a -> a.getId().equals(id));
-		if (success == true)
+		for(int i = 0; i < apartments.size(); ++i)
 		{
-			this.saveAll(apartments);
+			Apartment apartment = apartments.get(i);
+			if(apartment.getId().equals(id) && !apartment.getDeleted())
+			{
+				apartment.setDeleted(true);
+				apartments.set(i, apartment);
+				this.saveAll(apartments);
+				return true;
+			}
 		}
-		return success;
+		return false;
 	}
 
 	public boolean add(Apartment apartment)
 	{
 		ArrayList<Apartment> apartments = (ArrayList<Apartment>) this.getAll();
 		apartment.setId(apartment.getLocation().getLon() + apartment.getLocation().getLat());
-		for(Apartment a : apartments)
+		if (apartments.stream().filter(a -> a.getId().equals(apartment.getId()) && !a.getDeleted()).findAny().orElse(null) == null)
 		{
-			if(a.getId().equals(apartment.getId()))
-			{
-				return false;
-			}
+			apartment.setDeleted(false);
+			apartments.add(apartment);
+			this.saveAll(apartments);
+			return true;
 		}
-		apartments.add(apartment);
-		this.saveAll(apartments);
-		return true;
+		return false;
 		
 	}
 
@@ -191,13 +193,19 @@ public class ApartmentDAO
 		{
 			e.printStackTrace();
 		}
-
+		if(apartments != null)
+		{
+			apartments.removeIf(a -> a.getDeleted());
+		}
 		return apartments == null ? new ArrayList<Apartment>() : apartments;
 	}
 	
 	public void removeAll() {
 		ArrayList<Apartment> apartments = (ArrayList<Apartment>) this.getAll();
-		apartments.clear();
+		for(Apartment apartment : apartments)
+		{
+			apartment.setDeleted(true);
+		}
 		this.saveAll(apartments);
 	}
 

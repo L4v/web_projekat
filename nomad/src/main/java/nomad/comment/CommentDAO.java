@@ -13,6 +13,7 @@ import java.util.Collection;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
+
 public class CommentDAO
 {
 
@@ -55,8 +56,9 @@ public class CommentDAO
 	{
 		ArrayList<Comment> comments = (ArrayList<Comment>) this.getAll();
 		comment.setId(comment.getApartmentId() + comment.getGuestId() + comment.getRating() + Math.random());
-		if(comments.stream().filter(c -> c.getId().equals(comment.getId())).findAny().orElse(null) == null)
+		if (comments.stream().filter(a -> a.getId().equals(comment.getId()) && !a.getDeleted()).findAny().orElse(null) == null)
 		{
+			comment.setDeleted(false);
 			comments.add(comment);
 			this.saveAll(comments);
 			return true;
@@ -67,12 +69,18 @@ public class CommentDAO
 	public boolean remove(String id)
 	{
 		ArrayList<Comment> comments = (ArrayList<Comment>) this.getAll();
-		boolean success = comments.removeIf(c -> c.getId().equals(id));
-		if(success == true)
+		for(int i = 0; i < comments.size(); ++i)
 		{
-			this.saveAll(comments);
+			Comment comment = comments.get(i);
+			if(comment.getId().equals(id) && !comment.getDeleted())
+			{
+				comment.setDeleted(true);
+				comments.set(i, comment);
+				this.saveAll(comments);
+				return true;
+			}
 		}
-		return success;
+		return false;
 	}
 
 	public boolean update(Comment comment)
@@ -109,7 +117,10 @@ public class CommentDAO
 		{
 			e.printStackTrace();
 		}
-		
+		if(comments != null)
+		{
+			comments.removeIf(a -> a.getDeleted());
+		}
 		return comments == null ? new ArrayList<Comment>() : comments;
 	}
 }
