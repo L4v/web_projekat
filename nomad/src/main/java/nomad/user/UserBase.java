@@ -9,6 +9,7 @@ public abstract class UserBase
 	private String surname;
 	private Sex sex;
 	private UserType userType;
+	private boolean deleted;
 
 	
 	public UserBase(String username, String password, String name, String surname, Sex sex, UserType userType) {
@@ -19,8 +20,19 @@ public abstract class UserBase
 		this.surname = surname;
 		this.sex = sex;
 		this.userType = userType;
+		this.deleted = false;
 	}
 
+	public boolean getDeleted()
+	{
+		return this.deleted;
+	}
+	
+	public void setDeleted(boolean deleted)
+	{
+		this.deleted = deleted;
+	}
+	
 	public String getUsername()
 	{
 		return username;

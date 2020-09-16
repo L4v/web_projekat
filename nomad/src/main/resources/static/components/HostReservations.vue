@@ -3,13 +3,11 @@
         <h1>Reservations</h1>
         <table>
             <tr>
-                <th>Apartment</th>
-                <th>Reserved date</th>
+                <th>Apartment address</th>
+                <th>Start date</th>
                 <th>No. days</th>
                 <th>Guest</th>
                 <th>Status</th>
-                <th></th>
-                <th></th>
             </tr>
             <tr v-for="reservation in reservations">
                 <td>{{reservation.apartment.location.address.street}} {{reservation.apartment.location.address.streetNumber}}  {{reservation.apartment.location.address.area}}</td>

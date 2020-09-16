@@ -13,6 +13,7 @@ import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
+
 public class UserAdminDAO
 {
 
@@ -53,10 +54,11 @@ public class UserAdminDAO
 	public boolean add(UserAdmin newAdmin)
 	{
 		ArrayList<UserAdmin> admins = (ArrayList<UserAdmin>) this.getAll();
-		UserAdmin admin = admins.stream().filter(a -> a.getUsername().equals(newAdmin.getUsername())).findAny()
+		UserAdmin admin = admins.stream().filter(a -> a.getUsername().equals(newAdmin.getUsername()) && !a.getDeleted()).findAny()
 				.orElse(null);
 		if (admin == null)
 		{
+			newAdmin.setDeleted(false);
 			admins.add(newAdmin);
 			this.saveAll(admins);
 			return true;
@@ -80,14 +82,21 @@ public class UserAdminDAO
 	}
 
 	public boolean remove(String username)
-	{
+	{	
 		ArrayList<UserAdmin> admins = (ArrayList<UserAdmin>) this.getAll();
-		boolean success = admins.removeIf(a -> a.getUsername().equals(username));
-		if (success == true)
+		for(int i = 0; i < admins.size(); ++i)
 		{
-			this.saveAll(admins);
+			UserAdmin admin = admins.get(i);
+			if(admin.getUsername().equals(username) && !admin.getDeleted())
+			{
+				admin.setDeleted(true);
+				admins.set(i, admin);
+				this.saveAll(admins);
+				return true;
+			}
 		}
-		return success;
+		return false;
+		
 	}
 
 	public UserAdmin get(String username)
@@ -108,7 +117,10 @@ public class UserAdminDAO
 		} catch (IOException e)
 		{
 			e.printStackTrace();
-
+		}
+		if(admins != null)
+		{
+			admins.removeIf(a -> a.getDeleted());
 		}
 		return admins == null ? new ArrayList<UserAdmin>() : admins;
 	}

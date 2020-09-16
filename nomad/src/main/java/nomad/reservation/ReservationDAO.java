@@ -60,12 +60,18 @@ public class ReservationDAO
 	public boolean remove(String id)
 	{
 		ArrayList<Reservation> reservations = (ArrayList<Reservation>) this.getAll();
-		boolean success = reservations.removeIf(r -> r.getId().equals(id));
-		if (success == true)
+		for(int i = 0; i < reservations.size(); ++i)
 		{
-			this.saveAll(reservations);
+			Reservation reservation = reservations.get(i);
+			if(reservation.getId().equals(id) && !reservation.getDeleted())
+			{
+				reservation.setDeleted(true);
+				reservations.set(i, reservation);
+				this.saveAll(reservations);
+				return true;
+			}
 		}
-		return success;
+		return false;
 	}
 
 	public boolean add(Reservation reservation)
@@ -73,7 +79,7 @@ public class ReservationDAO
 		ArrayList<Reservation> reservations = (ArrayList<Reservation>) this.getAll();
 		String id = reservation.getApartmentId() + reservation.getGuestId() + reservation.getStartDate().getTime() + reservation.getStartDate().getTime();
 		reservation.setId(id);
-		
+		reservation.setDeleted(false);
 		for(Reservation r : reservations)
 		{
 			if(r.getId().equals(reservation.getId()))
@@ -186,6 +192,10 @@ public class ReservationDAO
 		} catch (IOException e)
 		{
 			e.printStackTrace();
+		}
+		if(reservations != null)
+		{
+			reservations.removeIf(a -> a.getDeleted());
 		}
 		return reservations == null ? new ArrayList<Reservation>() : reservations;
 	}

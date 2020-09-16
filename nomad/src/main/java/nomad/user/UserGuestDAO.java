@@ -55,12 +55,18 @@ public class UserGuestDAO
 	public boolean remove(String username)
 	{
 		ArrayList<UserGuest> guests = (ArrayList<UserGuest>) this.getAll();
-		boolean success = guests.removeIf(g -> g.getUsername().equals(username));
-		if (success == true)
+		for(int i = 0; i < guests.size(); ++i)
 		{
-			this.saveAll(guests);
+			UserGuest guest = guests.get(i);
+			if(guest.getUsername().equals(username) && !guest.getDeleted())
+			{
+				guest.setDeleted(true);
+				guests.set(i, guest);
+				this.saveAll(guests);
+				return true;
+			}
 		}
-		return success;
+		return false;
 	}
 
 	public boolean update(UserGuest userGuest)
@@ -84,8 +90,9 @@ public class UserGuestDAO
 	public boolean add(UserGuest guest)
 	{
 		ArrayList<UserGuest> guests = (ArrayList<UserGuest>) this.getAll();
-		if (guests.stream().filter(g -> g.getUsername().equals(guest.getUsername())).findAny().orElse(null) == null)
+		if (guests.stream().filter(g -> g.getUsername().equals(guest.getUsername()) && !g.getDeleted()).findAny().orElse(null) == null)
 		{
+			guest.setDeleted(false);
 			guests.add(guest);
 			this.saveAll(guests);
 			return true;
@@ -129,6 +136,10 @@ public class UserGuestDAO
 		} catch (IOException e)
 		{
 			e.printStackTrace();
+		}
+		if(guests != null)
+		{
+			guests.removeIf(a -> a.getDeleted());
 		}
 		return guests == null ? new ArrayList<UserGuest>() : guests;
 	}

@@ -10,6 +10,7 @@ public class Comment implements Serializable
 	private String apartmentId;
 	private String text;
 	private int rating;
+	private boolean deleted;
 
 	public Comment(String id, String guestId, String apartmentId, String text, int rating)
 	{
@@ -18,6 +19,17 @@ public class Comment implements Serializable
 		this.apartmentId = apartmentId;
 		this.text = text;
 		this.rating = rating;
+		this.deleted = false;
+	}
+	
+	public boolean getDeleted()
+	{
+		return this.deleted;
+	}
+	
+	public void setDeleted(boolean deleted)
+	{
+		this.deleted = deleted;
 	}
 	
 	public String getId()

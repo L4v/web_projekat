@@ -182,19 +182,16 @@ public class CommentServices
 		Apartment apartment = apartmentDAO.get(comment.getApartmentId());
 		ArrayList<Reservation> reservations = (ArrayList<Reservation>) reservationDAO.getForApartment(apartment.getId());
 		
-		if(apartment.getReservations() != null)
+		for(Reservation reservation : reservations)
 		{
-			for(Reservation reservation : reservations)
+			if(reservation.getGuestId().equals(comment.getGuestId()))
 			{
-				if(reservation.getGuestId().equals(comment.getGuestId()))
+				if(reservation.getStatus() == ReservationStatus.CANCELLED || reservation.getStatus() == ReservationStatus.REJECTED)
 				{
-					if(reservation.getStatus() == ReservationStatus.CANCELLED || reservation.getStatus() == ReservationStatus.REJECTED)
-					{
-						commentDAO.add(comment);
-						apartment.getComments().add(comment);
-						apartmentDAO.update(apartment);
-						return true;
-					}
+					commentDAO.add(comment);
+					apartment.getComments().add(comment);
+					apartmentDAO.update(apartment);
+					return true;
 				}
 			}
 		}

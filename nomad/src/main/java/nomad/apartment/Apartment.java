@@ -31,6 +31,7 @@ public class Apartment implements Serializable
 	private ApartmentStatus status;
 	private ArrayList<Amenity> amenities;
 	private ArrayList<String> reservations;
+	private boolean deleted;
 
 	public Apartment(String id, ApartmentType type, int noRooms, int noGuests, Location location, String hostId,
 			double price, LocalTime checkinTime, LocalTime checkoutTime)
@@ -44,6 +45,7 @@ public class Apartment implements Serializable
 		this.price = price;
 		this.checkinTime = checkinTime;
 		this.checkoutTime = checkoutTime;
+		this.deleted = false;
 	}
 
 	public Apartment(String id, ApartmentType type, int noRooms, int noGuests, Location location, String hostId,
@@ -58,6 +60,17 @@ public class Apartment implements Serializable
 		this.price = price;
 		this.checkinTime = LocalTime.of(14, 0);
 		this.checkoutTime = LocalTime.of(22, 0);
+		this.deleted = false;
+	}
+	
+	public boolean getDeleted()
+	{
+		return this.deleted;
+	}
+	
+	public void setDeleted(boolean deleted)
+	{
+		this.deleted = deleted;
 	}
 
 	public String getId()
