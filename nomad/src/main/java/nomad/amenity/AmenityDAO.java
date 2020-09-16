@@ -53,20 +53,27 @@ public class AmenityDAO
 	public boolean remove(String id)
 	{
 		ArrayList<Amenity> amenities = (ArrayList<Amenity>) this.getAll();
-		boolean success = amenities.removeIf(a -> a.getId().equals(id));
-		if (success == true)
+		for(int i = 0; i < amenities.size(); ++i)
 		{
-			this.saveAll(amenities);
+			Amenity amenity = amenities.get(i);
+			if(amenity.getId().equals(id) && !amenity.getDeleted())
+			{
+				amenity.setDeleted(true);
+				amenities.set(i, amenity);
+				this.saveAll(amenities);
+				return true;
+			}
 		}
-		return success;
+		return false;
 	}
 
 	public boolean add(Amenity amenity)
 	{
 		ArrayList<Amenity> amenities = (ArrayList<Amenity>) this.getAll();
 		amenity.setId(Math.random() + amenity.getName() + Math.random());
-		if (amenities.stream().filter(a -> a.getId().equals(amenity.getId())).findAny().orElse(null) == null)
+		if (amenities.stream().filter(a -> a.getId().equals(amenity.getId()) && !a.getDeleted()).findAny().orElse(null) == null)
 		{
+			amenity.setDeleted(false);
 			amenities.add(amenity);
 			this.saveAll(amenities);
 			return true;
@@ -108,7 +115,10 @@ public class AmenityDAO
 		{
 			e.printStackTrace();
 		}
-
+		if(amenities != null)
+		{
+			amenities.removeIf(a -> a.getDeleted());
+		}
 		return amenities == null ? new ArrayList<Amenity>() : amenities;
 	}
 }
