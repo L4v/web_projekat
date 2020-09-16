@@ -67,8 +67,7 @@ public class AdminServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			response.status(404);
-			return response;
+			return forbidden("User not authorized as admin", response);
 		} else
 		{
 			try
@@ -77,18 +76,15 @@ public class AdminServices
 				UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 				if (admin == null)
 				{
-					response.status(404);
-					return response;
+					return forbidden("User not authorized as admin", response);
 				}
-				response.status(200);
 				ArrayList<UserBase> users = (ArrayList<UserBase>) getAll();
 				String usersJson = gson.toJson(users);
-				return usersJson;
+				return ok(usersJson, response);
 			} catch (Exception e)
 			{
 				e.printStackTrace();
-				response.status(404);
-				return response;
+				return serverError(e.getMessage(), response);
 			}
 		}
 	};
@@ -99,7 +95,7 @@ public class AdminServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("User not authorized as admin", response);
 		} 
 		
 		try
@@ -108,16 +104,15 @@ public class AdminServices
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if (admin == null)
 			{
-				response.status(404);
-				return response;
+				return forbidden("User not authorized as admin", response);
 			}
 			ArrayList<Apartment> apartments = (ArrayList<Apartment>) apartmentDAO.getAll();
-			response.status(200);
-			return gson.toJson(apartments);
+			String json = gson.toJson(apartments);
+			return ok(json, response);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 	
@@ -127,7 +122,7 @@ public class AdminServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("Invalid login", response);
 		} 
 		
 		try
@@ -136,16 +131,16 @@ public class AdminServices
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if (admin == null)
 			{
-				return notFound("Not admin", response);
+				return forbidden("Not admin", response);
 			}
 
 			ArrayList<Amenity> amenities = (ArrayList<Amenity>) amenityDAO.getAll();
-			response.status(200);
-			return gson.toJson(amenities);
+			String json = gson.toJson(amenities);
+			return ok(json, response);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 

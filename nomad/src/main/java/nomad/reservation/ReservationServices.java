@@ -148,8 +148,6 @@ public class ReservationServices
 				return forbidden("Not a guest", response);
 			}
 			ArrayList<Reservation> reservations = (ArrayList<Reservation>)reservationDAO.getByIds(guest.getReservations());
-			
-			response.type("application/json");
 			String json = gson.toJson(reservations);
 			return ok(json, response);
 		} catch (Exception e)
@@ -164,7 +162,7 @@ public class ReservationServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("Invalid login", response);
 		}
 		try
 		{
@@ -172,18 +170,15 @@ public class ReservationServices
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if (admin == null)
 			{
-				response.status(404);
-				return response;
+				return forbidden("Invalid admin", response);
 			}
 
 			ArrayList<Reservation> reservations = (ArrayList<Reservation>) reservationDAO.getAll();
-
-			response.status(200);
-			response.body(gson.toJson(reservations));
-			return response;
+			String json = gson.toJson(reservations);
+			return ok(json, response);
 		} catch (Exception e)
 		{
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 
@@ -299,7 +294,7 @@ public class ReservationServices
 			return forbidden("Not allowed", response);
 		} catch (Exception e)
 		{
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 	

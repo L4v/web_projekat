@@ -1,9 +1,9 @@
 package nomad.comment;
 
 
-import static nomad.utils.Responses.notFound;
-
+import static nomad.utils.Responses.ok;
 import static nomad.utils.Responses.serverError;
+import static nomad.utils.Responses.forbidden;
 import static nomad.Application.parseJws;
 import static nomad.Application.key;
 import static nomad.Application.gson;
@@ -52,7 +52,7 @@ public class CommentServices
 		String jws = parseJws(request);
 		if(jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("Invalid login", response);
 		}
 		
 		try
@@ -62,7 +62,7 @@ public class CommentServices
 			UserHost host = hostDAO.get(claims.getBody().getSubject());
 			if(host == null)
 			{
-				return notFound("Invalid host", response);
+				return forbidden("Invalid host", response);
 			}
 			response.type("application/json");
 			response.status(200);
@@ -73,7 +73,7 @@ public class CommentServices
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 	
@@ -83,7 +83,7 @@ public class CommentServices
 		String jws = parseJws(request);
 		if(jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("Invalid login", response);
 		}
 		
 		try
@@ -93,19 +93,16 @@ public class CommentServices
 			UserAdmin admin = adminDAO.get(claims.getBody().getSubject());
 			if(admin == null)
 			{
-				response.status(404);
-				return response;
+				return forbidden("Invalid admin", response);
 			}
-			response.type("application/json");
-			response.status(200);
 			ArrayList<Comment> comments = (ArrayList<Comment>) commentDAO.getAll();
-			response.body(gson.toJson(comments));
-			return response;
+			String json = gson.toJson(comments);
+			return ok(json, response);
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return notFound("Server error: " + e.getMessage(), response);
+			return serverError("Server error: " + e.getMessage(), response);
 		}
 	};
 	
@@ -115,7 +112,7 @@ public class CommentServices
 		String jws = parseJws(request);
 		if(jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("Invalid login", response);
 		}
 		
 		try
@@ -125,18 +122,15 @@ public class CommentServices
 			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
 			if(guest == null)
 			{
-				response.status(404);
-				return response;
+				return forbidden("Invalid guest", response);
 			}
 			
 			String json = request.body();
 			Apartment apartment = gson.fromJson(json, Apartment.class);
-			
-			response.type("application/json");
-			response.status(200);
+
 			ArrayList<Comment> comments = (ArrayList<Comment>) apartment.getComments();
-			response.body(gson.toJson(comments));
-			return response;
+			String jsonRet = gson.toJson(comments);
+			return ok(jsonRet, response);
 		}
 		catch(Exception e)
 		{
@@ -151,7 +145,7 @@ public class CommentServices
 		String jws = parseJws(request);
 		if(jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("Invalid login", response);
 		}
 		
 		try
@@ -161,7 +155,7 @@ public class CommentServices
 			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
 			if(guest == null)
 			{
-				return notFound("Invalid guest", response);
+				return forbidden("Invalid guest", response);
 			}
 			
 			String json = request.body();
@@ -170,12 +164,9 @@ public class CommentServices
 			
 			if(!addCommentToApartment(comment))
 			{
-				return notFound("Don't have a rejected or cancelled reservation!", response);
+				return forbidden("Don't have a rejected or cancelled reservation!", response);
 			}
-			
-			response.status(200);
-			response.body("Comment added");
-			return response;
+			return ok("Comment added", response);
 		}
 		catch(Exception e)
 		{
@@ -193,12 +184,15 @@ public class CommentServices
 		{
 			for(Reservation reservation : reservations)
 			{
-				if(reservation.getStatus() == ReservationStatus.CANCELLED || reservation.getStatus() == ReservationStatus.REJECTED)
+				if(reservation.getGuestId().equals(comment.getGuestId()))
 				{
-					commentDAO.add(comment);
-					apartment.getComments().add(comment);
-					apartmentDAO.update(apartment);
-					return true;
+					if(reservation.getStatus() == ReservationStatus.CANCELLED || reservation.getStatus() == ReservationStatus.REJECTED)
+					{
+						commentDAO.add(comment);
+						apartment.getComments().add(comment);
+						apartmentDAO.update(apartment);
+						return true;
+					}
 				}
 			}
 		}
