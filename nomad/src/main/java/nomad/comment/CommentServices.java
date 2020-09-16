@@ -195,6 +195,7 @@ public class CommentServices
 			{
 				if(reservation.getStatus() == ReservationStatus.CANCELLED || reservation.getStatus() == ReservationStatus.REJECTED)
 				{
+					commentDAO.add(comment);
 					apartment.getComments().add(comment);
 					apartmentDAO.update(apartment);
 					return true;

@@ -54,11 +54,6 @@
                             <hr v-if="loggedIn" />
                             <li><router-link to="/login">Log in</router-link></li>
                             <li v-if="!loggedIn"><router-link to="/registration">Sign up</router-link></li>
-                            <li><router-link to="/personal_data">Personal data</router-link></li>
-                            <li><router-link to="/amenities">Amenities</router-link></li>
-                            <li><router-link to="/guests_reservations">Reservations</router-link></li>
-                            <li><router-link to="/hosts_guests">Hosts guests</router-link></li>
-                            <li><router-link to="/guest_apartments">Guest apartments</router-link></li>
                             <!-- TODO(Jovan): Make computed? -->
                             <li v-if="loggedIn"><a href="#" @click="logout()">Log out</a></li>
 						</ul>

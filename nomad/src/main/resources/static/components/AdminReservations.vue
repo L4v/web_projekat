@@ -2,6 +2,7 @@
 	<div class="container">
 		<div id="reservations">
 			<h1>Reservations</h1>
+			<br>
 			<div id="sorting">
 				Sort by price:
 				<select name="sort" v-model="sort" required>
@@ -24,6 +25,12 @@
 	       		</select>
 	       		<button class="button-primary" @click=filterReservations()>Filter</button>
 	       	</div>
+	       	<div id="search">
+	       		Search by username:
+	       		<input v-model="username" type="text">
+	       		<button class="button-primary" @click=searchReservation()>Search</button>
+	       	</div>
+	       	<br>
 			<table>
 				<tr>
 					<th>Start date</th>
@@ -52,6 +59,7 @@
 				reservations_copy: [],
 				sort: "",
 				filter: "",
+				username: "",
 				successMsg: "",
 			}
 		},
@@ -116,6 +124,18 @@
 		    		this.reservations = retVal;
 	    		}
 	    	},
+	    	
+	    	searchReservation: function()
+	    	{
+	    		if(!this.username)
+	    		{
+	    			this.reservations = this.reservations_copy;
+	    		}
+	    		else
+	    		{
+	    			//TODO
+	    		}
+	    	}
 	    },
 	}
 </script>

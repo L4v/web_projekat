@@ -99,7 +99,7 @@
 		
 		   		let amenity = 
 	     		{
-	     			id: Math.random(),
+	     			id: "",
 	     			name: this.amenityName,
 	     		};
 	     		

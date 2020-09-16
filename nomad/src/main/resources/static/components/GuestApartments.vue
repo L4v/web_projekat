@@ -2,6 +2,7 @@
 	<div class="container">
 		<div id="apartments">
 			<h1>Apartments</h1>
+			<br>
 			<div id="sort">
 				Sort by price:
 				<select name="sort" v-model="sort" required>
@@ -11,6 +12,16 @@
 	       		</select>
 	       		<button class="button-primary" @click=sortApartmentsByPrice()>Sort</button>
        		</div>
+       		<div id="search">
+       			Filter:
+       			<select name="typeFilter" v-model="typeFilter" required>
+	            	<option value="" disabled>Type</option>
+	            	<option value="WHOLE">WHOLE</option>
+	            	<option value="ROOM">ROOM</option>
+	       		</select>
+	       		<button class="button-primary" @click=filterApartments()>Filter</button>
+       		</div>
+       		<br>
 			<table>
 				<tr>
 					<th>Type</th>
@@ -37,8 +48,10 @@
 		{
 			return {
 				apartments: {},
+				apartments_copy: {},
 				successMsg: "",
 				sort: "",
+				typeFilter: "",
 			}
 		},
 		
@@ -52,6 +65,7 @@
 			        .then(response => 
 			       	{
 			       		this.apartments = response.data;
+			       		this.apartments_copy = response.data;
 			       	})
 		    		.catch(response => 
 	    			{
@@ -72,13 +86,35 @@
 	    		} 
 	    		else if(this.sort == 'DESCENDING')
 	    		{
-	    			this.reservations.sort((a, b) => (a.price > b.price) ? 1 : -1);
+	    			this.apartments.sort((a, b) => (a.price > b.price) ? 1 : -1);
 	    		}
 	    		else
 	    		{
-	    			this.reservations.sort((a, b) => (a.price < b.price) ? 1 : -1);
+	    			this.apartments.sort((a, b) => (a.price < b.price) ? 1 : -1);
 	    		}	
 	    	},
+	    	
+	    	filterApartments: function()
+	     	{
+	     		if(!this.typeFilter)
+	     		{
+	     			this.apartments = this.apartments_copy;
+	     		} 
+	     		else 
+	     		{
+	     			var retVal = [];
+	     			for(apartment of this.apartments_copy)
+	     			{
+	     				if(apartment.type == this.typeFilter)
+	     				{
+	     					retVal.push(apartment);
+	     				}
+	     			}
+	     			this.apartments = retVal;
+	     		}
+	     		//TODO
+	     	},   
+	    	
 	    },
     }
 </script>

@@ -3,6 +3,8 @@
         <sidebar :user="user">
             <li><router-link to="/guest">Overview</router-link></li>
             <li><router-link to="/guest/reservations">Reservations</router-link></li>
+            <li><router-link to="/guest/apartments">Apartments</router-link></li>
+            <li><router-link to="/guest/personal_data">Personal data</router-link></li>
         </sidebar>
         <div id="main-content">
             <router-view></router-view>

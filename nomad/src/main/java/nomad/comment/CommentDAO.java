@@ -54,6 +54,7 @@ public class CommentDAO
 	public boolean add(Comment comment)
 	{
 		ArrayList<Comment> comments = (ArrayList<Comment>) this.getAll();
+		comment.setId(comment.getApartmentId() + comment.getGuestId() + comment.getRating() + Math.random());
 		if(comments.stream().filter(c -> c.getId().equals(comment.getId())).findAny().orElse(null) == null)
 		{
 			comments.add(comment);

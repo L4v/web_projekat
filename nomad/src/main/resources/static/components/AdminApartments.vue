@@ -2,6 +2,7 @@
 	<div class="container">
 		<div id="apartments">
 			<h1>Apartments</h1>
+			<br>
 			<div id="sorting">
 				Sort by price:
 				<select name="sort" v-model="sort" required>
@@ -11,6 +12,21 @@
 	       		</select>
 	       		<button class="button-primary" @click=sortApartmentsByPrice()>Sort</button>
 	       	</div>
+	       	<div id="filter">
+	       		Filter:
+	       		<select name="typeFilter" v-model="typeFilter" required>
+	            	<option value="" disabled>Type</option>
+	            	<option value="WHOLE">WHOLE</option>
+	            	<option value="ROOM">ROOM</option>
+	       		</select>
+	       		<select name="statusFilter" v-model="statusFilter" required>
+	            	<option value="" disabled>Status</option>
+	            	<option value="ACTIVE">ACTIVE</option>
+	            	<option value="INACTIVE">INACTIVE</option>
+	       		</select>
+	       		<button class="button-primary" @click=filterApartments()>Filter</button>
+	       	</div>
+	       	<br>
 			<table>
 				 <tr v-for="apartment in apartments">
 					<td>{{apartment.type}}</td>
@@ -29,21 +45,26 @@
 		{
 			return {
 				apartments: {},
+				apartments_copy: {},
 				successMsg: "",
 				sort: "",
+				typeFilter: "",
+				statusFilter: "",
 			}
 		},
 		
 		mounted()
 		{
-	    	var jwt = localStorage.jwt;
+	    	let jwt = localStorage.jwt;
+	    	
 	    	
 	    	if(jwt)
 			{
-		    	axios.get("rest/admin_all_apartments", {headers:{"Authorization": "Bearer " + localStorage.jwt}})
+		    	axios.get("rest/admin_all_apartments", {headers:{"Authorization": "Bearer " + jwt}})
 			        .then(response => 
 			       	{
 			       		this.apartments = response.data;
+			       		this.apartments_copy = response.data;
 			       	})
 		    		.catch(response => 
 	    			{
@@ -82,6 +103,50 @@
 	    		{
 	    			this.apartments.sort((a, b) => (a.price < b.price) ? 1 : -1);
 	    		}	
+	     	},
+	     	
+	     	filterApartments: function()
+	     	{
+	     		if(!this.typeFilter && !this.statusFilter)
+	     		{
+	     			this.apartments = this.apartments_copy;
+	     		} 
+	     		else if(!this.typeFilter)
+	     		{
+	     			var retVal = [];
+	     			for(apartment of this.apartments_copy)
+	     			{
+	     				if(apartment.status == this.statusFilter)
+	     				{
+	     					retVal.push(apartment);
+	     				}
+	     			}
+	     			this.apartments = retVal;
+	     		}
+	     		else if(!this.statusFilter)
+	     		{
+	     			var retVal = [];
+	     			for(apartment of this.apartments_copy)
+	     			{
+	     				if(apartment.type == this.typeFilter)
+	     				{
+	     					retVal.push(apartment);
+	     				}
+	     			}
+	     			this.apartments = retVal;
+	     		}
+	     		else 
+	     		{
+	     			var retVal = [];
+	     			for(apartment of this.apartments_copy)
+	     			{
+	     				if(apartment.status == this.statusFilter && apartment.type == this.typeFilter)
+	     				{
+	     					retVal.push(apartment);
+	     				}
+	     			}
+	     			this.apartments = retVal;
+	     		}
 	     	},   
 	    },
     }
