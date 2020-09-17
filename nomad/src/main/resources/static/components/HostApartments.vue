@@ -4,14 +4,44 @@
             <h1>Apartments</h1>
             <table>
                 <tr>
-                    <th>ID</th>
-                    <th>Address</th>
-                    <th>Type</th>
-                    <th>Price</th>
-                    <th>Status</th>
+                    <th @click="sort('id')">
+                        ID
+                        <span v-if="sortBy === 'id'">
+                            <span v-if="sortOrder < 0"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+                            <span v-else><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
+                        </span>
+                    </th>
+                    <th @click="sort('location.address.street')">
+                        Address
+                        <span v-if="sortBy === 'location.address.street'">
+                            <span v-if="sortOrder < 0"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+                            <span v-else><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
+                        </span>
+                    </th>
+                    <th @click="sort('type')">
+                        Type    
+                        <span v-if="sortBy === 'type'">
+                            <span v-if="sortOrder < 0"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+                            <span v-else><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
+                        </span>
+                    </th>
+                    <th @click="sort('price')">
+                        Price
+                        <span v-if="sortBy === 'price'">
+                            <span v-if="sortOrder < 0"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+                            <span v-else><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
+                        </span>
+                    </th>
+                    <th @click="sort('status')">
+                        Status
+                        <span v-if="sortBy === 'status'">
+                            <span v-if="sortOrder < 0"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+                            <span v-else><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
+                        </span>
+                    </th>
                 </tr>
                 <!-- TODO(Jovan): Dropdown for each apartment or view separate page -->
-                <tr v-for="apartment in apartments">
+                <tr v-for="apartment in sortedList">
                     <td>{{apartment.id}}</td>
                     <td>{{apartment.location.address.street}} {{apartment.location.address.streetNo}} {{apartment.location.address.area}}</td>
                     <td>{{apartment.type}}</td>
@@ -137,6 +167,9 @@
                 submitMsg:         "",
 
                 image: "",
+
+                sortOrder: 1,
+                sortBy: "id",
 
             }
         },
@@ -437,8 +470,29 @@
                     {
                         // TODO(jovan): Handle
                         this.submitMsg = "Failed adding apartment";
-                    })
+                    });
+            },
+            sort: function(sortBy)
+            {
+                if(this.sortBy === sortBy)
+                {
+                    this.sortOrder = -this.sortOrder;
+                }
+                else
+                {
+                    this.sortBy = sortBy;
+                }
             }
+        },
+
+        computed:
+        {
+            sortedList: function()
+            {
+                let sortBy = this.sortBy;
+                return [...this.apartments]
+                    .sort((a, b) => a[sortBy] > b[sortBy] ? this.sortOrder : -this.sortOrder);
+            },
         },
 
         mounted()
