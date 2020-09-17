@@ -91,7 +91,7 @@
                 name: "Registration",
                 component: httpVueLoader("components/Registration.vue")
             },
-           {
+      /*     {
                 path: "/show_apartment",
                 name: "ShowApartment",
                 component: httpVueLoader("components/ShowApartment.vue"),
@@ -100,7 +100,7 @@
                 {
                     requiresAuth: true,
                 },
-            },
+            },*/
             {
                 path: "/admin",
                 name: "Admin",
@@ -175,7 +175,7 @@
                         path: "apartments",
                         name: "GuestApartments",
                         component: httpVueLoader("components/GuestApartments.vue"),
-                        children:
+                        /*children:
                         [
                         	{
                                 path: "show_apartment",
@@ -183,13 +183,19 @@
                                 component: httpVueLoader("components/ShowApartment.vue"),
                                 props: true,
                         	},
-                        ],
+                        ],*/
                     },
                     {
                         path: "personal_data",
                         name: "PersonalData",
                         component: httpVueLoader("components/PersonalData.vue"),
                     },
+                    {
+                        path: "show_apartment",
+                        name: "ShowApartment",
+                        component: httpVueLoader("components/ShowApartment.vue"),
+                        props: true,
+                	},
                 ],
             },
             {
