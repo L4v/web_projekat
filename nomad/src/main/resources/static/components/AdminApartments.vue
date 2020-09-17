@@ -3,15 +3,6 @@
 		<div id="apartments">
 			<h1>Apartments</h1>
 			<br>
-			<div id="sorting">
-				Sort by price:
-				<select name="sort" v-model="sort" required>
-	            	<option value="" disabled>Sort</option>
-	            	<option value="ASCENDING">Ascending</option>
-	            	<option value="DESCENDING">Descending</option>
-	       		</select>
-	       		<button class="button-primary" @click=sortApartmentsByPrice()>Sort</button>
-	       	</div>
 	       	<div id="filter">
 	       		Filter:
 	       		<select name="typeFilter" v-model="typeFilter" required>
@@ -48,11 +39,17 @@
 					<th>ID</th>
 					<th>Address</th>
 					<th>Type</th>
-					<th>Price</th>
+					<th @click="sort('price')">
+                        Price
+                        <span v-if="sortBy === 'price'">
+                            <span v-if="sortOrder < 0"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+                            <span v-else><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
+                        </span>
+                    </th>
 					<th>Status</th>
 					<th>Host username</th>
 				</tr>
-				 <tr v-for="apartment in apartments">
+				 <tr v-for="apartment in sortedList">
 				 	<td>{{apartment.id}}</td>
 				 	<td>{{apartment.location.address.street}} {{apartment.location.address.streetNumber}} {{apartment.location.address.area}}</td>
 					<td>{{apartment.type}}</td>
@@ -74,13 +71,14 @@
 				apartments: {},
 				apartments_copy: {},
 				successMsg: "",
-				sort: "",
 				typeFilter: "",
 				statusFilter: "",
 				allAmenities:      [],
                 selectedAmenities: [],
                 leftSelected:      [],
                 rightSelected:     [],
+                sortOrder: 1,
+                sortBy: "price",
 			}
 		},
 		
@@ -131,21 +129,17 @@
 			        });
 	     	},
 	     	
-	     	sortApartmentsByPrice: function()
-	     	{
-	     		if(!this.sort)
-	    		{
-	    			this.successMsg = "Sort parameter must not be empty.";
-	    		} 
-	    		else if(this.sort == 'DESCENDING')
-	    		{
-	    			this.apartments.sort((a, b) => (a.price > b.price) ? 1 : -1);
-	    		}
-	    		else
-	    		{
-	    			this.apartments.sort((a, b) => (a.price < b.price) ? 1 : -1);
-	    		}	
-	     	},
+	     	sort: function(sortBy)
+            {
+                if(this.sortBy === sortBy)
+                {
+                    this.sortOrder = -this.sortOrder;
+                }
+                else
+                {
+                    this.sortBy = sortBy;
+                }
+            },
 	     	
 	     	filterApartments: function()
 	     	{
@@ -318,6 +312,16 @@
                 this.allAmenities = [];
             },   
 	    },
+	    
+	     computed:
+        {
+            sortedList: function()
+            {
+                let sortBy = this.sortBy;
+                return [...this.apartments]
+                    .sort((a, b) => a[sortBy] > b[sortBy] ? this.sortOrder : -this.sortOrder);
+            },
+        },
     }
 </script>
 

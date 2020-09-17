@@ -9,7 +9,6 @@ import static nomad.Application.parseJws;
 import static nomad.Application.reservationDAO;
 import static nomad.utils.Responses.badRequest;
 import static nomad.utils.Responses.forbidden;
-import static nomad.utils.Responses.notFound;
 import static nomad.utils.Responses.ok;
 import static nomad.utils.Responses.serverError;
 import static nomad.Application.uploadDir;
@@ -312,7 +311,7 @@ public class HostServices
 		
 		if (jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("Invalid login", response);
 		}
 		
 		try
@@ -322,12 +321,11 @@ public class HostServices
 			UserHost host = hostDAO.get(claims.getBody().getSubject());
 			if(host == null)
 			{
-				return notFound("Invalid host", response);
+				return forbidden("Invalid host", response);
 			}
-			response.status(200);
 			ArrayList<UserGuest> guests = (ArrayList<UserGuest>) getGuests(host.getUsername());
-			//ArrayList<UserGuest> guests = (ArrayList<UserGuest>) guestDAO.getAll();
-			return gson.toJson(guests);
+			String json = gson.toJson(guests);
+			return ok(json, response);
 		}
 		catch(Exception e)
 		{

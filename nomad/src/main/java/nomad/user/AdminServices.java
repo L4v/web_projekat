@@ -1,7 +1,6 @@
 package nomad.user;
 
 import static nomad.Application.parseJws;
-import static nomad.utils.Responses.notFound;
 import static nomad.utils.Responses.forbidden;
 import static nomad.utils.Responses.ok;
 import static nomad.utils.Responses.serverError;

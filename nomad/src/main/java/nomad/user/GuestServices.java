@@ -13,10 +13,8 @@ import static nomad.utils.Responses.notFound;
 import static nomad.utils.Responses.ok;
 import static nomad.utils.Responses.serverError;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import com.google.gson.reflect.TypeToken;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -139,7 +137,7 @@ public class GuestServices
 		String jws = parseJws(request);
 		if (jws == null)
 		{
-			return notFound("Invalid login", response);
+			return forbidden("Invalid login", response);
 		}
 		
 		try
@@ -149,13 +147,11 @@ public class GuestServices
 			UserGuest guest = guestDAO.get(claims.getBody().getSubject());
 			if(guest == null)
 			{
-				return notFound("Invalid guest", response);
+				return forbidden("Invalid guest", response);
 			}
-			response.type("application/json");
-			response.status(200);
 			ArrayList<Apartment> apartments = (ArrayList<Apartment>) apartmentDAO.getActive();
-			response.status(200);
-			return gson.toJson(apartments);
+			String json = gson.toJson(apartments);
+			return ok(json, response);
 		}
 		catch(Exception e)
 		{

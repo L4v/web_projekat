@@ -2,6 +2,7 @@
 	<div class="container">
 		<div id="amenities">
 			<h1>Amenities</h1>
+			<br>
 			<table>
 				<td>
 					<small class="error">{{errorMsg}}</small>

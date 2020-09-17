@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import nomad.apartment.Apartment;
 
 public class UserHost extends UserBase implements Serializable
 {
