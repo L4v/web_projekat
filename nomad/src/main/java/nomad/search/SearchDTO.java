@@ -1,11 +1,9 @@
 package nomad.search;
 
-import java.util.Date;
-
 public class SearchDTO
 {
-	private Date fromDate;
-	private Date toDate;
+	private long fromDate;
+	private long toDate;
 	private String area;
 	private double fromPrice;
 	private double toPrice;
@@ -13,7 +11,7 @@ public class SearchDTO
 	private int toRoom;
 	private int noGuests;
 	
-	public SearchDTO(Date fromDate, Date toDate, String area, double fromPrice, double toPrice, int fromRoom, int toRoom, int noGuests)
+	public SearchDTO(long fromDate, long toDate, String area, double fromPrice, double toPrice, int fromRoom, int toRoom, int noGuests)
 	{
 		this.fromDate = fromDate;
 		this.toDate = toDate;
@@ -25,22 +23,22 @@ public class SearchDTO
 		this.noGuests = noGuests;
 	}
 
-	public Date getFromDate()
+	public long getFromDate()
 	{
 		return fromDate;
 	}
 
-	public void setFromDate(Date fromDate)
+	public void setFromDate(long fromDate)
 	{
 		this.fromDate = fromDate;
 	}
 
-	public Date getToDate()
+	public long getToDate()
 	{
 		return toDate;
 	}
 
-	public void setToDate(Date toDate)
+	public void setToDate(long toDate)
 	{
 		this.toDate = toDate;
 	}

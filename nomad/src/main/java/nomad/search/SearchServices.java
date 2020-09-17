@@ -52,19 +52,19 @@ public class SearchServices
 		ArrayList<Apartment> allApartments = (ArrayList<Apartment>) apartmentDAO.getAll();
 		ArrayList<Apartment> results = new ArrayList<Apartment>(allApartments);
 		
-		if(search.getFromDate() != null)
+		if(search.getFromDate() != -1L)
 		{
 			results = (ArrayList<Apartment>) results.stream().filter(a -> 
 				a.getAvailableDates().stream().filter(ad ->
-					ad.getStart().getTime() >= search.getFromDate().getTime()).findAny().orElse(null) != null)
+					ad.getStart().getTime() >= search.getFromDate()).findAny().orElse(null) != null)
 					.collect(Collectors.toList());
 		}
 		
-		if(search.getToDate() != null)
+		if(search.getToDate() != -1L)
 		{
 			results = (ArrayList<Apartment>) results.stream().filter(a -> 
 				a.getAvailableDates().stream().filter(ad ->
-					ad.getEnd().getTime() <= search.getToDate().getTime()).findAny().orElse(null) != null) 
+					ad.getEnd().getTime() <= search.getToDate()).findAny().orElse(null) != null) 
 					.collect(Collectors.toList());
 		}
 		

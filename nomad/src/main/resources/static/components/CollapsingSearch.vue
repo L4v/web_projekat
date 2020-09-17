@@ -105,6 +105,14 @@
 
             search: function()
             {
+                if(this.searchQuery.dateRange.start)
+                {
+                    this.searchQuery.fromDate = this.searchQuery.dateRange.start.getTime();
+                }
+                if(this.searchQuery.dateRange.end)
+                {
+                    this.searchQuery.toDate = this.searchQuery.dateRange.end.getTime();
+                }
                 this.$emit("search", this.searchQuery);
             }
         },
