@@ -82,6 +82,12 @@
                                 apartment:   {},
                             }
                         );
+                        this.reservations_copy.push(
+                            {
+                                reservation: reservation,
+                                apartment:   {},
+                            }
+                        );
                         apartmentIds.push(reservation.apartmentId);
                     });
                     axios.get("rest/admin_all_apartments",
@@ -95,6 +101,13 @@
                         response.data.forEach(apartment =>
                         {
                             for(let reservation of this.reservations)
+                            {
+                                if(reservation.reservation.apartmentId === apartment.id)
+                                {
+                                    reservation.apartment = apartment;
+                                }
+                            }
+                            for(let reservation of this.reservations_copy)
                             {
                                 if(reservation.reservation.apartmentId === apartment.id)
                                 {
@@ -130,11 +143,11 @@
 	    		} 
 	    		else if(this.sort == 'DESCENDING')
 	    		{
-	    			this.reservations.sort((a, b) => (a.totalPrice > b.totalPrice) ? 1 : -1);
+	    			this.reservations.sort((a, b) => (a.reservation.totalPrice > b.reservation.totalPrice) ? 1 : -1);
 	    		}
 	    		else
 	    		{
-	    			this.reservations.sort((a, b) => (a.totalPrice < b.totalPrice) ? 1 : -1);
+	    			this.reservations.sort((a, b) => (a.reservation.totalPrice < b.reservation.totalPrice) ? 1 : -1);
 	    		}	
 	    	},
 	    	
@@ -151,9 +164,9 @@
 	    		else
 	    		{
 		    		var retVal = [];
-		    		for(reservation of this.reservations_copy)
+		    		for(let reservation of this.reservations_copy)
 		    		{
-		    			if(reservation.status == this.filter)
+		    			if(reservation.reservation.status == this.filter)
 		    			{
 		    				retVal.push(reservation);
 		    			}
@@ -170,7 +183,15 @@
 	    		}
 	    		else
 	    		{
-	    			//TODO
+	    			var retVal = [];
+		    		for(let reservation of this.reservations_copy)
+		    		{
+		    			if(reservation.reservation.guestId == this.username)
+		    			{
+		    				retVal.push(reservation);
+		    			}
+		    		}
+		    		this.reservations = retVal;
 	    		}
 	    	}
 	    },

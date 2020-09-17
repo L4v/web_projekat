@@ -7,6 +7,7 @@
 				Search:
 				<select id="sex" v-model="guest_sex" required>
 		            <option value="" disabled>Sex</option>
+		            <option value="">All</option>
 		            <option value="MALE">Male</option>
 		            <option value="FEMALE">Female</option>
 		            <option value="OTHER">Other</option>
@@ -86,10 +87,29 @@
 			        }
 					this.guests = result;
 				}
-				else 
+				else if(!this.guest_sex)
 				{
 					var result = [];
-					//TODO
+		    		for(let guest of this.guests_copy)
+		    		{
+		    			if(guest.username == this.guest_username)
+		    			{
+		    				result.push(guest);
+		    			}
+		    		}
+		    		this.guests = result;
+				}
+				else
+				{
+					var result = [];
+		    		for(let guest of this.guests_copy)
+		    		{
+		    			if(guest.username == this.guest_username && guest.sex == this.guest_sex)
+		    			{
+		    				result.push(guest);
+		    			}
+		    		}
+		    		this.guests = result;
 				}
 	        },
 	    },

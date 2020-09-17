@@ -16,14 +16,30 @@
 	       		Filter:
 	       		<select name="typeFilter" v-model="typeFilter" required>
 	            	<option value="" disabled>Type</option>
+	            	<option value="">ALL</option>
 	            	<option value="WHOLE">WHOLE</option>
 	            	<option value="ROOM">ROOM</option>
 	       		</select>
 	       		<select name="statusFilter" v-model="statusFilter" required>
 	            	<option value="" disabled>Status</option>
+	            	<option value="">ALL</option>
 	            	<option value="ACTIVE">ACTIVE</option>
 	            	<option value="INACTIVE">INACTIVE</option>
 	       		</select>
+	       		<div id="amenities">
+                        <select id="leftSelect" name="allAmenities" v-model="leftSelected"  multiple>
+                            <option v-for="amenity in allAmenities" :value="amenity">{{amenity.name}}</option>
+                        </select>
+                        <div id="amenity-buttons">
+                            <button type="button" @click="addAmenity">&rsaquo;</button>
+                            <button type="button" @click="removeAmenity">&lsaquo;</button>
+                            <button type="button" @click="clearAmenities">Clear all</button>
+                            <button type="button" @click="addAllAmenities">Add all</button>
+                        </div>
+                        <select id="rightSelect" name="selectedAmenities"  v-model="rightSelected" multiple>
+                            <option v-for="amenity in selectedAmenities" :value="amenity">{{amenity.name}}</option>
+                        </select>
+                   </div>
 	       		<button class="button-primary" @click=filterApartments()>Filter</button>
 	       	</div>
 	       	<br>
@@ -61,6 +77,10 @@
 				sort: "",
 				typeFilter: "",
 				statusFilter: "",
+				allAmenities:      [],
+                selectedAmenities: [],
+                leftSelected:      [],
+                rightSelected:     [],
 			}
 		},
 		
@@ -79,8 +99,12 @@
 			       	})
 		    		.catch(response => 
 	    			{
-	    				//TODO(Kristian): handle 404
-	    				alert("Please log in");
+	    			});
+	    			
+	    		axios.get("rest/admin_all_amenities", {headers:{"Authorization": "Bearer " + jwt}})
+			        	.then(response => (this.allAmenities = response.data))
+		    		.catch(response => 
+	    			{
 	    			});
 			}
 	    },
@@ -131,15 +155,33 @@
 	     		} 
 	     		else if(!this.typeFilter)
 	     		{
-	     			var retVal = [];
-	     			for(apartment of this.apartments_copy)
-	     			{
-	     				if(apartment.status == this.statusFilter)
-	     				{
-	     					retVal.push(apartment);
-	     				}
-	     			}
-	     			this.apartments = retVal;
+	     			/*if(!this.selectedAmenities)
+	     			{*/
+		     			var retVal = [];
+		     			for(apartment of this.apartments_copy)
+		     			{
+		     				if(apartment.status == this.statusFilter)
+		     				{
+		     					retVal.push(apartment);
+		     				}
+		     			}
+		     			this.apartments = retVal;
+		     		/*} 
+		     		else if(!this.statusFilter)
+		     		{
+		     			var retVal = [];
+		     			
+		     			for(apartment of this.apartments_copy)
+		     			{
+		     				var inter = [];
+		     				inter = _.intersection(apartment.amenities, this.selectedAmenities);
+		     				if(inter.length > 0)
+		     				{
+		     					retval.push(apartment);
+		     				}
+						}
+		     			this.apartments = retVal;	
+		     		}*/
 	     		}
 	     		else if(!this.statusFilter)
 	     		{
@@ -153,7 +195,7 @@
 	     			}
 	     			this.apartments = retVal;
 	     		}
-	     		else 
+	     		/*else if(!this.selectedAmenities)
 	     		{
 	     			var retVal = [];
 	     			for(apartment of this.apartments_copy)
@@ -164,8 +206,78 @@
 	     				}
 	     			}
 	     			this.apartments = retVal;
-	     		}
-	     	},   
+	     		}*/
+	     	},
+	     	
+	     	addAmenity: function()
+            {
+                let selected = this.leftSelected;
+                if(!selected)
+                {
+                    return;
+                }
+                console.log("adding " + selected);
+                this.selectedAmenities = this.selectedAmenities.concat(selected);
+
+                selected.forEach(el => 
+                {
+                    let index = this.allAmenities.indexOf(el);
+                    this.allAmenities.splice(index, 1); 
+                });
+                this.leftSelected = [];
+            },
+
+            removeAmenity: function()
+            {
+                let selected = this.rightSelected;
+                if(!selected)
+                {
+                    return;
+                }
+                this.allAmenities = this.allAmenities.concat(selected);
+
+                selected.forEach(el =>
+                {
+                    let index = this.selectedAmenities.indexOf(el);
+                    this.selectedAmenities.splice(index, 1);
+                });
+
+                this.rightSelected = [];
+            },
+
+            clearAmenities: function()
+            {
+                this.allAmenities = this.selectedAmenities.concat(this.allAmenities);
+                this.selectedAmenities = [];
+            },
+
+            addAllAmenities: function()
+            {
+                this.selectedAmenities = this.allAmenities.concat(this.selectedAmenities);
+                this.allAmenities = [];
+            },   
 	    },
     }
 </script>
+
+<style>
+	#amenities
+    {
+        display: flex;
+        flex-direction: row;
+        flex: 2 1 2;
+    }
+
+    #amenities select
+    {
+        height: 100%;
+        min-height: 200px;
+        min-width: 200px;
+    }
+
+    #amenity-buttons
+    {
+        display: flex;
+        flex-direction: column;
+    }
+</style>

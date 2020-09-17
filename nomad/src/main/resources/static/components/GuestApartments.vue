@@ -22,6 +22,7 @@
        			Filter:
        			<select name="typeFilter" v-model="typeFilter" required>
 	            	<option value="" disabled>Type</option>
+	            	<option value="">ALL</option>
 	            	<option value="WHOLE">WHOLE</option>
 	            	<option value="ROOM">ROOM</option>
 	       		</select>
