@@ -108,7 +108,7 @@ public class ApartmentServices
 				// TODO(jovan): Temporary
 				host.addApartment(apartment.getId());
 				hostDAO.update(host);
-				return ok("Apartment added", response);
+				return ok(apartment.getId(), response);
 			}
 			return badRequest("Something failed while adding apartment. Not added", response);
 		} catch (Exception e)

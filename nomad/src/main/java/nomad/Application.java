@@ -9,6 +9,7 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
+import java.io.File;
 import java.security.Key;
 
 import com.google.gson.Gson;
@@ -56,6 +57,8 @@ public class Application
 	public static CommentDAO commentDAO;
 	public static AmenityDAO amenityDAO;
 	public static SearchDAO searchDAO;
+	public static File uploadDir;
+	
 
 	// TODO(Jovan): Separate into utility classes?
 
@@ -136,6 +139,9 @@ public class Application
 		commentDAO = new CommentDAO("comments.json");
 		amenityDAO = new AmenityDAO("amenities.json");
 		searchDAO = new SearchDAO("search_results.json");
+		
+		uploadDir = new File("upload");
+		uploadDir.mkdir();
 
 		port(8080);
 		staticFiles.location("/static");
@@ -163,9 +169,11 @@ public class Application
 		post(Path.Rest.HOST_REJECT_RESERVATION, HostServices.rejectReservation);
 		post(Path.Rest.HOST_ADD_APARTMENT, ApartmentServices.hostAddApartment);
 		post(Path.Rest.HOST_FINISH_RESERVATION, HostServices.finishReservation);
+		post(Path.Rest.HOST_UPLOAD_IMAGE, HostServices.uploadImage);
 		post(Path.Rest.REG_HOST, RegistrationServices.registerHost);
-		post(Path.Rest.SAVE_SEARCH_RESULTS, SearchServices.saveSearch);
+		//post(Path.Rest.SAVE_SEARCH_RESULTS, SearchServices.saveSearch);
 		post(Path.Rest.CHECK_IF_HAS_RESERVATION, ReservationServices.checkIfHasReservation);
+		post(Path.Rest.SEARCH_APARTMENT, SearchServices.searchApartment);
 		
 		get("rest/test", LoginServices.verifyLogin);
 		get(Path.Rest.GET_USER, UserServices.getUser);
@@ -186,11 +194,10 @@ public class Application
 		get(Path.Rest.GUEST_RESERVED_APARTMENTS, GuestServices.reservedApartments);
 		get(Path.Rest.GUEST_ALL_APARTMENTS, GuestServices.allApartments);
 		get(Path.Rest.GUEST_ALL_RESERVATIONS, ReservationServices.guestViewReservations);
-		post(Path.Rest.CHECK_IF_HAS_RESERVATION, ReservationServices.checkIfHasReservation);
 		get(Path.Rest.GET_GUESTS, GuestServices.getGuests);
 		get(Path.Rest.GET_APARTMENTS, ApartmentServices.getApartments);
 		get(Path.Rest.GET_ALL_APARTMENTS, ApartmentServices.getAllApartments);
-		get(Path.Rest.GET_SEARCH_RESULTS, SearchServices.getSearch);
+		//get(Path.Rest.GET_SEARCH_RESULTS, SearchServices.getSearch);
 		
 		// TODO(Jovan): Catch all for vue router, not necessary?
 		/*before((request, response) ->

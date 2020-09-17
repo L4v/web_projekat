@@ -45,12 +45,34 @@
         {
             search: function(e)
             {
-                e.forEach(a => this.searchResults.push(a.apartment));
-                axios.post("rest/save_search_results", this.searchResults.map(a => a.id))
-                    .then(response =>
-                    {
-                        this.$router.push({name: "SearchResults",});
-                    });
+            /*
+            area:      "",
+                    roomsFrom: "",
+                    roomsTo:   "",
+                    priceFrom: "",
+                    priceTo:   "",
+                    noGuests:  "",
+                    dateRange: {},
+            */
+            this.$router.push({name: "SearchResults", query:
+                {
+                    area:      e.area ? e.area : "",
+                    fromRoom:  e.roomsFrom ? e.roomsFrom : -1,
+                    toRoom:    e.roomsTo ? e.roomsTo : -1,
+                    fromPrice: e.priceFrom ? e.priceFrom : -1,
+                    toPrice:   e.priceTo ? e.priceTo : -1,
+                    noGuests:  e.noGuests ? e.noGuests : -1,
+                    fromDate:  e.dateRange ? e.dateRange.start : null,
+                    toDate:    e.dateRange ? e.dateRange.end : null,
+                    /*area:      "Novi Sad",
+                    fromRoom: -1,
+                    toRoom:   -1,
+                    fromPrice: 0,
+                    toPrice:   1234,
+                    noGuests:  -1,
+                    fromDate:  null,
+                    toDate:    null,*/
+                }});
             },
 
             getUser: function()

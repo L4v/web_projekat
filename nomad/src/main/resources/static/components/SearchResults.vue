@@ -38,20 +38,11 @@
         },
         mounted()
         {
-            axios.get("rest/get_all_apartments")
-                .then(response => 
+            let query = this.$route.query;
+            axios.post("rest/search_apartment", query)
+                .then(response =>
                 {
-                    this.allApartments = response.data;
-
-                    axios.get("rest/get_search_results")
-                        .then(response =>
-                        {
-                            this.apartmentIds = response.data;
-                            response.data.forEach(id =>
-                            {
-                                this.searchResults.push(this.allApartments.find(a => a.id === id));
-                            });
-                        });
+                    this.searchResults = response.data;
                 });
         }
     }

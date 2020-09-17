@@ -172,6 +172,16 @@ public class Apartment implements Serializable
 	{
 		this.images = images;
 	}
+	
+	public void addImage(String image)
+	{
+		this.images.add(image);
+	}
+	
+	public void removeImage(String image)
+	{
+		this.images.remove(image);
+	}
 
 	public double getPrice()
 	{

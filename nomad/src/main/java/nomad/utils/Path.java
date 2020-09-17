@@ -29,6 +29,7 @@ public class Path
 		public static final String HOST_REJECT_RESERVATION = "/rest/host_reject_reservation";
 		public static final String HOST_ACCEPT_RESERVATION = "/rest/host_accept_reservation";
 		public static final String HOST_FINISH_RESERVATION = "/rest/host_finish_reservation";
+		public static final String HOST_UPLOAD_IMAGE = "/rest/host_upload_image";
 		public static final String CHECK_IF_HOST = "/rest/check_if_host";
 		
 		public static final String GUEST_ALL_APARTMENTS = "/rest/guest_all_apartments";
@@ -56,6 +57,7 @@ public class Path
 		public static final String GET_ALL_APARTMENTS = "/rest/get_all_apartments";
 		public static final String SAVE_SEARCH_RESULTS = "/rest/save_search_results";
 		public static final String GET_SEARCH_RESULTS = "/rest/get_search_results";
+		public static final String SEARCH_APARTMENT = "/rest/search_apartment";
 	}
 
 }

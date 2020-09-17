@@ -1,19 +1,22 @@
 package nomad.search;
 
-import spark.Request;
-import spark.Response;
-import spark.Route;
-
 import static nomad.Application.gson;
 import static nomad.Application.searchDAO;
+import static nomad.Application.apartmentDAO;
 import static nomad.utils.Responses.ok;
 import static nomad.utils.Responses.serverError;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import com.google.gson.reflect.TypeToken;
+
+import nomad.apartment.Apartment;
+import spark.Request;
+import spark.Response;
+import spark.Route;
 
 public class SearchServices
 {
@@ -42,6 +45,68 @@ public class SearchServices
 
 		return a + 1;
 	}*/
+	
+	public static Route searchApartment = (Request request, Response response) ->
+	{
+		SearchDTO search = gson.fromJson(request.body(), SearchDTO.class);
+		ArrayList<Apartment> allApartments = (ArrayList<Apartment>) apartmentDAO.getAll();
+		ArrayList<Apartment> results = new ArrayList<Apartment>(allApartments);
+		
+		if(search.getFromDate() != null)
+		{
+			results = (ArrayList<Apartment>) results.stream().filter(a -> 
+				a.getAvailableDates().stream().filter(ad ->
+					ad.getStart().getTime() >= search.getFromDate().getTime()).findAny().orElse(null) != null)
+					.collect(Collectors.toList());
+		}
+		
+		if(search.getToDate() != null)
+		{
+			results = (ArrayList<Apartment>) results.stream().filter(a -> 
+				a.getAvailableDates().stream().filter(ad ->
+					ad.getEnd().getTime() <= search.getToDate().getTime()).findAny().orElse(null) != null) 
+					.collect(Collectors.toList());
+		}
+		
+		if(!search.getArea().isBlank())
+		{
+			results = (ArrayList<Apartment>) results.stream().filter(a ->
+				a.getLocation().getAddress().getArea().equalsIgnoreCase(search.getArea())).collect(Collectors.toList());
+		}
+		
+		if(search.getFromPrice() != -1)
+		{
+			results = (ArrayList<Apartment>) results.stream().filter(a ->
+			    a.getPrice() >= search.getFromPrice()).collect(Collectors.toList());
+		}
+		
+		if(search.getToPrice() != -1)
+		{
+			results = (ArrayList<Apartment>) results.stream().filter(a ->
+			    a.getPrice() <= search.getToPrice()).collect(Collectors.toList());
+		}
+		
+		if(search.getFromRoom() != -1)
+		{
+			results = (ArrayList<Apartment>) results.stream().filter(a ->
+			    a.getNoRooms() >= search.getFromRoom()).collect(Collectors.toList());
+		}
+		
+		if(search.getToRoom() != -1)
+		{
+			results = (ArrayList<Apartment>) results.stream().filter(a ->
+				a.getNoRooms() <= search.getToRoom()).collect(Collectors.toList());
+		}
+		
+		if(search.getNoGuests() != -1)
+		{
+			results = (ArrayList<Apartment>) results.stream().filter(a ->
+			    a.getNoGuests() == search.getNoGuests()).collect(Collectors.toList());
+		}
+		
+		String json = gson.toJson(results);
+		return ok(json, response);
+	};
 	
 	public static Route saveSearch = (Request request, Response response) ->
 	{

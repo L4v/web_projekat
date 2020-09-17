@@ -88,7 +88,11 @@
                 </div>
             </div>
             <!-- TODO(Jovan): Images -->
-            <!-- TODO(Jovan): Hidden, dropdown amenities with dual multiselect listbox -->
+            <div id="image-upload">
+                <img style="width: 17rem" alt="imagelocation" :src="image">
+                <img :src="remoteUrl" alt="remoteImage">
+                <input name="image" type="file" accept="image/*" @change="handleImage">
+            </div>
             
             <b class="error">{{submitMsg}}</b>
             <button type="button" class="button-primary" @click="addApartment">Add apartment</button>
@@ -131,11 +135,44 @@
 
                 },
                 submitMsg:         "",
+
+                image: "",
+
             }
         },
 
         methods:
         {
+            // TODO(Jovan): upload image!!!
+            handleImage: function(e)
+                {
+                    const selectedImage = e.target.files[0];
+                    this.createBase64Image(selectedImage);
+                },
+                createBase64Image: function(fileObject)
+                {
+                    const reader = new FileReader();
+
+                    reader.onload = (e) =>
+                    {
+                        this.image = e.target.result;
+                        this.uploadImage();
+                    };
+                    reader.readAsDataURL(fileObject);
+                },
+                uploadImage: function(apartmentId)
+                {
+                    const { image } = this;
+                    axios.post("rest/host_upload_image", { apartmentId: apartmentId, image: image }, {headers: {"Authorization": "Bearer " + localStorage.jwt}})
+                        .then(response =>
+                        {
+                            this.remoteUrl = response.data.url;
+                        })
+                        .catch(response =>
+                        {
+                            console.log(response.data);
+                        });
+                },
 
             enableApartment: function(id)
             {
@@ -368,7 +405,6 @@
                                     },
                             },
                         rentDates: [],
-                        // TODO(Jovan): add dates
                         availableDates: this.availableDates,
                         host: "",
                         comments: [],
@@ -392,6 +428,9 @@
                     {
                         // TODO(Jovan): Handle
                         this.submitMsg = "Apartment added";
+
+                        // TODO(Jovan): Upload images
+
                         this.$router.go();
                     })
                     .catch(response =>

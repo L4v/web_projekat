@@ -1,27 +1,27 @@
 <template>
     <div v-if="!collapsed" id="searchbar" :class="{collapsed: collapsed}">
         <div class="search-field">
-            <!-- TODO(Jovan): Add floating label animation -->
             <label class="search-field-label" for="area">Area</label>
             <input class="search-field-input" type="text"
                 placeholder="Area" name="area"
                 v-model="searchQuery.area" >
         </div>
-        <!-- 
-        <div class="search-field">
-            <label>City</label> <input type="text" placeholder="Which city?"
-                name="city">
-        </div>
-        -->
-        <div class="search-field">
-            <label>No. of rooms</label>
-            <input type="number" placeholder="Number of rooms"
-                v-model="searchQuery.noRooms" />
-        </div>
-        <div class="search-field">
+        <div id="guest-numbers" class="search-field">
             <label>No. of guests</label>
-            <input type="number" placeholder="Number of guests"
-                v-model="searchQuery.noGuests"  />
+            <div @click="guestsHidden = !guestsHidden">
+                <span class="faded-text" v-if="!searchQuery.noGuests">Add guests</span>
+                <span v-else>{{searchQuery.noGuests}}</span>
+            </div>
+            <transition name="fade">
+                <div v-if="!guestsHidden" id="guest-numbers-container" @mouseleave="guestsHidden = !guestsHidden">
+                    <b>Guests:</b>
+                    <div>
+                        <button type="button" @click="--searchQuery.noGuests" :disabled="searchQuery.noGuests <= 0">-</button>
+                        <span>{{searchQuery.noGuests}}</span>
+                        <button type="button" @click="++searchQuery.noGuests">+</button>
+                    </div>
+                </div>
+            </transition>
         </div>
         <div class="search-field">
             <label>Pick dates</label>
@@ -55,12 +55,11 @@
                 searchResults: [],
                 searchQuery:
                 {
-                    area: "",
-                    noRooms: "",
-                    noGuests: "",
+                    area:      "",
+                    noGuests:  0,
                     dateRange: {},
-                    // TODO(Jovan): Search by date
                 },
+                guestsHidden: true,
             }
         },
         
@@ -106,27 +105,7 @@
 
             search: function()
             {
-                let query = this.searchQuery;
-                let results = [...this.allApartments];
-
-                console.log("Searching...");
-
-                if(query.area)
-                {
-                    results = results.filter(a => a.queries.area === query.area);
-                }
-                if(query.noRooms)
-                {
-                    results = results.filter(a => a.queries.noRooms == query.noRooms);
-                }
-                if(query.noGuests)
-                {
-                    results = results.filter(a => a.queries.noGuests == query.noGuests);
-                }
-                // TODO(Jovan): Search by date
-                this.searchResults = [...results];
-                console.log(JSON.stringify(this.searchResults));
-                this.$emit("search", results);
+                this.$emit("search", this.searchQuery);
             }
         },
 
@@ -142,7 +121,7 @@
         order: 1;
         display: flex;
         flex-direction: row;
-        justify-content: center;
+        justify-content: space-evenly;
         align-items: center;
         min-width: 70vw;
         margin: auto;
@@ -171,5 +150,61 @@
 
     #searchbar input:focus {
         border: none;
+    }
+
+    .faded-text,
+    ::placeholder
+    {
+        color: rgb(150, 150, 150);
+    }
+
+    .pulse-error
+    {
+        animation: pulse 2.5s 1;
+        border: 2px solid transparent;
+        border-radius: 4px;
+    }
+
+    #guest-numbers
+    {
+        position: relative;
+    }
+
+    #guest-numbers-container
+    {
+        position: absolute;
+        background-color: #fff;
+        z-index: 3;
+        min-width: 100px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        min-width: 200px;
+        min-height: 50px;
+        padding: 16px;
+
+        border-radius: 8px;
+    }
+
+    #guest-numbers-container button[disabled]
+    {
+        color: rgb(200, 200, 200);
+    }
+
+    @keyframes pulse
+    {
+        0% 
+        {
+            /* background-color: #fff; */
+            border-color: #f00;
+        }
+
+        70%
+        {
+            border-color: #fff;
+        }
     }
 </style>
