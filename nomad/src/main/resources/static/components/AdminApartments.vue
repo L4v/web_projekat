@@ -61,7 +61,7 @@
 					<td>{{apartment.hostId}}</td>
 				</tr>
 			</table>
-			<button @click="removeAll()">Remove all</button>
+			<button class="button-primary" @click="removeAll()">Remove all</button>
 		</div>
 	</div>
 </template>
@@ -149,14 +149,30 @@
 	     	
 	     	filterApartments: function()
 	     	{
-	     		if(!this.typeFilter && !this.statusFilter)
+	     		if(!this.typeFilter && !this.statusFilter && this.selectedAmenities.length == 0)
 	     		{
 	     			this.apartments = this.apartments_copy;
-	     		} 
+	     		}
 	     		else if(!this.typeFilter)
 	     		{
-	     			/*if(!this.selectedAmenities)
-	     			{*/
+	     			if(!this.statusFilter) //just amenities
+	     			{
+		     			var retVal = [];
+		     			for(apartment of this.apartments_copy)
+		     			{
+		     				for(selectedAmenity of this.selectedAmenities)
+		     				{
+		     					if(apartment.amenities.some(amenity => amenity.id === selectedAmenity.id))
+		     					{
+		     						retVal.push(apartment);
+		     						break;
+		     					}
+		     				}
+		     			}
+	     				this.apartments = retVal;
+	     			}
+	     			else if(this.selectedAmenities.length == 0) //just status
+	     			{
 		     			var retVal = [];
 		     			for(apartment of this.apartments_copy)
 		     			{
@@ -165,37 +181,63 @@
 		     					retVal.push(apartment);
 		     				}
 		     			}
-		     			this.apartments = retVal;
-		     		/*} 
-		     		else if(!this.statusFilter)
-		     		{
-		     			var retVal = [];
-		     			
+	     				this.apartments = retVal;
+	     			}
+	     			else     //amenities and status
+	     			{
+	     				var retVal = [];
 		     			for(apartment of this.apartments_copy)
 		     			{
-		     				var inter = [];
-		     				inter = _.intersection(apartment.amenities, this.selectedAmenities);
-		     				if(inter.length > 0)
+		     				if(apartment.status == this.statusFilter)
 		     				{
-		     					retval.push(apartment);
+		     					for(selectedAmenity of this.selectedAmenities)
+		     					{
+			     					if(apartment.amenities.some(amenity => amenity.id === selectedAmenity.id))
+			     					{
+			     						retVal.push(apartment);
+			     						break;
+			     					}
+		     					}
 		     				}
-						}
-		     			this.apartments = retVal;	
-		     		}*/
-	     		}
+		     			}
+	     				this.apartments = retVal;
+	     			}
+				} 
 	     		else if(!this.statusFilter)
 	     		{
-	     			var retVal = [];
-	     			for(apartment of this.apartments_copy)
+	     			if(this.selectedAmenities.length == 0) //just type
 	     			{
-	     				if(apartment.type == this.typeFilter)
-	     				{
-	     					retVal.push(apartment);
-	     				}
-	     			}
-	     			this.apartments = retVal;
+		     			var retVal = [];
+		     			for(apartment of this.apartments_copy)
+		     			{
+		     				if(apartment.type == this.typeFilter)
+		     				{
+		     					retVal.push(apartment);
+		     				}
+		     			}
+		     			this.apartments = retVal;
+		     		}
+		     		else   //amenities and type
+		     		{
+		     			var retVal = [];
+		     			for(apartment of this.apartments_copy)
+		     			{
+		     				if(apartment.type == this.typeFilter)
+		     				{
+		     					for(selectedAmenity of this.selectedAmenities)
+		     					{
+			     					if(apartment.amenities.some(amenity => amenity.id === selectedAmenity.id))
+			     					{
+			     						retVal.push(apartment);
+			     						break;
+			     					}
+		     					}
+		     				}
+		     			}
+		     			this.apartments = retVal;
+		     		}
 	     		}
-	     		/*else if(!this.selectedAmenities)
+	     		else if(this.selectedAmenities.length == 0)  //status and type
 	     		{
 	     			var retVal = [];
 	     			for(apartment of this.apartments_copy)
@@ -206,7 +248,26 @@
 	     				}
 	     			}
 	     			this.apartments = retVal;
-	     		}*/
+	     		}
+	     		else   //everything
+	     		{
+	     			var retVal = [];
+	     			for(apartment of this.apartments_copy)
+	     			{
+	     				if(apartment.status == this.statusFilter && apartment.type == this.typeFilter)
+	     				{
+	     					for(selectedAmenity of this.selectedAmenities)
+		     					{
+			     					if(apartment.amenities.some(amenity => amenity.id === selectedAmenity.id))
+			     					{
+			     						retVal.push(apartment);
+			     						break;
+			     					}
+		     					}
+	     				}
+	     			}
+	     			this.apartments = retVal;
+	     		}
 	     	},
 	     	
 	     	addAmenity: function()

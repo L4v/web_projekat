@@ -1,17 +1,42 @@
 <template>
     <div class="container">
+    	<h1>Users</h1>
+    	<br>
+			<div id="search">
+				Search:
+				<select id="sex" v-model="userSex" required>
+		            <option value="" disabled>Sex</option>
+		            <option value="">All</option>
+		            <option value="MALE">Male</option>
+		            <option value="FEMALE">Female</option>
+		            <option value="OTHER">Other</option>
+		            <option value="PRIVATE">Prefer not to say</option>
+		        </select>
+		        <select id="userType" v-model="userType" required>
+		            <option value="" disabled>Type</option>
+		            <option value="">All</option>
+		            <option value="GUEST">Guest</option>
+		            <option value="HOST">Host</option>
+		            <option value="ADMIN">Admin</option>
+		        </select>
+		        <input v-model="userUsername" placeholder="Username..." type="text">
+				<button class="button-primary" @click="searchUser()">Search</button>
+			</div>
+			<br>
         <table>
             <tr>
                 <th>Username</th>
                 <th>Name</th>
                 <th>Surname</th>
                 <th>User Type</th>
+                <th>Sex</th>
             </tr>
             <tr v-for="user in users" :key="user">
                 <td>{{user.username}}</td>
                 <td>{{user.name}}</td>
                 <td>{{user.surname}}</td>
                 <td>{{user.userType}}</td>
+                <td>{{user.sex}}</td>
             </tr>
         </table>
         <!-- TODO(Jovan): This is temporary, will add correct form later -->
@@ -48,6 +73,10 @@
         {
             return {
                 users: [],
+                users_copy: [],
+                userType:     "",
+                userSex:      "",
+                userUsername: "",
                 username:     "",
                 password:     "",
                 confpassword: "",
@@ -81,6 +110,7 @@
                     .then(response =>
                     {
                         this.users = response.data;
+                        this.users_copy = response.data;
                     })
                     .catch(response =>
                     {
@@ -234,6 +264,106 @@
                     });
             },
             
+            
+            searchUser: function()
+	        {
+	        
+	            if(!this.userUsername && !this.userSex && !this.userType)
+	            {
+					this.users = this.users_copy;
+	            }
+	            else if(!this.userUsername)
+	            {
+					if(!this.userType) // only sex            
+	            	{
+				        var result = [];
+				        for(user of this.users_copy)
+				        {
+				        	if(user.sex == this.userSex)
+				        	{
+				        		result.push(user);
+				        	}
+				        }
+						this.users = result;
+					}
+					else if(!this.userSex) // only type
+					{
+						var result = [];
+				        for(user of this.users_copy)
+				        {
+				        	if(user.userType == this.userType)
+				        	{
+				        		result.push(user);
+				        	}
+				        }
+						this.users = result;
+					}
+					else // sex and type
+					{
+						var result = [];
+			    		for(user of this.users_copy)
+			    		{
+			    			if(user.sex == this.userSex && user.userType == this.userType)
+			    			{
+			    				result.push(user);
+			    			}
+			    		}
+			    		this.users = result;
+					}
+				}
+				else if(!this.userSex)
+				{
+					if(!this.userType) //only username
+					{
+						var result = [];
+			    		for(user of this.users_copy)
+			    		{
+			    			if(user.username == this.userUsername)
+			    			{
+			    				result.push(user);
+			    			}
+			    		}
+			    		this.users = result;
+			    	}
+			    	else  //username and type
+			    	{
+			    		var result = [];
+			    		for(user of this.users_copy)
+			    		{
+			    			if(user.username == this.userUsername && user.userType == this.userType)
+			    			{
+			    				result.push(user);
+			    			}
+			    		}
+			    		this.users = result;
+			    	}
+				}
+				else if(!this.userType)  //username and sex
+				{
+					var result = [];
+			    		for(user of this.users_copy)
+			    		{
+			    			if(user.username == this.userUsername && user.sex == this.userSex)
+			    			{
+			    				result.push(user);
+			    			}
+			    		}
+			    		this.users = result;
+				}
+				else   //everything
+				{
+					var result = [];
+		    		for(user of this.users_copy)
+		    		{
+		    			if(user.username == this.userUsername && user.sex == this.userSex && user.userType == this.userType)
+		    			{
+		    				result.push(user);
+		    			}
+		    		}
+		    		this.users = result;
+				}
+	        },
+ 
         },
         mounted()
         {
