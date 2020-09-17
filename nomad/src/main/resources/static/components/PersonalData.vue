@@ -45,10 +45,8 @@
 				<tr>
 					<td><button id="saveButton" class="button-primary" @click="updatePersonalData(guest)">Save changes</button></td>
 				</tr>
-				<tr>
-					{{successMsg}}
-				</tr>
 			</table>
+			{{successMsg}}
 		</div>
 	</div>
 </template>
