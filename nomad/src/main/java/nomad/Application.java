@@ -22,6 +22,7 @@ import nomad.apartment.ApartmentDAO;
 import nomad.apartment.ApartmentServices;
 import nomad.comment.CommentDAO;
 import nomad.comment.CommentServices;
+import nomad.image.ImageServices;
 import nomad.login.LoginServices;
 import nomad.registration.RegistrationServices;
 import nomad.reservation.ReservationDAO;
@@ -197,6 +198,7 @@ public class Application
 		get(Path.Rest.GET_GUESTS, GuestServices.getGuests);
 		get(Path.Rest.GET_APARTMENTS, ApartmentServices.getApartments);
 		get(Path.Rest.GET_ALL_APARTMENTS, ApartmentServices.getAllApartments);
+		get("rest/image", ImageServices.getImage);
 		//get(Path.Rest.GET_SEARCH_RESULTS, SearchServices.getSearch);
 		
 		// TODO(Jovan): Catch all for vue router, not necessary?

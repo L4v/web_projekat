@@ -28,7 +28,7 @@ import spark.Route;
 
 public class ApartmentServices
 {
-
+	
 	public static Route getAllApartments = (Request request, Response response) ->
 	{
 		ArrayList<Apartment> apartments = (ArrayList<Apartment>) apartmentDAO.getAll();

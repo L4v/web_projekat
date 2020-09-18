@@ -4,7 +4,7 @@
 			<h1>Apartment info</h1>
 			<br>
 			<div class="slide-container">
-				<img v-for="image in apartment.images" :src="image" />
+				<img v-for="image in apartment.images" :src="'rest/image/' + image" />
 			</div>
 			<br>
 			<div id="apartment">
