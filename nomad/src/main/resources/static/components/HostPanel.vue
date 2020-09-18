@@ -8,6 +8,7 @@
                 <router-link to="/host/personal_data">Personal data</router-link>
                 <router-link to="/host/reservations">Reservations</router-link>
                 <router-link to="/host/comments">Comments</router-link>
+                <router-link to="/host/edit_apartment">Edit apartment</router-link>
             </li>
         </sidebar>
         <div id="main-content">

@@ -15,6 +15,9 @@
                 <div class="result-text">
                     <b>No. of rooms</b> {{apartment.noRooms}}
                 </div>
+                <div class="result-image">
+                    <img :src="'rest/image?filename=' + apartment.images[0]" alt="Apartment image">
+                </div>
             </div>
         </div>
     </div>
@@ -47,3 +50,17 @@
         }
     }
 </script>
+
+<style scoped>
+    .result
+    {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .result-image image
+    {
+        width: 150px;
+        height: 150px;
+    }
+</style>

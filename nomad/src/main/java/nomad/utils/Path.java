@@ -30,6 +30,7 @@ public class Path
 		public static final String HOST_ACCEPT_RESERVATION = "/rest/host_accept_reservation";
 		public static final String HOST_FINISH_RESERVATION = "/rest/host_finish_reservation";
 		public static final String HOST_UPLOAD_IMAGE = "/rest/host_upload_image";
+		public static final String HOST_UPDATE_APARTMENT = "/rest/host_update_apartment";
 		public static final String CHECK_IF_HOST = "/rest/check_if_host";
 		
 		public static final String GUEST_ALL_APARTMENTS = "/rest/guest_all_apartments";

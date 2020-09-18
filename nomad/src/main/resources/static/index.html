@@ -62,6 +62,10 @@
         {
             props: ["collapsed", ],
         });
+        Vue.component("image-slider", httpVueLoader("components/ImageSlider.vue"),
+        {
+            props: ["images", ],
+        });
 
         // NOTE(Jovan): Route registration
         const routes =
@@ -238,6 +242,11 @@
                         path: "comments",
                         name: "HostComments",
                         component: httpVueLoader("components/HostComments.vue"),
+                    },
+                    {
+                        path: "edit_apartment",
+                        name: "HostEditApartment",
+                        component: httpVueLoader("components/HostEditApartment.vue"),
                     },
                 ],
             },

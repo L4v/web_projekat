@@ -171,6 +171,7 @@ public class Application
 		post(Path.Rest.HOST_ADD_APARTMENT, ApartmentServices.hostAddApartment);
 		post(Path.Rest.HOST_FINISH_RESERVATION, HostServices.finishReservation);
 		post(Path.Rest.HOST_UPLOAD_IMAGE, HostServices.uploadImage);
+		post(Path.Rest.HOST_UPDATE_APARTMENT, HostServices.updateApartment);
 		post(Path.Rest.REG_HOST, RegistrationServices.registerHost);
 		//post(Path.Rest.SAVE_SEARCH_RESULTS, SearchServices.saveSearch);
 		post(Path.Rest.CHECK_IF_HAS_RESERVATION, ReservationServices.checkIfHasReservation);

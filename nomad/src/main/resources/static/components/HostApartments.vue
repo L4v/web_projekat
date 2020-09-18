@@ -67,7 +67,7 @@
                             <option value="ROOM">Room</option>
                         </select>
                         <small class="error">{{errors.noRooms}}</small>
-                        <floating-label name="noRooms" placeholder="Number of rooms" type="number" :inputdata.sync="noRooms"></floating-label>
+                        <floating-label v-if="apartmentType === 'WHOLE'" name="noRooms" placeholder="Number of rooms" type="number" :inputdata.sync="noRooms"></floating-label>
                         <small class="error">{{errors.noGuests}}</small>
                         <floating-label name="noGuests" placeholder="Number of guests" type="number" :inputdata.sync="noGuests"></floating-label>
                         <small class="error">{{errors.price}}</small>
@@ -117,13 +117,6 @@
                     </div>
                 </div>
             </div>
-            <!-- TODO(Jovan): Images -->
-            <div id="image-upload">
-                <img style="width: 17rem" alt="imagelocation" :src="image">
-                <img :src="remoteUrl" alt="remoteImage">
-                <input name="image" type="file" accept="image/*" @change="handleImage">
-            </div>
-            
             <b class="error">{{submitMsg}}</b>
             <button type="button" class="button-primary" @click="addApartment">Add apartment</button>
             <button type="button" @click="showForm = !showForm">Cancel</button>
@@ -176,37 +169,6 @@
 
         methods:
         {
-            // TODO(Jovan): upload image!!!
-            handleImage: function(e)
-                {
-                    const selectedImage = e.target.files[0];
-                    this.createBase64Image(selectedImage);
-                },
-                createBase64Image: function(fileObject)
-                {
-                    const reader = new FileReader();
-
-                    reader.onload = (e) =>
-                    {
-                        this.image = e.target.result;
-                        this.uploadImage();
-                    };
-                    reader.readAsDataURL(fileObject);
-                },
-                uploadImage: function(apartmentId)
-                {
-                    const { image } = this;
-                    axios.post("rest/host_upload_image", { apartmentId: apartmentId, image: image }, {headers: {"Authorization": "Bearer " + localStorage.jwt}})
-                        .then(response =>
-                        {
-                            this.remoteUrl = response.data.url;
-                        })
-                        .catch(response =>
-                        {
-                            console.log(response.data);
-                        });
-                },
-
             enableApartment: function(id)
             {
                 let jwt = localStorage.jwt;

@@ -11,15 +11,10 @@ import static nomad.utils.Responses.badRequest;
 import static nomad.utils.Responses.forbidden;
 import static nomad.utils.Responses.ok;
 import static nomad.utils.Responses.serverError;
-import static nomad.Application.uploadDir;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -27,7 +22,6 @@ import java.util.Date;
 import java.util.Base64;
 
 import javax.imageio.ImageIO;
-import javax.servlet.MultipartConfigElement;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -61,6 +55,42 @@ public class HostServices
 		}
 		return users;
 	}
+	
+	public static Route updateApartment = (Request request, Response response) ->
+	{
+		String jws = parseJws(request);
+		if(jws == null)
+		{
+			return forbidden("User not authorized as host", response);
+		}
+		try
+		{
+			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
+			UserHost host = hostDAO.get(claims.getBody().getSubject());
+			if(host == null)
+			{
+				return forbidden("User not authorized as host", response);
+			}
+			 
+			String json = request.body();
+			Apartment apartment = gson.fromJson(json, Apartment.class);
+			if(apartment == null)
+			{
+				return badRequest("Bad apartment object", response);
+			}
+			
+			if(!apartmentDAO.update(apartment))
+			{
+				return badRequest("Could not update apartment", response);
+			}
+			
+			return ok("Apartment updated", response);
+		}
+		catch(Exception e)
+		{
+			return serverError("Server error " + e.getMessage(), response);
+		}
+	};
 
 	/* NOTE(Jovan):
 	 * Data comes in looking like:
@@ -110,7 +140,7 @@ public class HostServices
 			image = ImageIO.read(bis);
 			bis.close();
 			
-			String imageName = host.getUsername() + imageDTO.getApartmentId() + new Date().getTime() + "." + imageType;
+			String imageName = host.getUsername() + imageDTO.getApartmentId().replaceAll(".", "") + new Date().getTime() + "." + imageType;
 			
 			Apartment apartment = apartmentDAO.get(imageDTO.getApartmentId());
 			if(apartment == null)
@@ -119,6 +149,7 @@ public class HostServices
 			}
 			
 			apartment.addImage(imageName);
+			apartmentDAO.update(apartment);
 			
 			File outputFile = new File(imageName);
 			ImageIO.write(image, imageType, outputFile);
