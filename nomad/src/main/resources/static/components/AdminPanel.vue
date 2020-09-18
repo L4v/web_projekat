@@ -2,8 +2,7 @@
     <div>
         <!-- TODO(Jovan): Make into a separate component -->
         <sidebar title="Admin panel" :user="user">
-            <li><router-link to="/admin">Overview</router-link></li>
-            <li><router-link to="/admin/amenities">Amenities</router-link></li>
+            <li><router-link to="/admin/">Amenities</router-link></li>
             <li><router-link to="/admin/all_users">All users</router-link></li>
             <li><router-link to="/admin/reservations">Reservations</router-link></li>
             <li><router-link to="/admin/apartments">Apartments</router-link></li>

@@ -149,6 +149,11 @@
         height: 1rem;
         border-radius: 50%;
     }
+
+    #username
+    {
+        font-weight: 500;
+    }
     
     hr
     {

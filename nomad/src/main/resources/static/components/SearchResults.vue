@@ -37,21 +37,23 @@
                 <div class="result-image">
                     <img :src="'rest/image?filename=' + apartment.images[0]" alt="" style="width: 480px; height: 320px">
                 </div>
-                <div class="result-text">
-                    <h2>{{apartment.location.address.street}} {{apartment.location.address.streetNumber}} {{apartment.location.address.area}}</h2>
-                </div>
-                <div id="result-info">
-                    <div class="result-text">
-                        <b>Host:</b> {{apartment.hostId}}
+                <div class="result-text-container">
+                    <div class="result-title">
+                        <h2>{{apartment.location.address.street}} {{apartment.location.address.streetNumber}} {{apartment.location.address.area}}</h2>
                     </div>
-                    <div class="result-text">
-                        <b>No. of guests</b> {{apartment.noGuests}}
-                    </div>
-                    <div class="result-text">
-                        <b>No. of rooms</b> {{apartment.noRooms}}
-                    </div>
-                    <div class="result-text">
-                        <b>Price:</b> {{apartment.price}}
+                    <div id="result-info">
+                        <div class="result-text">
+                            <b>Host:</b> {{apartment.hostId}}
+                        </div>
+                        <div class="result-text">
+                            <b>No. of guests</b> {{apartment.noGuests}}
+                        </div>
+                        <div class="result-text">
+                            <b>No. of rooms</b> {{apartment.noRooms}}
+                        </div>
+                        <div class="result-text">
+                            <b>Price:</b> {{apartment.price}}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -287,6 +289,21 @@
     {
         display: grid;
         grid-template-columns: auto auto;
+    }
+
+    .result-text-container:
+    {
+        padding: 20px;
+    }
+
+    .result-title h2
+    {
+        font-size: 2.2rem;
+    }
+
+    .result-text b
+    {
+        font-weight: 500;
     }
 
     .faded-text,

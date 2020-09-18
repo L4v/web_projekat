@@ -1,6 +1,10 @@
 package nomad.login;
 
 import static nomad.utils.Responses.notFound;
+
+import java.time.ZonedDateTime;
+import java.util.Date;
+
 import static nomad.Application.adminDAO;
 import static nomad.Application.gson;
 import static nomad.Application.guestDAO;
@@ -83,7 +87,7 @@ public class LoginServices
 		}
 		response.type("application/json");
 		response.status(200);
-		String jws = Jwts.builder().setSubject(loggedInUser.getUsername()).signWith(key).compact();
+		String jws = Jwts.builder().setSubject(loggedInUser.getUsername()).setExpiration(Date.from(ZonedDateTime.now().plusMinutes(30).toInstant())).signWith(key).compact();
 
 		return jws;
 	};
