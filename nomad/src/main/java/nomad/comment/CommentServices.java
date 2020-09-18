@@ -186,7 +186,7 @@ public class CommentServices
 		{
 			if(reservation.getGuestId().equals(comment.getGuestId()))
 			{
-				if(reservation.getStatus() == ReservationStatus.CANCELLED || reservation.getStatus() == ReservationStatus.REJECTED)
+				if(reservation.getStatus() == ReservationStatus.FINISHED || reservation.getStatus() == ReservationStatus.REJECTED)
 				{
 					commentDAO.add(comment);
 					apartment.getComments().add(comment);

@@ -109,6 +109,7 @@
                 .then(response =>
                     {
                         this.registrationMsg = "Registered";
+                        this.$router.push("/login");
                     })
                 .catch(error =>
                     {

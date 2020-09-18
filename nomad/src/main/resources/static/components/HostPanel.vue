@@ -2,8 +2,7 @@
     <div>
         <sidebar title="Host panel" :user="user">
             <li>
-                <router-link to="#">Overview</router-link>
-                <router-link to="/host/apartments">Apartments</router-link>
+                <router-link to="/host/">Apartments</router-link>
                 <router-link to="/host/guests">Guests</router-link>
                 <router-link to="/host/personal_data">Personal data</router-link>
                 <router-link to="/host/reservations">Reservations</router-link>

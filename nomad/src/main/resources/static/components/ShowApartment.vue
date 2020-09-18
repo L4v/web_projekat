@@ -3,9 +3,7 @@
 		<div id="apartmentInfo">
 			<h1>Apartment info</h1>
 			<br>
-			<div class="slide-container">
-				<img v-for="image in apartment.images" :src="'rest/image/' + image" />
-			</div>
+			<image-slider :images="apartment.images"></image-slider>
 			<br>
 			<div id="apartment">
 				<label>Type:   {{apartment.type}}</label>

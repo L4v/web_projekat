@@ -201,6 +201,11 @@
 
             validateNoRooms: function()
             {
+                if(this.apartmentType === "ROOM")
+                {
+                    this.noRooms = 1;
+                    return true;
+                }
                 if(!this.noRooms  || this.noRooms <= 0)
                 {
                     this.errors.noRooms = "Must be a positive integer";

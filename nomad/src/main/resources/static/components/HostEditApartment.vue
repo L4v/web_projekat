@@ -166,7 +166,7 @@
                     return;
                 }
 
-                axios.post("rest/host_update_apartment", {headers: {"Authorization": "Bearer " + jwt}})
+                axios.post("rest/host_update_apartment", this.apartment, {headers: {"Authorization": "Bearer " + jwt}})
                     .then(response =>
                     {
                         this.$router.go();

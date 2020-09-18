@@ -117,13 +117,8 @@
                 },
                 children:
                 [
-                    {
-                        path: "",
-                        name: "AdminOverview",
-                        component: httpVueLoader("components/AdminOverview.vue"),
-                    },
                    	{
-                    	path: "amenities",
+                    	path: "",
                     	name: "AdminAmenities",
                     	component: httpVueLoader("components/AdminAmenities.vue"),
                    	},
@@ -167,11 +162,6 @@
                 [
                     {
                         path: "",
-                        name: "GuestOverview",
-                        component: httpVueLoader("components/GuestOverview.vue"),
-                    },
-                    {
-                        path: "reservations",
                         name: "GuestReservations",
                         component: httpVueLoader("components/GuestsReservations.vue"),
                     },
@@ -215,11 +205,6 @@
                 [
                     {
                         path: "",
-                        name: "HostOverview",
-                        component: httpVueLoader("components/HostOverview.vue"),
-                    },
-                    {
-                        path: "apartments",
                         name: "HostApartments",
                         component: httpVueLoader("components/HostApartments.vue"),
                     },
@@ -249,6 +234,12 @@
                         component: httpVueLoader("components/HostEditApartment.vue"),
                     },
                 ],
+            },
+            {
+                // NOTE(Jovan): Must be last
+                path: "*",
+                name: "PageNotFound",
+                component: httpVueLoader("components/PageNotFound.vue"),
             },
         ];
 

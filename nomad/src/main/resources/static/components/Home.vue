@@ -21,14 +21,6 @@
 				</div>
 			</div>
 		</section>
-
-		<!-- NOTE(Jovan): Footer -->
-		<section class="footer">
-			<ul class="footer-list">
-				<li class="footer-item"><a href="">About</a></li>
-				<li class="footer-item"><a href="footer-item">Contact</a></li>
-			</ul>
-        </section>
 	</div>
 </template>
 <script>

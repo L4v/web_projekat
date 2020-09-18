@@ -301,7 +301,7 @@ public class ReservationServices
 	private static boolean isAllowed(ArrayList<Reservation> reservations, String username) {
 		for(Reservation reservation : reservations)
 		{
-			if(reservation.getGuestId().equals(username) && (reservation.getStatus() == ReservationStatus.CANCELLED || reservation.getStatus() == ReservationStatus.REJECTED))
+			if(reservation.getGuestId().equals(username) && (reservation.getStatus() == ReservationStatus.FINISHED || reservation.getStatus() == ReservationStatus.REJECTED))
 			{
 				return true;
 			}
