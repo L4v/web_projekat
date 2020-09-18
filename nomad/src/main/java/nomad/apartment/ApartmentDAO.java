@@ -39,35 +39,6 @@ public class ApartmentDAO
 			this.saveAll(new ArrayList<Apartment>());
 		}
 	}
-	
-	private String getNextId(int curr)
-	{
-		//ArrayList<Apartment> apartments = (ArrayList<Apartment>) this.getAll();
-		// TODO(Jovan): Add prefix?
-		/*if(apartments.size() == 0)
-		{
-			return "0";
-		}
-		try
-		{
-			int maxId = Integer.parseInt(apartments.get(0).getId());
-			for(Apartment a : apartments)
-			{
-				int currId = Integer.parseInt(a.getId());
-				if(currId > maxId)
-				{
-					maxId = currId;
-				}
-			}
-			return String.valueOf(maxId + 1);
-		}
-		catch(NumberFormatException e)
-		{
-			e.printStackTrace();
-			return String.valueOf(-1);
-		}*/
-		return String.valueOf(curr++);
-	}
 
 	private void saveAll(ArrayList<Apartment> apartments)
 	{

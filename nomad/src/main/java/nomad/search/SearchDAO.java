@@ -13,8 +13,6 @@ import java.util.Collection;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
-import nomad.apartment.Apartment;
-
 public class SearchDAO
 {
 	private String filename;

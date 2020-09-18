@@ -173,7 +173,6 @@ public class Application
 		post(Path.Rest.HOST_UPLOAD_IMAGE, HostServices.uploadImage);
 		post(Path.Rest.HOST_UPDATE_APARTMENT, HostServices.updateApartment);
 		post(Path.Rest.REG_HOST, RegistrationServices.registerHost);
-		//post(Path.Rest.SAVE_SEARCH_RESULTS, SearchServices.saveSearch);
 		post(Path.Rest.CHECK_IF_HAS_RESERVATION, ReservationServices.checkIfHasReservation);
 		post(Path.Rest.SEARCH_APARTMENT, SearchServices.searchApartment);
 		
@@ -200,17 +199,8 @@ public class Application
 		get(Path.Rest.GET_APARTMENTS, ApartmentServices.getApartments);
 		get(Path.Rest.GET_ALL_APARTMENTS, ApartmentServices.getAllApartments);
 		get("rest/image", ImageServices.getImage);
-		//get(Path.Rest.GET_SEARCH_RESULTS, SearchServices.getSearch);
 		
-		// TODO(Jovan): Catch all for vue router, not necessary?
-		/*before((request, response) ->
-		{
-			try(InputStream stream = Application.class.getResourceAsStream("/static/index.html")){
-				halt(200, IOUtils.toString(stream));
-			} catch(IOException e) {
-				e.printStackTrace();
-			}
-		});*/
+		
 		get("*", (request, response) ->
 		{
 			System.out.println("Redirecting...");
